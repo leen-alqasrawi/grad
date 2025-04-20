@@ -20,6 +20,7 @@
   "homepage": "https://github.com/leen-alqasrawi/grad#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "firebase": "^11.6.0"
   }
 }
