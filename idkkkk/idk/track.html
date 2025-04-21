@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Track the Bus</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: url('images/courses-bg.jpg') center center/cover no-repeat;
+  height: 100vh;
+  display: flex;
+  color: rgb(255, 255, 255);
+
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+    }
+
+    .track-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 700px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    #map {
+      width: 100%;
+      height: 400px;
+      margin-top: 1.5rem;
+      border-radius: 8px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div class="track-container">
+  <h2>Live Bus Tracker</h2>
+
+  <!-- ✅ Account ID input added -->
+  <label for="account_id">Enter Your Account ID:</label>
+  <input type="text" id="account_id" name="account_id" placeholder="enter the student id">
+
+  <button class="btn" onclick="window.open('https://www.google.com/maps?q=31.963158,35.930359', '_blank')">
+    Start Live Tracking
+  </button>
+  
+  <div id="map"></div>
+</div>
+
+<!-- Google Maps Script (use your actual API key below) -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-vnYBfKzHzIOUwGyZON8KcCE8YY1Y9cY"></script>
+
+<script src="script.js"></script>
+
+</body
