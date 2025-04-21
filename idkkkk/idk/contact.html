@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Us – School Advisor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+     background: url('images/courses-bg.jpg') center center/cover no-repeat;
+     height: 100vh;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f6f8;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgb(255, 255, 255);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 1rem;
+    }
+
+    .contact-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .contact-form {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .contact-form label {
+      display: block;
+      margin: 0.5rem 0 0.2rem;
+      font-weight: bold;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .contact-form button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .contact-form button:hover {
+      background-color: #0056b3;
+    }
+
+    .contact-info {
+      flex: 1;
+      min-width: 250px;
+      font-size: 0.95rem;
+    }
+
+    .contact-info h3 {
+      margin-top: 0;
+      color: #007bff;
+    }
+
+    .contact-info p {
+      margin: 0.3rem 0;
+    }
+
+    .socials a {
+      display: inline-block;
+      margin-right: 1rem;
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    .success-msg {
+      color: green;
+      display: none;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Contact Us</h1>
+    <div class="contact-wrapper">
+      <!-- Contact Form -->
+      <div class="contact-form">
+        <form id="contactForm">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" required placeholder="Enter your name">
+
+          <label for="email">Email</label>
+          <input type="email" id="email" required placeholder="example@mail.com">
+
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" placeholder="Your subject">
+
+          <label for="message">Message</label>
+          <textarea id="message" rows="6" required placeholder="Type your message here..."></textarea>
+
+          <button type="submit">Send Message</button>
+          <p class="success-msg" id="successMsg">Your message has been sent! ✅</p>
+        </form>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="contact-info">
+        <h3>School Advisor Office</h3>
+        <p><strong>Address:</strong> 123 School St, Education City, ED 45678</p>
+        <p><strong>Phone:</strong> +1 (800) 123-4567</p>
+        <p><strong>Email:</strong> support@schooladvisor.com</p>
+
+        <h3>Business Hours</h3>
+        <p>Monday – Friday: 8 AM – 5 PM</p>
+        <p>Saturday: 9 AM – 1 PM</p>
+        <p>Sunday: Closed</p>
+
+        <h3>Follow Us</h3>
+        <div class="socials">
+          <a href="#">Facebook</a>
+          <a href="#">Instagram</a>
+          <a href="#">Twitter</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="contact.js"></script>
+</body>
+</html>
