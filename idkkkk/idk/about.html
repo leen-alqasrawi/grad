@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عن الموقع</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body class="about-page">
+    
+    <div id="navbar-container"></div>
+ 
+    <script>
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-container').innerHTML = data;
+            });
+    </script>
+
+    <section class="hero">
+    <div class="hero-text">
+        <h1>معلومات عن الموقع</h1>
+        <p>نحن نساعدك في إيجاد أفضل المدارس عبر توفير معلومات مفصلة حول المدارس المختلفة. نهدف لتبسيط عملية اختيار المدرسة.</p>
+        <button>اكتشف المزيد</button>
+    </div>
+</section>
+
+<section class="carousel">
+    <div class="carousel-container">
+      <div class="slide active">
+        <img src="images/img1.jpg" alt="">
+        <div class="text">
+          <h3>Tailored Search Options</h3>
+          <p>Utilize our advanced search and filter system...</p>
+          <button>Start Searching</button>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="images/img2.jpg" alt="">
+        <div class="text">
+          <h3>Verified School Ratings</h3>
+          <p>We provide trusted reviews from parents and students...</p>
+          <button>Learn More</button>
+        </div>
+      </div>
+      <!-- أضف سلايدات أكثر إذا بدك -->
+    </div>
+  
+    <!-- الأسهم -->
+    <button class="prev">&#10094;</button>
+    <button class="next">&#10095;</button>
+  </section>
+  
+
+</body>
+</html>
