@@ -20,14 +20,10 @@
   "homepage": "https://github.com/leen-alqasrawi/grad#readme",
   "dependencies": {
     "cors": "^2.8.5",
-<<<<<<< HEAD
     "express": "^5.1.0",
     "pg": "^8.15.6",
-    "pool": "^0.4.1"
-=======
+    "pool": "^0.4.1",
     "env": "^0.0.2",
-    "express": "^5.1.0",
     "firebase": "^11.6.0"
->>>>>>> backend
   }
 }
