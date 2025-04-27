@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>School Advisor</title>
+
+  <!-- Google Font: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    #about {
+      scroll-margin-top: 100px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <h1><span class="grad">SCHOOL</span> ADVISOR</h1>
+      <nav>
+        <ul>
+          <li><a href="#">HOME</a></li>
+          <li><a href="#about">ABOUT US</a></li>
+          <li><a href="login.html">REGISTER</a></li>
+          <a href="track.html">TRACKING</a>
+          <a href="#contact">CONTACT</a>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Find the Perfect School for Your Child</h1>
+      <h4>Smart, Simple, and Tailored to You.</h4>
+      <a href="#about" class="btn">DISCOVER MORE</a>
+    </div>
+  </section>
+
+  <!-- About Tabs Section -->
+  <section id="about" class="tabs-section">
+    <div class="tab-buttons">
+      <button data-tab="education" class="active">BEST EDUCATION</button>
+      <button data-tab="management">TOP MANAGEMENT</button>
+      <button data-tab="meeting">QUALITY MEETING</button>
+    </div>
+
+    <div id="education" class="tab-content active">
+      <div class="tab-inner">
+        <img src="images/choose-us-image-01.png" alt="Best Education" />
+        <div>
+          <h2>Best Education</h2>
+          <p>No more endless browsing or guesswork. School Advisor’s smart search helps parents discover the best schools based on their own criteria — from fees and curriculum to location and learning environment.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="management" class="tab-content">
+      <div class="tab-inner">
+        <img src="images/choose-us-image-02.png" alt="Top Management" />
+        <div>
+          <h2>Top Management</h2>
+          <p>Choosing the right school is personal. With School Advisor, parents can filter by the things that matter most and instantly explore a list of schools that align with their goals and values. It's education matching made simple.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="meeting" class="tab-content">
+      <div class="tab-inner">
+        <img src="images/choose-us-image-03.png" alt="Quality Meeting" />
+        <div>
+          <h2>Quality Meeting</h2>
+          <p>Stay informed every step of the way. School Advisor lets parents monitor their school search progress, application status, and updates — all in one place. No more emails lost or missed deadlines.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <section id="contact">
+    <footer class="site-footer">
+      <div class="container">
+        <h2><span class="grad">SCHOOL</span> ADVISOR</h2>
+        <p class="copyright">&copy; 2025 School Advisor. All rights reserved.</p>
+      </div>
+    </footer>
+  </section>
+
+  <!-- Link external JavaScript file -->
+  <script src="script.js" defer></script>
+</body>
+
+</html>
