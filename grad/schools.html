@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Schools List</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+        background: url('images/courses-bg.jpg') center center/cover no-repeat;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f7f9fb;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    tr {
+      cursor: pointer;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Schools List</h1>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>school name</th>
+          <th>المحافظة</th>
+          <th>المدينه</th>
+          <th>المنطقة</th>
+          <th>الصفوف</th>
+          <th>اللغة</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- You can add more rows as needed -->
+        <tr onclick="goToInfo('Al Noor International School')">
+          <td>Al Noor International School</td>
+          <td>Capital</td>
+          <td>University</td>
+          <td>Shafa Badran</td>
+          <td>K-12</td>
+          <td>English</td>
+          
+        </tr>
+        <tr onclick="goToInfo('Future Vision Academy')">
+          <td>Future Vision Academy</td>
+          <td>Capital</td>
+          <td>West</td>
+          <td>Abdoun</td>
+          <td>1-10</td>
+          <td>Arabic</td>
+        </tr>
+        <tr onclick="goToInfo('Smart Horizons School')">
+          <td>Smart Horizons School</td>
+          <td>Irbid</td>
+          <td>Downtown</td>
+          <td>Irbid City</td>
+          <td>KG - 9</td>
+          <td>Bilingual</td>
+        </tr>
+        <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+          <tr onclick="goToInfo('Smart Horizons School')">
+            <td>Smart Horizons School</td>
+            <td>Irbid</td>
+            <td>Downtown</td>
+            <td>Irbid City</td>
+            <td>KG - 9</td>
+            <td>Bilingual</td>
+          </tr>
+        <!-- more rows here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function goToInfo(schoolName) {
+      // Encode school name for URL (optional)
+      const encoded = encodeURIComponent(schoolName);
+      window.location.href = `info.html?school=${encoded}`;
+    }
+  </script>
+
+</body>
+</html>
