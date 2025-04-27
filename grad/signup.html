@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up - School Adviser</title>
   <link rel="stylesheet" href="style.css">
+  <script type="module" src="./firebase.js"></script>
 </head>
 <body>
   <!-- Signup Section -->
   <section class="signup-section">
     <h2>Create a New Account</h2>
+    <div id="signUpMessage" style="display:none; color: red;"></div>
     <form action="#" method="post">
-      
       <!-- Username Field -->
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required placeholder="Enter your username"><br>
