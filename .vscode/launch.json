@@ -9,12 +9,17 @@
       "stopAtEntry": false,
       "externalConsole": true,
 <<<<<<< HEAD
+<<<<<<< HEAD
       "cwd": "c:/Users/markb/Desktop/grad/node_modules",
       "program": "c:/Users/markb/Desktop/grad/node_modules/build/Debug/outDebug",
 =======
       "cwd": "c:/Users/markb/Desktop/grad/grad/node_modules",
       "program": "c:/Users/markb/Desktop/grad/grad/node_modules/build/Debug/outDebug",
 >>>>>>> abbbd8e (add gitignore correctly, waiting on merge)
+=======
+      "cwd": "c:/Users/markb/Desktop/grad/grad/node_modules",
+      "program": "c:/Users/markb/Desktop/grad/grad/node_modules/build/Debug/outDebug",
+>>>>>>> abbbd8e43fe290bedb9dc64907606330f95fc331
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
