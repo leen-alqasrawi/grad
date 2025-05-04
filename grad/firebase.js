@@ -82,7 +82,7 @@ if (window.location.pathname.includes("login.html")) {
 
       showMessage("Login successful", "signInMessage");
       localStorage.setItem("loggedInUserId", user.uid);
-      window.location.href = "./Login/loginS.html"; // Redirect after successful login
+      window.location.href = "./findschool.html"; // Redirect after successful login
 
     } catch (err) {
       if (err.code === "auth/invalid-credential") {
