@@ -90,6 +90,13 @@
           // Do whatever you want with the data
       })
       .catch(error => console.error('Error fetching data:', error));
+      const isIndexPage = window.location.pathname.endsWith("index.html") || window.location.pathname === "/";
+  if (isIndexPage) {
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    if (sidebar) sidebar.style.display = 'none';
+    if (mainContent) mainContent.style.marginLeft = '0';
+  }
 </script>
 </body>
 </html>
