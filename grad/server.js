@@ -127,5 +127,21 @@ app.post('/filter-school', async (req, res) => {
     res.status(500).json({ error: 'Filtering failed' });
   }
 });
+app.post('/save-form',async(req,res)=>{
+  const{
+    uid, location, special_needs, language, mixed, grade_from, grade_to
+  } = req.body;
+  if(!uid) return res.status(400).json({error:"firebase error: UID missing"});
+  try{
+    await pool.query(
+      'INSERT INTO user_filters (firebase_uid, location, special_needs, language, mixed, grade_from, grade_to) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+      [uid, location, special_needs, language, mixed, grade_from, grade_to]
+    );
+    res.json({message:'school finding data saved into database'});
+  } catch(err){
+    console.error('error saving school finding data:', err);
+    res.status(500).json({error: 'internal server error'});
+  }
+});
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
