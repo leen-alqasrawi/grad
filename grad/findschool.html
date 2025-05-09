@@ -185,6 +185,7 @@
     // Called when user clicks "Find School"
     function fetchData() {
   const filter = {
+    uid: localStorage.getItem("loggedInUserId"),
     location: document.getElementById('location').value,
     special_needs: document.getElementById('special_needs').value,
     language: document.getElementById('language').value,
@@ -204,7 +205,28 @@
     window.location.href = 'schools.html';
   })
   .catch(err => console.error('fetching error:', err));
-}
+
+  fetch('http://localhost:5000/save-form',{
+    method: 'POST',
+    headers:{'Content-Type': 'application/json'},
+    body: JSON.stringify(filter)
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    console.log(data.message);
+    return fetch('http://localhost:5000/filter-school',{
+      method: 'POST',
+      headers:{'Content-Type': 'application/json'},
+      body: JSON.stringify(filter)
+    });
+  })
+  .then(res => res.json())
+  .then(data => {
+    localStorage.setItem('schoolResults', JSON.stringify(data));
+    window.location.href = 'schools.html';
+  })
+  .catch(err => console.error('fetching error:', err));
+    }
 
   </script>
   
