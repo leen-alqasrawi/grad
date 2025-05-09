@@ -1,0 +1,287 @@
+<div class="user-menu-container">
+  <button id="userMenuBtn" class="user-menu-button" aria-label="Open user menu">
+    <div class="notification-indicator"></div>
+    <img id="userMenuAvatar" src="https://www.gravatar.com/avatar/?d=mp" alt="Profile" class="user-avatar">
+  </button>
+  
+  <div id="userDropdown" class="user-dropdown">
+    <div class="user-dropdown-header">
+      <img id="userDropdownAvatar" src="https://www.gravatar.com/avatar/?d=mp" alt="Profile" class="user-dropdown-avatar">
+      <div class="user-info">
+        <div id="userMenuName" class="user-name">Loading...</div>
+        <div id="userMenuEmail" class="user-email">Loading...</div>
+      </div>
+    </div>
+    
+    <div class="user-dropdown-divider"></div>
+    
+    <div class="user-dropdown-menu">
+      <a href="profile.html" class="menu-item">
+        <i class="fas fa-user"></i>
+        <span>View Profile</span>
+      </a>
+      <a href="dashboard.html" class="menu-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="settings.html" class="menu-item">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+    
+    <div class="user-dropdown-divider"></div>
+    
+    <div class="user-dropdown-footer">
+      <button onclick="logoutUser()" class="logout-button">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* User Menu Styles */
+  .user-menu-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+  }
+
+  .user-menu-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .user-menu-button:hover {
+    transform: scale(1.05);
+  }
+
+  .user-menu-button:focus {
+    outline: none;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #fff;
+    transition: all 0.2s ease;
+  }
+
+  .notification-indicator {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    background-color: #e74c3c;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    z-index: 2;
+  }
+
+  /* Dropdown Styles */
+  .user-dropdown {
+    display: none;
+    background: white;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    margin-top: 15px;
+    min-width: 280px;
+    position: absolute;
+    right: 0;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease;
+    transform-origin: top right;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Dropdown Header */
+  .user-dropdown-header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+  }
+
+  .user-dropdown-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .user-info {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .user-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #2c3e50;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .user-email {
+    font-size: 13px;
+    color: #7f8c8d;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Dropdown Divider */
+  .user-dropdown-divider {
+    height: 1px;
+    background-color: #edf2f7;
+    margin: 0;
+  }
+
+  /* Dropdown Menu */
+  .user-dropdown-menu {
+    padding: 10px 0;
+  }
+
+  .menu-item {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    color: #4a5568;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+
+  .menu-item:hover {
+    background-color: #f8f9fa;
+    color: #3498db;
+  }
+
+  .menu-item i {
+    margin-right: 12px;
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    color: #718096;
+  }
+
+  .menu-item:hover i {
+    color: #3498db;
+  }
+
+  /* Dropdown Footer */
+  .user-dropdown-footer {
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+  }
+
+  .logout-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #f1f5f9;
+    color: #e53e3e;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .logout-button:hover {
+    background-color: #fee2e2;
+  }
+
+  .logout-button i {
+    margin-right: 8px;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .user-dropdown {
+      min-width: 260px;
+      right: -10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .user-dropdown {
+      min-width: 230px;
+      right: -15px;
+    }
+    
+    .user-dropdown-header {
+      padding: 15px;
+    }
+    
+    .user-dropdown-avatar {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  /* Arrow indicator for dropdown */
+  .user-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 17px;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    transform: rotate(45deg);
+    box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.04);
+  }
+</style>
+
+<script>
+  // Toggle dropdown when clicking the user menu button
+  document.getElementById("userMenuBtn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    const dropdown = document.getElementById("userDropdown");
+    dropdown.style.display = dropdown.style.display === "none" || !dropdown.style.display ? "block" : "none";
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (e) => {
+    const dropdown = document.getElementById("userDropdown");
+    const button = document.getElementById("userMenuBtn");
+    if (dropdown && dropdown.style.display === "block" && !dropdown.contains(e.target) && e.target !== button) {
+      dropdown.style.display = "none";
+    }
+  });
+
+  // Prevent dropdown from closing when clicking inside it
+  document.getElementById("userDropdown").addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+</script>
+<div id="userMenuContainer"></div>
+
