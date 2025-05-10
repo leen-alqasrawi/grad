@@ -1,95 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>School Adviser</title>
-  <link rel="icon" href="c:\Users\Home\OneDrive\سطح المكتب\project\favicon.png"/>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="./firebase.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Advisor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
+
+
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <header>
-    <div class="container">
-      <h1><span class="grad">SCHOOL</span> ADVISOR</h1>
-      <nav>
-        <ul>
-          <li><a href="#">HOME</a></li>
-          <li><a href="#">ABOUT US</a></li>
-          <li><a href="#">COURSES</a></li>
-          <li><a href="#">CONTACT</a></li>
-          <li><a href="#">EXTERNAL</a></li>
-          <li><a href="login.html">LOGIN</a></li> <!-- رابط تسجيل الدخول -->
-          <li><a href="signup.html">SIGN UP</a></li> <!-- رابط إنشاء حساب -->
+    <header class="navbar">
+        <div class="logo">SCHOOL <span class="highlight">ADVISOR</span></div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#">HOME</a></li>
+                <li><a href="#about">ABOUT US</a></li>
+                <li><a href="register.html">REGISTER</a></li>
+                <li><a href="#ourprograms">OUR PROGRAMS</a></li>
+                <li><a href="tracking.html">TRACKING</a></li>
+                <li><a href="#contact">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+<!---------------------------------INTRO SECTION--------------------------------->
+
+    <section class="hero">
+        <div class="overlay">
+            <div class="hero-text">
+                <p class="subheading">Find the Perfect School for Your Child</p>
+                <h1>Smart, Simple, and Tailored to You.</h1>
+                <a href="#testimonials" class="btn">DISCOVER MORE</a>
+            </div>
+        </div>
+    </section>
+    <!-- -->
+<!--------------------Feature SECTION--------------------------------->
+<section id="about" class="offer-section">
+  <div class="offer-container">
+    <div class="offer-text">
+      <h2>What We Offer</h2>
+      <p class="intro">
+        Discover how School Advisor simplifies the school selection process for parents, ensuring better education and communication every step of the way.
+      </p>
+
+      <div class="features-grid">
+        <div class="feature-box">
+          <div class="icon-circle"><i class="fas fa-graduation-cap"></i></div>
+          <div>
+            <h3>Best Education</h3>
+            <p>Smart search tailored to your child’s needs — from fees and curriculum to location.</p>
+          </div>
+        </div>
+
+        <div class="feature-box">
+          <div class="icon-circle"><i class="fas fa-user-tie"></i></div>
+          <div>
+            <h3>Top Management</h3>
+            <p>Personalized filtering to match schools with your values and goals.</p>
+          </div>
+        </div>
+
+        <div class="feature-box">
+          <div class="icon-circle"><i class="fas fa-video"></i></div>
+          <div>
+            <h3>Quality Meeting</h3>
+            <p>Stay informed with live status, updates, and all-in-one school tracking.</p>
+          </div>
+        </div>
+
+        <div class="feature-box">
+          <div class="icon-circle"><i class="fas fa-layer-group"></i></div>
+          <div>
+            <h3>Curriculum Match</h3>
+            <p>Instant recommendations based on your preferred curriculum type.</p>
+          </div>
+        </div>
+
+        <div class="feature-box">
+          <div class="icon-circle"><i class="fas fa-map-marker-alt"></i></div>
+          <div>
+            <h3>Nearby Schools</h3>
+            <p>Search and compare schools close to your home or workplace.</p>
+          </div>
+        </div>
+
+        <div class="feature-box">
+          <div class="icon-circle"><i class="fas fa-envelope-open-text"></i></div>
+          <div>
+            <h3>Instant Communication</h3>
+            <p>Connect directly with school staff for quick responses and updates.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="vertical-counter-section">
+      <div class="overlay">
+        <div class="vertical-counters">
+          <div class="counter-box">
+            <h2>90</h2>
+            <p>Schools</p>
+          </div>
+          <div class="counter-box">
+            <h2>30</h2>
+            <p>regions</p>
+          </div>
+          <div class="counter-box">
+            <h2>10</h2>
+            <p>Filters</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+  </div>
+</section>
+
+ 
+ <!---------------------------------- Feature SECTION (2) ----------------------------->
+
+<!-- Testimonials Section -->
+<section id="testimonials">
+  <div class="testimonial-container">
+    
+    <!-- Title that changes dynamically -->
+    <h2 id="feature-title"></h2>
+
+    <!-- Feature list (dynamic items inserted via JS) -->
+    <ul id="feature-list"></ul>
+
+    <!-- Navigation dots to switch between slides -->
+    <div class="dots">
+      <span class="dot"></span> <!-- Dot for slide 0 -->
+      <span class="dot"></span> <!-- Dot for slide 1 -->
+      <span class="dot"></span> <!-- Dot for slide 2 -->
+    </div>
+    
+  </div>
+</section>
+
+<!--------------------------OUR PROGRAMS---------------------------------->
+
+<section id="ourprograms" class="programs-section">
+  <div class="programs-container">
+
+    <!-- Header -->
+    <div class="programs-header">
+      <h2>Start With Us</h2>
+      <p>Join School Advisor today and simplify your school search journey. Let us help you make confident decisions for your child’s future — all you need to do is start by filling out a few simple forms.</p>
+    </div>
+
+    <!-- Content Row -->
+    <div class="programs-content">
+      <!-- Left Image -->
+      <div class="programs-image">
+        <img src="../images/ourprogram.svg" alt="Program Illustration">
+      </div>
+
+      <!-- Right Text -->
+      <div class="programs-text">
+        <h3>Your Path to the Right School Begins Here</h3>
+        <p>We guide you step by step — starting with essential forms to understand your needs, then offering customized recommendations tailored to your goals and location.</p>
+
+        <ul class="programs-stats">
+          <li><i class="fas fa-edit"></i> Fill out your preferences and requirements</li>
+          <li><i class="fas fa-search"></i> Get matched with the best options instantly</li>
+          <li><i class="fas fa-paper-plane"></i> Submit and track your applications with ease</li>
         </ul>
-      </nav>
-    </div>
-  </header>
 
-  <section class="hero">
-    <div class="hero-content">
-      <h1>Find the Perfect School for Your Child </h1>
-      <h4> Smart, Simple, and Tailored to You.</h2>
-      <a href="#" class="btn">DISCOVER MORE</a>
+        <!-- Button with alert -->
+        <a href="findschool.html" class="cta-button">Start Now</a>
+      </div>
     </div>
-  </section>
-  
-  
-  <!-- New section for background -->
-<section class="background-section">
-  <section class="features">
-    <div class="feature">
-       ALL COURSES
-      <p class="description">Here you can find all available courses for your child.</p>
-    </div>
-    <div class="feature">
-       VIRTUAL CLASS
-      <p class="description">Interactive online classes with flexible schedules.</p>
-    </div>
-    <div class="feature">
-       REAL MEETING
-      <p class="description">Face-to-face meetings with educators and mentors.</p>
-    </div>
-  </section>
-  <div class="background-content">
-    <h2>Why choose School Advisor ? </h2>
-    <p>Smart choices start here — we match families with the right schools and nurseries effortlessly.</p>
-  </div>
-
-  
-<section class="background-section">
-  <div class="choose-buttons">
-    <button onclick="showInfo('education')"> Best Education</button>
-    <button onclick="showInfo('management')">Top Management</button>
-    <button onclick="showInfo('meeting')"> Quality Meeting</button>
-  </div>
-
-  <div class="info-box" id="education">
-    <h3>Best Education</h3>
-    <p>We provide the highest quality education by partnering with top schools and nurseries that match your child’s learning style.</p>
-  </div>
-
-  <div class="info-box" id="management">
-    <h3>Top Management</h3>
-    <p>Our system ensures that each institution is managed by professionals with years of experience in the educational field.</p>
-  </div>
-
-  <div class="info-box" id="meeting">
-    <h3>Quality Meeting</h3>
-    <p>Join real-time meetings with educators and administrators to discuss your child's development and needs.</p>
   </div>
 </section>
 
-<script src="script.js"></script>
+<!------------------------CONTACT US------------------------------------------->
+<section id="contact" class="contact-section">
+  <!-- Left Content -->
+  <div class="contact-left">
+    <h2>Contact Us</h2>
+    <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+  </div>
+
+  <!-- Right Form -->
+  <div class="contact-right">
+    <h3>Get In Touch</h3>
+    <form class="contact-form">
+      <input type="text" placeholder="Full Name" required />
+      <input type="tel" placeholder="Phone Number" required />
+      <input type="email" placeholder="Email Address" required />
+      <textarea placeholder="Message" required></textarea>
+      <button type="submit">SEND</button>
+    </form>
+  </div>
 </section>
-<script>
-  fetch('http://localhost:5000/المنطقة')
-      .then(response => response.json())
-      .then(data => {
-          console.log(data); // Now you have the منطقة table data
-          // Do whatever you want with the data
-      })
-      .catch(error => console.error('Error fetching data:', error));
-</script>
+      
+       <!---------------------------------- FOOTER SECTION ----------------------------->
+  <section >
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-column">
+          <h3>Quick Link</h3>
+          <ul>
+            <li><a href="#about">About Us</a></li>
+            <a href="contact.html">Contact Us</a>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms & Condition</a></li>
+            <li><a href="#">FAQs & Help</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <p><i class="fas fa-envelope"></i> info@example.com</p>
+          <div class="footer-socials">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>© School Advisor, All Right Reserved. </p>
+          <div class="footer-links">
+            <a href="#">Home</a>
+            <a href="#">Help</a>
+            <a href="#">FAQs</a>
+          </div>
+        </div>
+    </footer>
+  </section>
+      
+      
+      
+
+<script src="../js/script.js"></script>
 </body>
 </html>
