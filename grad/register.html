@@ -102,8 +102,8 @@
     <form id="login-form">
       <h2>Login to Your Account</h2>
 
-      <input type="email" id="email" placeholder="Email Address" required>
-      <input type="password" id="password" placeholder="Password" required>
+      <input type="email" id="login-email" placeholder="Email Address" required>
+      <input type="password" id="login-password" placeholder="Password" required>
 
       <button type="submit">Login</button>
 
@@ -113,11 +113,13 @@
     <!-- === SIGN UP FORM === -->
     <form id="signup-form" class="hidden">
       <h2>Create a New Account</h2>
+      <div id="signUpMessage" style="color: yellow; margin-top: 10px;"></div>
 
-      <input type="text" placeholder="Full Name" required>
-      <input type="email" placeholder="Email Address" required>
-      <input type="password" placeholder="Password" required>
-      <input type="password" placeholder="Confirm Password" required>
+
+      <input id="username" type="text" placeholder="Full Name" required>
+      <input id="signup-email" type="email" placeholder="Email Address" required>
+      <input id="signup-password" type="password" placeholder="Password" required>
+      <input id="confirm-password" type="password" placeholder="Confirm Password" required>
 
       <button type="submit">Sign Up</button>
 
@@ -137,26 +139,9 @@
     document.getElementById('login-form').classList.remove('hidden');
   }
 
-  // Redirect to findschool.html on form submission
-  document.addEventListener('DOMContentLoaded', function () {
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
 
-    if (loginForm) {
-      loginForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        window.location.href = 'findschool.html';
-      });
-    }
-
-    if (signupForm) {
-      signupForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        window.location.href = 'findschool.html';
-      });
-    }
-  });
 </script>
+
 
   <script type="module" src="./firebase.js"></script>
 
