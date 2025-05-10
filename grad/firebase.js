@@ -39,17 +39,21 @@ if (window.location.pathname.includes("signup.html")) {
       const user = userCredential.user;
 
       // Send email verification
+      const docRef = doc(db, "users", user.uid);
+      await setDoc(docRef, {email, username});
+      await setDoc(docRef, {email, username});
+
       await sendEmailVerification(user);
       showMessage("Verification email sent. Please check your inbox.", "signUpMessage");
 
       // Wait for email verification and then save user data
-      auth.onAuthStateChanged(async (user) => {
+      /*auth.onAuthStateChanged(async (user) => {
         if (user && user.emailVerified) {
           const docRef = doc(db, "users", user.uid);
           await setDoc(docRef, { email, username });
           window.location.href = "login.html"; // Redirect to login page
         }
-      });
+      });*/
 
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
@@ -82,7 +86,7 @@ if (window.location.pathname.includes("login.html")) {
 
       showMessage("Login successful", "signInMessage");
       localStorage.setItem("loggedInUserId", user.uid);
-      window.location.href = "./Login/loginS.html"; // Redirect after successful login
+      window.location.href = "./findschool.html"; // Redirect after successful login
 
     } catch (err) {
       if (err.code === "auth/invalid-credential") {
