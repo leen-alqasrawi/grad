@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login / Sign Up</title>
-  <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg">
 
   <style>
     /* === PAGE BACKGROUND STYLE === */
@@ -102,8 +102,8 @@
     <form id="login-form">
       <h2>Login to Your Account</h2>
 
-      <input type="email" placeholder="Email Address" required>
-      <input type="password" placeholder="Password" required>
+      <input type="email" id="email" placeholder="Email Address" required>
+      <input type="password" id="password" placeholder="Password" required>
 
       <button type="submit">Login</button>
 
@@ -126,17 +126,40 @@
   </div>
 
   <!-- === JAVASCRIPT TO SWITCH FORMS === -->
-  <script>
-    function showSignUp() {
-      document.getElementById('login-form').classList.add('hidden');
-      document.getElementById('signup-form').classList.remove('hidden');
+<script>
+  function showSignUp() {
+    document.getElementById('login-form').classList.add('hidden');
+    document.getElementById('signup-form').classList.remove('hidden');
+  }
+
+  function showLogin() {
+    document.getElementById('signup-form').classList.add('hidden');
+    document.getElementById('login-form').classList.remove('hidden');
+  }
+
+  // Redirect to findschool.html on form submission
+  document.addEventListener('DOMContentLoaded', function () {
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+
+    if (loginForm) {
+      loginForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        window.location.href = 'findschool.html';
+      });
     }
 
-    function showLogin() {
-      document.getElementById('signup-form').classList.add('hidden');
-      document.getElementById('login-form').classList.remove('hidden');
+    if (signupForm) {
+      signupForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        window.location.href = 'findschool.html';
+      });
     }
-  </script>
+  });
+</script>
+
+  <script type="module" src="./firebase.js"></script>
+
 
 </body>
 </html>
