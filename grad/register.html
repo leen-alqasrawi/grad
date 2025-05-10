@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Sign Up</title>
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
+
+  <style>
+    /* === PAGE BACKGROUND STYLE === */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(0, 123, 255, 0.08), rgba(0, 123, 255, 0.08)), 
+            url(../images/main-slider-02.jpg) no-repeat center center fixed;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      transform: scale(0.95);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* === FORM CONTAINER === */
+    .form-container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      width: 90%;
+      max-width: 400px;
+      color: white;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-container h2 {
+      margin-bottom: 30px;
+      font-weight: bold;
+      color: white;
+    }
+
+    /* === INPUTS & BUTTONS === */
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+    }
+
+    input {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    ::placeholder {
+      color: white;
+      opacity: 1;
+    }
+
+    button {
+      background: #007BFF;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .switch-link {
+      color: #ccc;
+      font-size: 14px;
+      margin-top: 10px;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .switch-link:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- === FORM CONTAINER === -->
+  <div class="form-container">
+    <!-- === LOGIN FORM === -->
+    <form id="login-form">
+      <h2>Login to Your Account</h2>
+
+      <input type="email" placeholder="Email Address" required>
+      <input type="password" placeholder="Password" required>
+
+      <button type="submit">Login</button>
+
+      <p class="switch-link" onclick="showSignUp()">Don't have an account? Sign Up</p>
+    </form>
+
+    <!-- === SIGN UP FORM === -->
+    <form id="signup-form" class="hidden">
+      <h2>Create a New Account</h2>
+
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Email Address" required>
+      <input type="password" placeholder="Password" required>
+      <input type="password" placeholder="Confirm Password" required>
+
+      <button type="submit">Sign Up</button>
+
+      <p class="switch-link" onclick="showLogin()">Already have an account? Login</p>
+    </form>
+  </div>
+
+  <!-- === JAVASCRIPT TO SWITCH FORMS === -->
+  <script>
+    function showSignUp() {
+      document.getElementById('login-form').classList.add('hidden');
+      document.getElementById('signup-form').classList.remove('hidden');
+    }
+
+    function showLogin() {
+      document.getElementById('signup-form').classList.add('hidden');
+      document.getElementById('login-form').classList.remove('hidden');
+    }
+  </script>
+
+</body>
+</html>
