@@ -1,46 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Font: Poppins -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
-
-  
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpg" />
   <title>Find Your School</title>
   <style>
-    body { /* Main background settings */
-      margin: 0; /* Remove default margin */
-      padding: 0; /* Remove default padding */
-      font-family: 'Poppins', sans-serif; /* Set font */
-      background: url(../images/main-slider-02.jpg) no-repeat center center fixed; /* Set background image */
-      background-size: cover; /* Cover full screen */
-      position: relative; /* For inner elements */
-      height: 100vh; /* Full viewport height */
-      display: flex; /* Flex container */
-      align-items: center; /* Center vertically */
-      justify-content: center; /* Center horizontally */
-    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url(../images/main-slider-02.jpg) no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .form-container { /* Form box styles */
-      background: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
-      padding: 40px; /* Inner space */
-      border-radius: 12px; /* Rounded corners */
-      box-shadow: 0 8px 16px rgba(0,0,0,0.3); /* Shadow effect */
+    .form-container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
       width: 90%;
-      max-width: 400px; /* Limit width */
+      max-width: 400px;
       color: white;
       text-align: center;
     }
 
-    .form-container h2 { /* Heading style */
+    .form-container h2 {
       margin-bottom: 30px;
       color: white;
     }
 
-    select, button { /* Common input/button styles */
+    select, button {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -71,174 +66,140 @@
       background: #0056b3;
     }
 
-    .grade-selects { /* Container for From Grade and To Grade */
+    .grade-selects {
       display: flex;
-      gap: 10px; /* Space between the two selects */
+      gap: 10px;
     }
 
     .grade-selects select {
-      flex: 1; /* Make both selects same width */
+      flex: 1;
     }
 
-    /* Responsive for small screens */
     @media (max-width: 480px) {
       .grade-selects {
-        flex-direction: column; /* Stack vertically on small screens */
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
-
   <div class="form-container">
     <h2>Find Your School</h2>
-    <form>
+
+    <div>
       <select id="location" name="location" required>
-        <option value="" disabled selected hidden>Select Region</option>
-        <option>Region 1</option>
-        <option>Region 2</option>
+        <option value="" disabled selected hidden>اختار المنطقة</option>
       </select>
 
       <select id="special_needs" name="special_needs" required>
-        <option value="" disabled selected hidden>Does the student have special needs?</option>
-        <option>Yes</option>
-        <option>No</option>
+        <option value="" disabled selected hidden>هل لدى الطالب احتياجات خاصة؟</option>
+        <option>نعم</option>
+        <option>لا</option>
       </select>
 
       <select id="language" name="language" required>
-        <option value="" disabled selected hidden>Language</option>
-        <option>Arabic</option>
-        <option>English</option>
+        <option value="" disabled selected hidden>لغة التدريس</option>
       </select>
 
       <select id="mixed" name="mixed" required>
-        <option value="" disabled selected hidden>Mixed Gender</option>
-        <option>Yes</option>
-        <option>No</option>
+        <option value="" disabled selected hidden>هل المدرسة مختلطة؟</option>
+        <option>نعم</option>
+        <option>لا</option>
       </select>
 
       <div class="grade-selects">
         <select id="grade_from" name="grade_from" required>
-          <option value="" disabled selected hidden>From Grade</option>
+          <option value="" disabled selected hidden>من الصف</option>
           <option>1</option>
           <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
         </select>
 
         <select id="grade_to" name="grade_to" required>
-          <option value="" disabled selected hidden>To Grade</option>
+          <option value="" disabled selected hidden>إلى الصف</option>
+          <option>1</option>
+          <option>2</option>
           <option>3</option>
           <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
         </select>
       </div>
 
-      <button type="submit">Search</button>
-    </form>
+      <button onclick="fetchData()">بحث</button>
+    </div>
   </div>
-  <!--
-  <script>
-    function goToNextForm() {
-      // Optional: Check if all selects have values
-      const selects = document.querySelectorAll('form select');
-      for (let s of selects) {
-        if (!s.value) {
-          alert("Please fill in all fields before proceeding.");
-          return;
-        }
-      }
-  
-      // Redirect to step 2
-      window.location.href = "appointment.html";
-    }
-  </script>
-  -->
-  <div id="userMenuContainer"></div>
-
-
 
   <script>
-    // Load dynamic filters on page load
+    // Load filters dynamically on page load
     window.addEventListener('DOMContentLoaded', () => {
       fetch('http://localhost:5000/filters')
         .then(res => res.json())
         .then(data => {
           populateSelect('location', data.location, 'اختار المنطقة');
-          populateSelect('language', data.language, 'اللغة');
-          // Note: 'special_needs' and 'mixed' are NOT populated dynamically
+          populateSelect('language', data.language, 'لغة التدريس');
         })
-        .catch(err => console.error('Error loading filter options:', err));
+        .catch(err => console.error('Error loading filters:', err));
     });
-  
-    // Utility to populate a <select> element with cleaned and unique values
+
     function populateSelect(selectId, options, placeholder) {
       const select = document.getElementById(selectId);
       select.innerHTML = `<option value="">${placeholder}</option>`;
-  
-      const uniqueOptions = [...new Set(
-        options.map(opt =>
-          opt?.trim().replace(/\u00A0/g, '').replace(/\u200F/g, '')
-        )
-      )].sort((a, b) => a.localeCompare(b, 'ar'));
-  
-      uniqueOptions.forEach(opt => {
+      const unique = [...new Set(options.map(opt => opt?.trim().replace(/\u00A0/g, '').replace(/\u200F/g, '')))].sort((a, b) => a.localeCompare(b, 'ar'));
+      unique.forEach(opt => {
         const option = document.createElement('option');
         option.value = opt;
         option.textContent = opt;
         select.appendChild(option);
       });
     }
-  
-    // Called when user clicks "Find School"
+
     function fetchData() {
-  const filter = {
-    uid: localStorage.getItem("loggedInUserId"),
-    location: document.getElementById('location').value,
-    special_needs: document.getElementById('special_needs').value,
-    language: document.getElementById('language').value,
-    mixed: document.getElementById('mixed').value,
-    grade_from: document.getElementById('grade_from').value,
-    grade_to: document.getElementById('grade_to').value,
-  };
+      const filter = {
+        uid: localStorage.getItem("loggedInUserId"),
+        location: document.getElementById('location').value,
+        special_needs: document.getElementById('special_needs').value,
+        language: document.getElementById('language').value,
+        mixed: document.getElementById('mixed').value,
+        grade_from: document.getElementById('grade_from').value,
+        grade_to: document.getElementById('grade_to').value,
+      };
 
-  fetch('http://localhost:5000/filter-school', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(filter)
-  })
-  .then(res => res.json())
-  .then(data => {
-    localStorage.setItem('schoolResults', JSON.stringify(data));
-    window.location.href = 'schools.html';
-  })
-  .catch(err => console.error('fetching error:', err));
-
-  fetch('http://localhost:5000/save-form',{
-    method: 'POST',
-    headers:{'Content-Type': 'application/json'},
-    body: JSON.stringify(filter)
-  })
-  .then(res=>res.json())
-  .then(data=>{
-    console.log(data.message);
-    return fetch('http://localhost:5000/filter-school',{
-      method: 'POST',
-      headers:{'Content-Type': 'application/json'},
-      body: JSON.stringify(filter)
-    });
-  })
-  .then(res => res.json())
-  .then(data => {
-    localStorage.setItem('schoolResults', JSON.stringify(data));
-    window.location.href = 'schools.html';
-  })
-  .catch(err => console.error('fetching error:', err));
+      // Save the filters and then get the school results
+      fetch('http://localhost:5000/save-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(filter)
+      })
+      .then(() =>
+        fetch('http://localhost:5000/filter-school', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(filter)
+        })
+      )
+      .then(res => res.json())
+      .then(data => {
+        localStorage.setItem('schoolResults', JSON.stringify(data));
+        window.location.href = 'schools.html';
+      })
+      .catch(err => console.error('fetchData() error:', err));
     }
-
   </script>
-  <script type="module" src="usermenu-loader.js"></script>
-
-  
-  
-</body>
-</html>
 </body>
 </html>
