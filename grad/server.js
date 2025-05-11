@@ -143,5 +143,25 @@ app.post('/save-form',async(req,res)=>{
     res.status(500).json({error: 'internal server error'});
   }
 });
+app.get('/get-user-form/:uid', async (req, res) => {
+  const { uid } = req.params;
+
+  try {
+    const result = await pool.query(
+      'SELECT location, special_needs, language, mixed, grade_from, grade_to FROM user_filters WHERE firebase_uid = $1',
+      [uid]
+    );
+
+    if (result.rows.length === 0) {
+      return res.json({ message: 'No data submitted' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error retrieving user form:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
