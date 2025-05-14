@@ -12,13 +12,15 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+const { Pool } = require('pg');
+
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'postgres',
-    password: 'anasomar12',
-    port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
+
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, "findschool.html"));
