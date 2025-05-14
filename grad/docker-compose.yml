@@ -1,4 +1,4 @@
-version: '3.8'
+
 services:
   db:
     image: postgres
@@ -11,20 +11,27 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d  # Auto-import SQL
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   web:
     build: .
     container_name: web-app
     ports:
-      - "3000:3000"
+      - "5500:5500"
     environment:
       DB_USER: postgres
       DB_PASSWORD: anasomar12
-      DB_HOST: db
+      DB_HOST: db  # connect to container
       DB_PORT: 5432
       DB_DATABASE: postgres
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata:
