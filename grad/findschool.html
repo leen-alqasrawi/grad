@@ -1,241 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/jpeg" href="./images/logo.jpg" />
+  <link href="./style.css" rel="stylesheet">
   <title>Find Your School</title>
-  <link rel="stylesheet" href="style.css">
   <style>
     body {
-      background: url('images/courses-bg.jpg') center center/cover no-repeat;
-  height: 100vh;
-  display: flex;
-  color: rgb(255, 255, 255);
-
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-  flex-direction: column;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url('./images/pic1.jpg') no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .form-container {
-      background: #ffffff;
-      padding: 2rem 2.5rem;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 500px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      width: 90%;
+      max-width: 400px;
+      color: white;
+      text-align: center;
     }
 
     .form-container h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: #007bff;
+      margin-bottom: 30px;
+      color: white;
     }
 
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-
-    select,
-    input[type="text"] {
+    select, button {
       width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.3rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
     }
 
-    .grade-range {
+    select {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    select option {
+      background: rgb(81, 77, 77);
+      color: white;
+    }
+
+    button {
+      background: #007BFF;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .grade-selects {
       display: flex;
-      gap: 1rem;
+      gap: 10px;
     }
 
-    .grade-range select {
+    .grade-selects select {
       flex: 1;
     }
 
-    .btn {
-      width: 100%;
-      margin-top: 1.5rem;
-      padding: 0.75rem;
-      font-size: 1rem;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .btn:hover {
-      background-color: #0056b3;
+    @media (max-width: 480px) {
+      .grade-selects {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
-
   <div class="form-container">
     <h2>Find Your School</h2>
-    <form>
 
-      <label for="location">Choose Location:</label>
-      <select id="location" name="location">
-        <option value="">اختار المنطقة </option>
-        <!--<option value="West Town">West Town</option>
-        <option value="Downtown">Downtown</option>
-        <option value="North Hills">North Hills</option> -->
+    <div>
+      <select id="location" name="location" required>
+        <option value="" disabled selected hidden>اختار المنطقة</option>
       </select>
 
-      <select id="special_needs" name="special_needs">
-        <option value="">هل الطالب احتياجات خاصة</option>
-        <option value="نعم">نعم</option>
-        <option value="لا">لا</option>
-      </select>
-      
-
-      <label for="language">اللغة:</label>
-      <select id="language" name="language">
-        <option value="">اللغة</option>
-        <option value="English">English</option>
-        <option value="Arabic">Arabic</option>
-      </select>
-      <label for="mixed">مختلطة</label>
-      <select id="mixed" name="mixed">
-        <option value="">مختلطة</option>
-        <option value="نعم">نعم</option>
-        <option value="لا">لا</option>
+      <select id="special_needs" name="special_needs" required>
+        <option value="" disabled selected hidden>هل لدى الطالب احتياجات خاصة؟</option>
+        <option>نعم</option>
+        <option>لا</option>
       </select>
 
+      <select id="language" name="language" required>
+        <option value="" disabled selected hidden>لغة التدريس</option>
+      </select>
 
-      <label>Enter Your Grades:</label>
-      <div class="grade-range">
-        <select id="grade_from" name="grade_from">
-          <option value="">من الصف  </option>
-          <option value="K">K</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
+      <select id="mixed" name="mixed" required>
+        <option value="" disabled selected hidden>هل المدرسة مختلطة؟</option>
+        <option>نعم</option>
+        <option>لا</option>
+      </select>
+
+      <div class="grade-selects">
+        <select id="grade_from" name="grade_from" required>
+          <option value="" disabled selected hidden>من الصف</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
         </select>
 
-        <select id="grade_to" name="grade_to">
-          <option value="">الى الصف </option>
-          <option value="K">K</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
+        <select id="grade_to" name="grade_to" required>
+          <option value="" disabled selected hidden>إلى الصف</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
         </select>
       </div>
-      <button type="button" class="btn" onclick="fetchData()">Find School</button>
 
-      
-
-    </form>
+      <button onclick="fetchData()">بحث</button>
+    </div>
   </div>
-  <div id="userMenuContainer"></div>
-
-
 
   <script>
-    // Load dynamic filters on page load
+    // Load filters dynamically on page load
     window.addEventListener('DOMContentLoaded', () => {
       fetch('http://localhost:5000/filters')
         .then(res => res.json())
         .then(data => {
           populateSelect('location', data.location, 'اختار المنطقة');
-          populateSelect('language', data.language, 'اللغة');
-          // Note: 'special_needs' and 'mixed' are NOT populated dynamically
+          populateSelect('language', data.language, 'لغة التدريس');
         })
-        .catch(err => console.error('Error loading filter options:', err));
+        .catch(err => console.error('Error loading filters:', err));
     });
-  
-    // Utility to populate a <select> element with cleaned and unique values
+
     function populateSelect(selectId, options, placeholder) {
       const select = document.getElementById(selectId);
       select.innerHTML = `<option value="">${placeholder}</option>`;
-  
-      const uniqueOptions = [...new Set(
-        options.map(opt =>
-          opt?.trim().replace(/\u00A0/g, '').replace(/\u200F/g, '')
-        )
-      )].sort((a, b) => a.localeCompare(b, 'ar'));
-  
-      uniqueOptions.forEach(opt => {
+      const unique = [...new Set(options.map(opt => opt?.trim().replace(/\u00A0/g, '').replace(/\u200F/g, '')))].sort((a, b) => a.localeCompare(b, 'ar'));
+      unique.forEach(opt => {
         const option = document.createElement('option');
         option.value = opt;
         option.textContent = opt;
         select.appendChild(option);
       });
     }
-  
-    // Called when user clicks "Find School"
+
     function fetchData() {
-  const filter = {
-    uid: localStorage.getItem("loggedInUserId"),
-    location: document.getElementById('location').value,
-    special_needs: document.getElementById('special_needs').value,
-    language: document.getElementById('language').value,
-    mixed: document.getElementById('mixed').value,
-    grade_from: document.getElementById('grade_from').value,
-    grade_to: document.getElementById('grade_to').value,
-  };
+      const filter = {
+        uid: localStorage.getItem("loggedInUserId"),
+        location: document.getElementById('location').value,
+        special_needs: document.getElementById('special_needs').value,
+        language: document.getElementById('language').value,
+        mixed: document.getElementById('mixed').value,
+        grade_from: document.getElementById('grade_from').value,
+        grade_to: document.getElementById('grade_to').value,
+      };
 
-  fetch('http://localhost:5000/filter-school', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(filter)
-  })
-  .then(res => res.json())
-  .then(data => {
-    localStorage.setItem('schoolResults', JSON.stringify(data));
-    window.location.href = 'schools.html';
-  })
-  .catch(err => console.error('fetching error:', err));
-
-  fetch('http://localhost:5000/save-form',{
-    method: 'POST',
-    headers:{'Content-Type': 'application/json'},
-    body: JSON.stringify(filter)
-  })
-  .then(res=>res.json())
-  .then(data=>{
-    console.log(data.message);
-    return fetch('http://localhost:5000/filter-school',{
-      method: 'POST',
-      headers:{'Content-Type': 'application/json'},
-      body: JSON.stringify(filter)
-    });
-  })
-  .then(res => res.json())
-  .then(data => {
-    localStorage.setItem('schoolResults', JSON.stringify(data));
-    window.location.href = 'schools.html';
-  })
-  .catch(err => console.error('fetching error:', err));
+      // Save the filters and then get the school results
+      fetch('http://localhost:5000/save-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(filter)
+      })
+      .then(() =>
+        fetch('http://localhost:5000/filter-school', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(filter)
+        })
+      )
+      .then(res => res.json())
+      .then(data => {
+        localStorage.setItem('schoolResults', JSON.stringify(data));
+        window.location.href = 'schools.html';
+      })
+      .catch(err => console.error('fetchData() error:', err));
     }
-
   </script>
-  <script type="module" src="usermenu-loader.js"></script>
-
-  
-  
 </body>
 </html>

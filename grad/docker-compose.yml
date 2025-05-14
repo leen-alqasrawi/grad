@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  db:
+    image: postgres
+    container_name: team-postgres1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: anasomar12
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build: .
+    container_name: web-app
+    ports:
+      - "3000:3000"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: anasomar12
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: postgres
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
