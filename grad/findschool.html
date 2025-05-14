@@ -149,7 +149,7 @@
   <script>
     // Load filters dynamically on page load
     window.addEventListener('DOMContentLoaded', () => {
-      fetch('http://localhost:5000/filters')
+      fetch('/filters')
         .then(res => res.json())
         .then(data => {
           populateSelect('location', data.location, 'اختار المنطقة');
@@ -182,13 +182,13 @@
       };
 
       // Save the filters and then get the school results
-      fetch('http://localhost:5000/save-form', {
+      fetch('/save-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(filter)
       })
       .then(() =>
-        fetch('http://localhost:5000/filter-school', {
+        fetch('/filter-school', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(filter)
