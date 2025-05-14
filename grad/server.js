@@ -12,15 +12,12 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const { Pool } = require('pg');
+const isProduction = process.env.NODE_ENV === 'production';
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  connectionString: process.env.DATABASE_URL || 'postgres://postgres:anasomar12@localhost:5432/postgres',
+  ssl: isProduction ? { rejectUnauthorized: false } : false,
 });
-
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, "findschool.html"));
