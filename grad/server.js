@@ -13,12 +13,22 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'postgres',
-    password: 'anasomar12',
-    port: 5432,
+  host: 'localhost',
+  port: 5432,
+  user: 'postgres',
+  password: 'anasomar12',
+  database: 'postgres',
 });
+(async () => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    console.log('✅ Connected! Time from DB:', result.rows[0].now);
+    process.exit(); // exit after success
+  } catch (err) {
+    console.error('❌ Database connection failed:', err);
+    process.exit(1); // exit with failure
+  }
+})();
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, "findschool.html"));
@@ -143,5 +153,25 @@ app.post('/save-form',async(req,res)=>{
     res.status(500).json({error: 'internal server error'});
   }
 });
+app.get('/get-user-form/:uid', async (req, res) => {
+  const { uid } = req.params;
+
+  try {
+    const result = await pool.query(
+      'SELECT location, special_needs, language, mixed, grade_from, grade_to FROM user_filters WHERE firebase_uid = $1',
+      [uid]
+    );
+
+    if (result.rows.length === 0) {
+      return res.json({ message: 'No data submitted' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error retrieving user form:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
+
+  <title>Live Bus Tracker</title>
+  <style>
+    /* === PAGE BACKGROUND STYLE === */
+    body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(rgba(0, 123, 255, 0.2), rgba(0, 123, 255, 0.2)), 
+                url(../images/aa.webp) no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+    /* === FORM CONTAINER === */
+    .form-container {
+      background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+      padding: 40px; /* Inner space */
+      border-radius: 12px; /* Rounded corners */
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3); /* Soft shadow */
+      width: 90%; /* Full width on mobile */
+      max-width: 500px; /* Max width on larger screens */
+      height: 600px;
+      color: white; /* Text color */
+      text-align: center; /* Center text inside */
+    }
+
+    .form-container h2 {
+      margin-bottom: 30px; /* Space below heading */
+      color: white; /* Heading color */
+    }
+
+    /* === INPUT AND BUTTON STYLES === */
+    input, button {
+      width: 100%; /* Full width fields */
+      padding: 12px; /* Inner padding */
+      margin: 10px 0; /* Margin between fields */
+      border: none; /* No border */
+      border-radius: 25px; /* Rounded inputs and buttons */
+      font-size: 16px; /* Text size */
+    }
+
+    input {
+      background-color: rgba(255, 255, 255, 0.1); /* Light input background */
+      color: white; /* Input text color */
+    }
+
+    /* === PLACEHOLDER STYLE === */
+    ::placeholder {
+      color: white; /* White placeholder text */
+      opacity: 1;   /* Fully visible */
+    }
+
+    /* === BUTTON STYLE === */
+    button {
+      background: #007BFF; /* Blue background */
+      color: white; /* Button text color */
+      font-weight: bold; /* Bold button text */
+      cursor: pointer; /* Pointer on hover */
+      transition: background 0.3s; /* Smooth hover transition */
+    }
+
+    button:hover {
+      background: #0056b3; /* Darker blue on hover */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- === FORM STRUCTURE === -->
+  <div class="form-container">
+    <h2>Live Bus Tracker</h2> <!-- Form heading -->
+
+    <form>
+      <input type="text" placeholder="Enter the student ID" required> <!-- Input for student ID -->
+
+      <button type="submit">Start Live Tracking</button> <!-- Button to start tracking -->
+    </form>
+  </div>
+
+</body>
+</html>
