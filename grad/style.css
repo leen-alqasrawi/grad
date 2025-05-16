@@ -101,7 +101,7 @@ html {
   background: #00bcd4;
 }
 
-/************************FEATURE SECION*********************************/
+/*********FEATURE SECION************/
 /* What We Offer Section Styles */
 .offer-section {
   padding: 80px 0;
@@ -192,7 +192,7 @@ html {
   font-size: 14px;
   color: #666;
 }
-/*IMAGE INTRO*/
+/*MAGE INTRO*/
 .vertical-counter-section {
   background: url('../images/intro.jpg') no-repeat center center/cover;
   height: 100vh;
@@ -234,7 +234,7 @@ html {
 
 
 
-/*********************************Testimonials Section------------------------------- */
+/*************Testimonials Section------------------------------- */
 
 #testimonials {
   background-size: cover;              /* يجعل الصورة الخلفية تغطي كامل العنصر */
@@ -319,7 +319,7 @@ html {
 
 
 
-/****************************Programs Section**************************/
+/*********Programs Section*********/
 
 .programs-section {
   background: #fff;
@@ -426,14 +426,14 @@ html {
 }
 
 
-/*********** تنسيق التخطيط العام لقسم التواصل (يمين ويسار) ***********/
+/**** تنسيق التخطيط العام لقسم التواصل (يمين ويسار) ****/
 .contact-section {
   display: flex;              /* عرض العناصر بجانب بعض */
   flex-wrap: wrap;            /* لف العناصر عند صغر الشاشة */
   min-height: 100vh;          /* ملء الشاشة بالكامل */
 }
 
-/*********** العمود الأيسر: العنوان والوصف ***********/
+/**** العمود الأيسر: العنوان والوصف ****/
 .contact-left {
   flex: 1;
   padding: 80px 50px 80px 100px;  /* ✅ أضف padding-left أكبر لتقريبه لليمين */
@@ -466,7 +466,7 @@ html {
   max-width: 300px;           /* أقصى عرض للفقرة */
 }
 
-/*********** العمود الأيمن: خلفية مائلة وفورم ***********/
+/**** العمود الأيمن: خلفية مائلة وفورم ****/
 .contact-right {
   flex: 1.5;                  /* يأخذ حصة أكبر */
   background: #19497b;        /* لون خلفية أزرق */
@@ -484,7 +484,7 @@ html {
   margin-bottom: 30px;        /* مسافة أسفل العنوان */
 }
 
-/*********** تنسيقات نموذج الاتصال ***********/
+/**** تنسيقات نموذج الاتصال ****/
 .contact-form {
   max-width: 500px;           /* أقصى عرض للنموذج */
   margin: auto;               /* توسيطه بالصفحة */
@@ -529,7 +529,7 @@ html {
   background-color: #00bfa6;  /* تغيير اللون عند التحويم */
 }
 
-/*********** تجاوب التصميم عند الشاشات الصغيرة (جوال) ***********/
+/**** تجاوب التصميم عند الشاشات الصغيرة (جوال) ****/
 @media (max-width: 768px) {
   .contact-section {
     flex-direction: column;   /* تحويل التخطيط لعمودي */
@@ -546,9 +546,9 @@ html {
   }
 }
 
-/*********************************************************/
+/*******************/
 
-/***************** Footer Section ********************/
+/****** Footer Section *******/
 .footer {
   background-color: #000000ee;
   color: #fff;
@@ -670,4 +670,113 @@ html {
   color: #00c9ff;
 }
 
+/******************************************************/
+/***************************************** === Review Section === **************************************************/
+.review-section {
+  background-color: #f5f7fa;
+  padding: 80px 20px;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
 
+.review-container {
+  max-width: 800px;
+  margin: auto;
+  text-align: center;
+  background: #fff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.review-container h2 {
+  font-size: 32px;
+  color: #19497b;
+  margin-bottom: 10px;
+}
+
+.review-container p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.review-form input,
+.review-form textarea {
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  width: 100%;
+}
+
+.review-form textarea {
+  resize: vertical;
+  height: 120px;
+}
+
+.review-form button {
+  background-color: #19497b;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.review-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Success message */
+.success-msg {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/***************************************** Star Rating ****************************************/
+.star-rating {
+  direction: rtl;
+  display: flex;
+  justify-content: center;
+  font-size: 2rem;
+  user-select: none;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 0 5px;
+}
+
+.star-rating label::before {
+  content: "★";
+}
+
+.star-rating input:checked ~ label::before,
+.star-rating label:hover::before,
+.star-rating label:hover ~ label::before {
+  color: #187ff5;
+}
+
+
+/***************************************** Schools Review ****************************************/
