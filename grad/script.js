@@ -68,3 +68,34 @@ document.addEventListener("DOMContentLoaded", () => {
   // Show the first slide when the page loads
   showSlide(0);
 });
+
+//////////////////////////////// CODE FOR REVIEW ///////////////////
+document.addEventListener("DOMContentLoaded", () => {
+  const reviewForm = document.getElementById("reviewForm");
+
+  if (reviewForm) {
+    reviewForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("reviewerName").value.trim();
+      const message = document.getElementById("reviewMessage").value.trim();
+      const ratingInput = document.querySelector('input[name="rating"]:checked');
+      const rating = ratingInput ? ratingInput.value : null;
+
+      if (name && message) {
+        // Show success message instead of alert
+        const successMsg = document.getElementById("reviewSuccessMsg");
+        successMsg.style.display = "block";
+
+        setTimeout(() => {
+          successMsg.style.display = "none";
+        }, 4000);
+
+        reviewForm.reset();
+        const stars = document.querySelectorAll('input[name="rating"]');
+        stars.forEach(star => star.checked = false);
+      }
+    });
+  }
+});
+///////////////////////////////////////////////////////
