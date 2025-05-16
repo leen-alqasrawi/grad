@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Advisor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="icon" type="image/jpeg" href="./images/logo.jpg">
+    <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
 
 
-    <link rel="stylesheet" href="./style.css">
+   
+
+
+
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header class="navbar">
@@ -18,9 +22,11 @@
                 <li><a href="#">HOME</a></li>
                 <li><a href="#about">ABOUT US</a></li>
                 <li><a href="register.html">REGISTER</a></li>
-                <li><a href="#ourprograms">OUR PROGRAMS</a></li>
+                <li><a href="#ourprograms">SEARCH SCHOOLS</a></li>
                 <li><a href="tracking.html">TRACKING</a></li>
                 <li><a href="#contact">CONTACT</a></li>
+                 <li><a href="#review">REVIEW</a></li>
+
             </ul>
         </nav>
     </header>
@@ -143,7 +149,7 @@
   </div>
 </section>
 
-<!--------------------------OUR PROGRAMS---------------------------------->
+<!--------------------------SEARCH SCHOOL---------------------------------->
 
 <section id="ourprograms" class="programs-section">
   <div class="programs-container">
@@ -198,7 +204,63 @@
       <button type="submit">SEND</button>
     </form>
   </div>
+</section> 
+
+<!-- ===================== REVIEW SECTION ===================== -->
+<section id="review" class="review-section">
+  <div class="review-container">
+    <h2>Leave a Review</h2>
+    <p>We’d love to hear your thoughts about School Advisor.</p>
+
+    <form id="reviewForm" class="review-form">
+      <input type="text" id="reviewerName" placeholder="Full Name" required />
+      <textarea id="reviewMessage" placeholder="Write your comment here..." required></textarea>
+
+      <!-- Star Rating -->
+      <div class="star-rating">
+        <input type="radio" id="star5" name="rating" value="5"><label for="star5" title="5 stars"></label>
+        <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 stars"></label>
+        <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 stars"></label>
+        <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 stars"></label>
+        <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="1 star"></label>
+      </div>
+
+      <button type="submit">Submit</button>
+
+      <!-- Success message -->
+      <p id="reviewSuccessMsg" class="success-msg" style="display: none;">Thanks for your review!</p>
+    </form>
+  </div>
 </section>
+
+
+<!-- ===================== REVIEW SECTION ===================== 
+<section id="review" class="review-section">
+  <div class="review-container">
+    <h2>Leave a Review</h2>
+    <p>We’d love to hear your thoughts about School Advisor.</p>
+
+    <form id="reviewForm" class="review-form">
+      <input type="text" id="reviewerName" placeholder="Full Name" required />
+      <textarea id="reviewMessage" placeholder="Write your comment here..." required></textarea>
+      <select id="rating">
+        <option value="">Optional: Star Rating</option>
+        <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
+        <option value="4">⭐️⭐️⭐️⭐️</option>
+        <option value="3">⭐️⭐️⭐️</option>
+        <option value="2">⭐️⭐️</option>
+        <option value="1">⭐️</option>
+      </select>
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="submittedReviews" class="submitted-reviews">
+      <h3>User Reviews</h3>
+      
+    </div>
+  </div>
+</section>-->
+
       
        <!---------------------------------- FOOTER SECTION ----------------------------->
   <section >
@@ -208,9 +270,8 @@
           <h3>Quick Link</h3>
           <ul>
             <li><a href="#about">About Us</a></li>
-            <a href="contact.html">Contact Us</a>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms & Condition</a></li>
+            <li> <a href="#contact">Contact Us</a></li>
+            <li><a href="privacypolicy.html">Privacy Policy</a></li>
             <li><a href="#">FAQs & Help</a></li>
           </ul>
         </div>
@@ -229,8 +290,6 @@
           <p>© School Advisor, All Right Reserved. </p>
           <div class="footer-links">
             <a href="#">Home</a>
-            <a href="#">Help</a>
-            <a href="#">FAQs</a>
           </div>
         </div>
     </footer>
@@ -239,7 +298,6 @@
       
       
 
-<script src="./script.js"></script>
-  <script type="module" src="./firebase.js"></script>
+<script src="../js/script.js"></script>
 </body>
 </html>
