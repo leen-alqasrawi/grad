@@ -167,9 +167,14 @@ app.get('/get-user-form/:uid', async (req, res) => {
 
   try {
     const result = await pool.query(
-      'SELECT location, special_needs, language, mixed, grade_from AS grade FROM user_filters WHERE firebase_uid = $1',
-      [uid]
-    );
+  `SELECT location, special_needs, language, mixed, grade_from, grade_to
+   FROM user_filters
+   WHERE firebase_uid = $1
+   ORDER BY created_at DESC
+   LIMIT 1`,
+  [uid]
+);
+
     if (result.rows.length === 0) return res.json({ message: 'No data submitted' });
     res.json(result.rows[0]);
   } catch (err) {
@@ -214,6 +219,82 @@ app.get('/track/:schoolId', async (req, res) => {
   if (!data) return res.status(404).send('No location available');
   res.json(JSON.parse(data));
 });
+// 📘 Get school info by student ID
+app.get('/get-student-school', async (req, res) => {
+  const { studentId } = req.query;
+  if (!studentId) return res.status(400).json({ error: 'Missing student ID' });
+
+  try {
+    const result = await pool.query(`
+      SELECT s."اسم المدرسة", s."المنطقة", s.latitude, s.longitude
+      FROM students AS st
+      JOIN schooldata AS s ON st.school_id = s.id
+      WHERE st.id = $1
+      LIMIT 1
+    `, [studentId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Student not found or no linked school' });
+    }
+
+    res.json({ school: result.rows[0] });
+  } catch (err) {
+    console.error('Error fetching school for student:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+app.post('/update-location', async (req, res) => {
+  const { uid, lat, lng } = req.body;
+  if (!uid || !lat || !lng) {
+    return res.status(400).json({ error: 'Missing fields' });
+  }
+
+  try {
+    const existing = await pool.query(
+      'SELECT 1 FROM students WHERE firebase_uid = $1 LIMIT 1',
+      [uid]
+    );
+
+    if (existing.rows.length === 0) {
+      // Optionally get school_id from user_filters to insert a full student record
+      const schoolResult = await pool.query(
+        `SELECT grade_from FROM user_filters WHERE firebase_uid = $1 ORDER BY created_at DESC LIMIT 1`,
+        [uid]
+      );
+
+      // fallback school_id or dummy value
+      const school_id = 'SCH001'; // default or inferred based on your schema
+
+      await pool.query(
+        `INSERT INTO students (id, name, firebase_uid, school_id, home_lat, home_lng)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [
+          'stu_' + Date.now(),   // or use uuid if preferred
+          'Anonymous',           // you can replace with a real name later
+          uid,
+          school_id,
+          lat,
+          lng
+        ]
+      );
+    } else {
+      await pool.query(
+        `UPDATE students
+         SET home_lat = $1, home_lng = $2
+         WHERE firebase_uid = $3`,
+        [lat, lng, uid]
+      );
+    }
+
+    res.json({ message: 'Location updated successfully' });
+  } catch (err) {
+    console.error('Error updating location:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
 
 //  Start server
 app.listen(PORT, () => console.log(` Server running on port ${PORT}`));

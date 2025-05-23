@@ -62,6 +62,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         window.open(googleMapsURL, "_blank");
       });
     }
+    const viewed = JSON.parse(localStorage.getItem("viewedSchools") || "[]");
+if (!viewed.includes(data["اسم المدرسة"])) {
+  viewed.push(data["اسم المدرسة"]);
+  localStorage.setItem("viewedSchools", JSON.stringify(viewed));
+}
 
   } catch (error) {
     console.error("Error loading school info:", error);
@@ -104,4 +109,3 @@ function showSchoolImage(schoolName) {
     });
   });
 }
-

@@ -419,10 +419,11 @@
           <i class="fas fa-user"></i>
           <span>Profile</span>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" onclick="goToSchools()">
           <i class="fas fa-school"></i>
           <span>Schools</span>
         </div>
+
         <div class="menu-item">
           <i class="fas fa-bookmark"></i>
           <span>Saved</span>
@@ -437,7 +438,7 @@
         </div>
         <div class="menu-item">
           <i class="fas fa-sign-out-alt"></i>
-          <span>Logout</span>
+          <span onclick="logoutUser()">Logout</span>
         </div>
       </div>
     </div>
@@ -466,38 +467,32 @@
           <div class="profile-actions">
             <button class="btn btn-primary" onclick="editInfo()">
               <i class="fas fa-edit"></i> Edit Information
-            </button>
-            <button class="btn btn-outline">
-              <i class="fas fa-download"></i> Download Data
-            </button>
+              <button class="btn btn-outline" onclick="updateLocation()">
+                <i class="fas fa-map-marker-alt"></i> Update Location
+              </button>
+
           </div>
         </div>
       </div>
 
       <!-- Stats Section -->
-      <div class="stats-container">
+       <div class="stats-container">
         <div class="stat-card">
           <div class="stat-icon blue">
             <i class="fas fa-search"></i>
           </div>
-          <div class="stat-value">12</div>
+          <div class="stat-value" id="viewedCount"></div>
           <div class="stat-label">Schools Viewed</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon green">
-            <i class="fas fa-bookmark"></i>
-          </div>
-          <div class="stat-value">5</div>
-          <div class="stat-label">Saved Schools</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon purple">
             <i class="fas fa-check-circle"></i>
           </div>
-          <div class="stat-value">3</div>
-          <div class="stat-label">Applications</div>
+          <div class="stat-value"></div>
+          <div class="stat-label">Appointments Made</div>
         </div>
       </div>
+
 
       <!-- School Data Section -->
       <div class="school-data-section">

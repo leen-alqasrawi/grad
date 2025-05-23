@@ -1,18 +1,8 @@
-// tracking.js
+// ✅ Revised tracking.js with dynamic school lookup via student ID
+
 let locationSharing = false;
 let driverLocationSharing = false;
 let locationWatchId = null;
-
-const schools = {
-  'SCH001': { name: 'Lincoln Elementary', lat: 40.7128, lng: -74.0060 },
-  'SCH002': { name: 'Washington High School', lat: 40.7589, lng: -73.9851 },
-  'SCH003': { name: 'Roosevelt Middle School', lat: 40.7505, lng: -73.9934 }
-};
-
-const driverCredentials = {
-  'driver001': 'password123',
-  'driver002': 'busdriver456'
-};
 
 function showMainScreen() {
   hideAllScreens();
@@ -32,143 +22,127 @@ function showDriverLogin() {
 
 function hideAllScreens() {
   const screens = ['mainScreen', 'studentScreen', 'driverScreen', 'mapScreen', 'driverDashboard'];
-  screens.forEach(screen => {
-    document.getElementById(screen).classList.add('hidden');
-  });
+  screens.forEach(screen => document.getElementById(screen).classList.add('hidden'));
 }
 
-function requestLocation() {
-  const schoolId = document.getElementById('schoolId').value.trim();
+async function requestLocation() {
+  const studentId = document.getElementById('studentId').value.trim();
 
-  if (!schoolId || !schools[schoolId]) {
-    alert('Please enter a valid School ID (e.g., SCH001)');
+  if (!studentId) {
+    alert('Please enter your Student ID');
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(
-    function(position) {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      localStorage.setItem('homeLocation', JSON.stringify({ lat, lng }));
-      localStorage.setItem('schoolId', schoolId);
-      showMap();
-    },
-    function(error) {
-      alert('Location access denied. Please enable location services.');
-    }
-  );
-}
+  try {
+    const res = await fetch(`http://localhost:5000/get-student-school?studentId=${studentId}`);
+    const data = await res.json();
 
-let map, homeMarker, schoolMarker, busMarker;
+    if (!data || !data.school) {
+      alert('Invalid Student ID or no school linked.');
+      return;
+    }
+
+    const school = data.school;
+    localStorage.setItem('schoolData', JSON.stringify(school));
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          localStorage.setItem('homeLocation', JSON.stringify({ lat, lng }));
+          showMap();
+          startLocationSharing();
+        },
+        error => {
+          alert('Location access denied. Please enable location services.');
+          console.error('Geolocation error:', error);
+        }
+      );
+    } else {
+      alert('Geolocation not supported.');
+    }
+  } catch (error) {
+    console.error('Error fetching school info:', error);
+    alert('Failed to retrieve school info.');
+  }
+}
 
 function showMap() {
   hideAllScreens();
   document.getElementById('mapScreen').classList.remove('hidden');
 
-  const schoolId = localStorage.getItem('schoolId');
-  const school = schools[schoolId];
-  const home = JSON.parse(localStorage.getItem('homeLocation'));
+const school = JSON.parse(localStorage.getItem('schoolData'));
+const schoolName = `مدرسة ${school["اسم المدرسة"]}`;
+const mapQuery = encodeURIComponent(schoolName);
+
+const geocoder = new google.maps.Geocoder();
+geocoder.geocode({ address: schoolName }, (results, status) => {
+  if (status === "OK" && results[0]) {
+    const schoolLocation = results[0].geometry.location;
+    document.getElementById('schoolLocation').textContent = school["اسم المدرسة"];
+    document.getElementById('homeLocation').textContent = `Lat: ${homeLocation.lat.toFixed(4)}, Lng: ${homeLocation.lng.toFixed(4)}`;
+    
+    // optionally store lat/lng if needed later
+    localStorage.setItem('schoolGeo', JSON.stringify({
+      lat: schoolLocation.lat(),
+      lng: schoolLocation.lng()
+    }));
+  } else {
+    console.error("Geocode error:", status);
+    alert("Could not locate the school on the map.");
+  }
+});
+
+  const homeLocation = JSON.parse(localStorage.getItem('homeLocation'));
 
   document.getElementById('schoolLocation').textContent = school.name;
-  document.getElementById('homeLocation').textContent = `Lat: ${home.lat.toFixed(4)}, Lng: ${home.lng.toFixed(4)}`;
+  document.getElementById('homeLocation').textContent = `Lat: ${homeLocation.lat.toFixed(4)}, Lng: ${homeLocation.lng.toFixed(4)}`;
 
-  const center = {
-    lat: (home.lat + school.lat) / 2,
-    lng: (home.lng + school.lng) / 2
-  };
+  updateBusStatus();
+}
 
-  map = new google.maps.Map(document.getElementById('googleMap'), {
-    zoom: 13,
-    center
-  });
+function updateBusStatus() {
+  const statuses = ['Bus is approaching your stop', 'Bus is 5 minutes away', 'Bus is on route', 'Bus has left the school'];
+  const etas = ['5 minutes', '10 minutes', '15 minutes', '20 minutes'];
+  const stops = ['Main Street', 'Oak Avenue', 'Elm Street', 'School Parking Lot'];
 
-  homeMarker = new google.maps.Marker({
-    position: home,
-    map,
-    label: '🏠'
-  });
-
-  schoolMarker = new google.maps.Marker({
-    position: { lat: school.lat, lng: school.lng },
-    map,
-    label: '🏫'
-  });
-
-  busMarker = new google.maps.Marker({
-    position: { lat: school.lat, lng: school.lng },
-    map,
-    label: '🚌'
-  });
-
-  // Poll for live bus updates every 5 seconds
-  setInterval(async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/track/${schoolId}`);
-      if (!response.ok) throw new Error('Bus data not found');
-      const bus = await response.json();
-
-      busMarker.setPosition({ lat: bus.lat, lng: bus.lng });
-
-      document.getElementById('busStatus').textContent = 'Bus is on the move';
-      document.getElementById('eta').textContent = 'Live tracking';
-      document.getElementById('nextStop').textContent = `Lat: ${bus.lat.toFixed(4)}, Lng: ${bus.lng.toFixed(4)}`;
-    } catch (err) {
-      console.warn('No live bus location available');
-    }
+  setInterval(() => {
+    document.getElementById('busStatus').textContent = statuses[Math.floor(Math.random() * statuses.length)];
+    document.getElementById('eta').textContent = etas[Math.floor(Math.random() * etas.length)];
+    document.getElementById('nextStop').textContent = stops[Math.floor(Math.random() * stops.length)];
   }, 5000);
 }
 
-
-function driverLogin() {
-  const username = document.getElementById('driverUsername').value.trim();
-  const password = document.getElementById('driverPassword').value.trim();
-
-  if (!username || !password || driverCredentials[username] !== password) {
-    alert('Invalid credentials');
-    return;
+function startLocationSharing() {
+  if (navigator.geolocation) {
+    locationWatchId = navigator.geolocation.watchPosition(
+      position => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        localStorage.setItem('currentLocation', JSON.stringify({ lat, lng, timestamp: Date.now() }));
+      },
+      error => console.error('Location tracking error:', error),
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+    locationSharing = true;
   }
-
-  localStorage.setItem('driverLoggedIn', 'true');
-  localStorage.setItem('driverUsername', username);
-  localStorage.setItem('schoolId', 'SCH001'); // default for demo
-  showDriverDashboard();
 }
 
-function showDriverDashboard() {
-  hideAllScreens();
-  document.getElementById('driverDashboard').classList.remove('hidden');
-  startDriverLocationSharing();
-}
-
-function startDriverLocationSharing() {
-  navigator.geolocation.watchPosition(
-    async function(position) {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      const schoolId = localStorage.getItem('schoolId');
-
-      await fetch('http://localhost:5000/track/driver', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ schoolId, lat, lng })
-      });
-
-      document.getElementById('driverLocation').innerHTML = `<strong>📍 Current Location:</strong> Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)} - <span style="color: green;">Active</span>`;
-    },
-    function(error) {
-      console.error('Driver location error:', error);
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 30000
-    }
-  );
+function stopLocationSharing() {
+  if (locationWatchId) {
+    navigator.geolocation.clearWatch(locationWatchId);
+    locationWatchId = null;
+    locationSharing = false;
+  }
 }
 
 function logout() {
   localStorage.clear();
+  stopLocationSharing();
+  driverLocationSharing = false;
   showMainScreen();
 }
 
-window.onload = showMainScreen; 
+window.onload = showMainScreen;
