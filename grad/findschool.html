@@ -204,3 +204,202 @@
   </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Your School</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url(../images/main-slider-02.jpg) no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 400px;
+      color: white;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 30px;
+    }
+
+    select,
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+    }
+
+    select {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    select option {
+      background: rgb(81, 77, 77);
+      color: white;
+    }
+
+    button {
+      background: #007BFF;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .home-fixed {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+      z-index: 1000;
+    }
+
+    .home-fixed:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="form-container">
+    <h2>Find Your School</h2>
+    <form>
+      <select id="location" required>
+        <option value="" disabled selected hidden>Select Region</option>
+      </select>
+      <select id="special_needs" required>
+  <option value="" selected>تقبل المدرسة من ذوي الاحتياجات</option>
+  <option value="نعم">Yes</option>
+  <option value="لا">No</option>
+</select>
+
+
+      <select id="language" required>
+        <option value="" disabled selected hidden>Language</option>
+      </select>
+      <select id="mixed" required>
+  <option value="" selected>المدارس المختلطة</option>
+  <option value="نعم">Yes</option>
+  <option value="لا">No</option>
+</select>
+
+
+      <select id="grade" required>
+  <option value="" disabled selected hidden>اختار الصف</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+  <option value="6">6</option>
+  <option value="7">7</option>
+  <option value="8">8</option>
+  <option value="9">9</option>
+  <option value="10">10</option>
+  <option value="11">11</option>
+  <option value="12">12</option>
+</select>
+
+      <button type="button" onclick="fetchData()">Search</button>
+    </form>
+  </div>
+
+  <a href="index.html" class="home-fixed">Home</a>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      fetch('http://localhost:5000/filters')
+        .then(res => res.json())
+        .then(data => {
+          populateSelect('location', data.location, 'اختار المنطقة');
+          populateSelect('language', data.language, 'لغة التدريس');
+        })
+        .catch(err => console.error('Error loading filters:', err));
+    });
+
+    function populateSelect(selectId, options, placeholder) {
+      const select = document.getElementById(selectId);
+      select.innerHTML = `<option value="">${placeholder}</option>`;
+      const unique = [...new Set(options.map(opt => opt?.trim().replace(/\u00A0/g, '').replace(/\u200F/g, '')))].sort((a, b) => a.localeCompare(b, 'ar'));
+      unique.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt;
+        option.textContent = opt;
+        select.appendChild(option);
+      });
+    }
+
+    function fetchData() {
+      const filter = {
+        uid: localStorage.getItem("loggedInUserId"),
+        location: document.getElementById('location').value,
+        special_needs: document.getElementById('special_needs').value,
+        language: document.getElementById('language').value,
+        mixed: document.getElementById('mixed').value,
+        grade: document.getElementById('grade').value,
+      };
+
+      fetch('http://localhost:5000/save-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(filter)
+      })
+      .then(() =>
+        fetch('http://localhost:5000/filter-school', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(filter)
+        })
+      )
+      .then(res => res.json())
+      .then(data => {
+          if (!Array.isArray(data)) {
+            console.error('Server did not return an array:', data);
+            alert('Error loading schools. Check the server log.');
+            return;
+          }
+          localStorage.setItem('schoolResults', JSON.stringify(data));
+          window.location.href = 'schools.html';
+        })
+
+      .catch(err => console.error('fetchData() error:', err));
+    }
+  </script>
+</body>
+
+</html>

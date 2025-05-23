@@ -2,28 +2,38 @@ const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
 const bodyParser = require("body-parser");
-const path = require("path");
 
 const app = express();
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname))); // Serve HTML, CSS, images, etc.
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'anasomar12',
-  database: process.env.DB_DATABASE || 'postgres',
+  connectionString: process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_IaWQ4Cdrt9Pz@ep-delicate-sound-a1f4t8mi-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require',
+  ssl: isProduction ? { rejectUnauthorized: false } : false,
 });
 
+// ✅ Health check
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'findschool.html'));
+  res.send('✅ App is running and listening on /');
 });
 
+// Get all school names
+app.get('/city', (req, res) => {
+  pool.query('SELECT "اسم المدرسة" FROM "schooldata";', (error, result) => {
+    if (error) {
+      console.error('Error occurred:', error);
+      return res.status(500).send('Database error');
+    }
+    res.json(result.rows);
+  });
+});
+
+// filter values
 app.get('/filters', async (req, res) => {
   try {
     const queries = {
@@ -64,31 +74,14 @@ app.get('/filters', async (req, res) => {
       mixed: mixed.rows.map(r => r["mixed_flag"]),
       special_needs: special_needs.rows.map(r => r["needs_flag"]),
     });
+
   } catch (error) {
-    console.error('Error occurred:', error);
-    res.status(500).json({ error: 'Database error' });  // 👈 valid JSON error
-  }
-});
-app.post('/save-form', async (req, res) => {
-  const {
-    uid, location, special_needs, language, mixed, grade_from, grade_to
-  } = req.body;
-
-  if (!uid) return res.status(400).json({ error: "firebase error: UID missing" });
-
-  try {
-    await pool.query(
-      `INSERT INTO user_filters (firebase_uid, location, special_needs, language, mixed, grade_from, grade_to)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [uid, location, special_needs, language, mixed, grade_from, grade_to]
-    );
-    res.json({ message: 'school finding data saved into database' });
-  } catch (err) {
-    console.error('error saving school finding data:', err);
-    res.status(500).json({ error: 'internal server error' });
+    console.error('Error loading filters:', error);
+    res.status(500).send('Database error');
   }
 });
 
+//  Filter schools based on search criteria
 app.post('/filter-school', async (req, res) => {
   try {
     const {
@@ -96,11 +89,25 @@ app.post('/filter-school', async (req, res) => {
       special_needs,
       language,
       mixed,
-      grade_from,
-      grade_to
+      grade
     } = req.body;
+    const gradeMap = {
+  "1": "الصف الاول",
+  "2": "الصف الثاني",
+  "3": "الصف الثالث",
+  "4": "الصف الرابع",
+  "5": "الصف الخامس",
+  "6": "الصف السادس",
+  "7": "الصف السابع",
+  "8": "الصف الثامن",
+  "9": "الصف التاسع",
+  "10": "الصف العاشر",
+  "11": "الصف الأول ثانوي",
+  "12": "الصف الثاني ثانوي"
+};
 
-    let query = `SELECT * FROM "schooldata" WHERE 1=1`;
+
+    let query = 'SELECT * FROM "schooldata" WHERE 1=1';
     const values = [];
     let count = 1;
 
@@ -110,23 +117,33 @@ app.post('/filter-school', async (req, res) => {
     }
 
     if (special_needs === 'نعم') {
-      query += ` AND "تقبل الطلبة من ذوي الإحتياجات" ILIKE 'نعم%'`;
+      query += ` AND TRIM("تقبل الطلبة من ذوي الإحتياجات") ILIKE 'نعم%'`;
     } else if (special_needs === 'لا') {
-      query += ` AND "تقبل الطلبة من ذوي الإحتياجات" ILIKE 'لا%'`;
+      query += ` AND TRIM("تقبل الطلبة من ذوي الإحتياجات") ILIKE 'لا%'`;
+    }
+
+    if (mixed === 'نعم') {
+      query += ` AND "مختلطة" ILIKE '%مختلطة%' AND "مختلطة" NOT ILIKE '%غير%'`;
+    } else if (mixed === 'لا') {
+      query += ` AND (
+        "مختلطة" ILIKE '%غير%' OR
+        "مختلطة" ILIKE '%ذكور%' OR
+        "مختلطة" ILIKE '%إناث%' OR
+        "مختلطة" NOT ILIKE '%مختلطة%'
+      )`;
     }
 
     if (language) {
       query += ` AND TRIM("لغة التدريس") = $${count++}`;
       values.push(language);
     }
-
-    if (mixed === 'نعم') {
-      query += ` AND "مختلطة" ILIKE '%مختلطة%'`;
-    } else if (mixed === 'لا') {
-      query += ` AND ("مختلطة" ILIKE '%غير%' OR "مختلطة" ILIKE '%ذكور%' OR "مختلطة" ILIKE '%إناث%')`;
-    }
-
+    if (grade && gradeMap[grade]) {
+  query += ` AND "${gradeMap[grade]}"::text ~ '^[0-9]+$' AND "${gradeMap[grade]}"::int > 0`;
+}
     const result = await pool.query(query, values);
+    console.log("Final SQL Query:", query);
+    console.log("SQL Parameters:", values);
+
     res.json(result.rows);
   } catch (err) {
     console.error('Error filtering schools:', err);
@@ -134,6 +151,67 @@ app.post('/filter-school', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+//  Save filter selection
+app.post('/save-form', async (req, res) => {
+  const {
+    uid, location, special_needs, language, mixed, grade
+  } = req.body;
+
+  if (!uid) {
+    return res.status(400).json({ error: "firebase error: UID missing" });
+  }
+
+  try {
+    await pool.query(
+      'INSERT INTO user_filters (firebase_uid, location, special_needs, language, mixed, grade_from) VALUES ($1, $2, $3, $4, $5, $6)',
+      [uid, location, special_needs, language, mixed, grade]
+    );
+    res.json({ message: 'school finding data saved into database' });
+  } catch (err) {
+    console.error('Error saving school finding data:', err);
+    res.status(500).json({ error: 'internal server error' });
+  }
 });
+
+//  Retrieve previously saved form
+app.get('/get-user-form/:uid', async (req, res) => {
+  const { uid } = req.params;
+
+  try {
+    const result = await pool.query(
+      'SELECT location, special_needs, language, mixed, grade_from AS grade FROM user_filters WHERE firebase_uid = $1',
+      [uid]
+    );
+
+    if (result.rows.length === 0) {
+      return res.json({ message: 'No data submitted' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error retrieving user form:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// 📘 Get detailed info about a school
+app.get('/school-info', async (req, res) => {
+  const { name } = req.query;
+  if (!name) return res.status(400).json({ error: 'Missing school name' });
+
+  try {
+    const result = await pool.query(
+      'SELECT * FROM "schooldata" WHERE "اسم المدرسة" = $1 LIMIT 1',
+      [name]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'School not found' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error fetching school info:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

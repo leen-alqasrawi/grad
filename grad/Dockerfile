@@ -1,18 +1,20 @@
 # Use official Node.js image
 FROM node:18
 
-# Set working directory in container
+# Set working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Copy only package files first to install dependencies
 COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy the rest of your app code
+# Copy the rest of the app
 COPY . .
 
-# Expose port your app runs on
-EXPOSE 5500
+# Make wait-for-it.sh executable
+RUN chmod +x wait-for-it.sh
 
-# Start the app
-CMD ["node", "server.js"]
+# Start using nodemon
+CMD ["npm", "run", "dev"]

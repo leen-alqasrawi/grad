@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>معلومات المدرسة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="icon" type="image/jpeg" href="../images/logo.jpg"> 
+  <style>
+    body {
+      background: url('images/courses-bg.jpg');
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #f5f7fa;
+      padding: 2rem;
+      direction: rtl;
+      text-align: right;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 1rem;
+    }
+
+    .school-image {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .school-image img {
+      width: 300px;
+      max-width: 90%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      margin-bottom: 3rem;
+    }
+
+    th, td {
+      padding: 1rem;
+      border: 1px solid #ddd;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- ✅ This will get replaced by JS -->
+    <h1 id="schoolTitle">معلومات المدرسة</h1>
+
+    <!-- ✅ School Image -->
+    <div class="school-image">
+      <img src="images/image.png" alt="صورة المدرسة">
+    </div>
+
+    <br><br>
+ <!-- First Table -->
+<h1>معلومات المدرسة</h1>
+<table>
+  <tr>
+    <th>نظام التدريسي</th>
+    <th>احتياجات خاصة</th>
+    <th>لغة التدريس</th>
+    <th>مختلطة إلى</th>
+    <th>أعلى صف</th>
+  </tr>
+  <tr>
+    <td id="system"></td>
+    <td id="special_needs"></td>
+    <td id="language"></td>
+    <td id="mixed"></td>
+    <td id="max_grade"></td>
+  </tr>
+</table>
+
+<h1>اسعار الصفوف</h1>
+<!-- Second Table (15 Columns) -->
+<table>
+  <tr>
+    <th>الروضة | براعم</th>
+    <th>الروضة | بستان</th>
+    <th>الروضة | تمهيدي</th>
+    <th>الصف الأول</th>
+    <th>الصف الثاني</th>
+    <th>الصف الثالث</th>
+    <th>الصف الرابع</th>
+    <th>الصف الخامس</th>
+    <th>الصف السادس</th>
+    <th>الصف السابع</th>
+    <th>الصف الثامن</th>
+    <th>الصف التاسع</th>
+    <th>الصف العاشر</th>
+    <th>الصف الأول ثانوي</th>
+    <th>الصف الثاني ثانوي</th>
+  </tr>
+  <tr>
+    <td id="براعم"></td>
+    <td id="بستان"></td>
+    <td id="تمهيدي"></td>
+    <td id="الاول"></td>
+    <td id="الثاني"></td>
+    <td id="الثالث"></td>
+    <td id="الرابع"></td>
+    <td id="الخامس"></td>
+    <td id="السادس"></td>
+    <td id="السابع"></td>
+    <td id="الثامن"></td>
+    <td id="التاسع"></td>
+    <td id="العاشر"></td>
+    <td id="الاول ثانوي"></td>
+    <td id="الثاني ثانوي"></td>
+  </tr>
+</table>
+
+  </div>
+
+  <!-- ✅ JavaScript to show school name in title -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const params = new URLSearchParams(window.location.search);
+      const schoolName = params.get("school");
+
+      if (schoolName) {
+        const titleElement = document.getElementById("schoolTitle");
+        if (titleElement) {
+          titleElement.textContent = decodeURIComponent(schoolName);
+        }
+      }
+    });
+    /*
+    CREATE TABLE public.schooldata (
+    "المنطقة" character varying(100),
+    "اسم المدرسة" character varying(150),
+    "اعلى صف" character varying(50),
+    "مختلطة" character varying(50),
+    "تقبل الطلبة من ذوي الإحتياجات" character varying(100),
+    "نظام التعليمي" character varying(50),
+    "لغة التدريس" character varying(50),
+    "الروضة | براعم" double precision,
+    "الروضة | بستان" double precision,
+    "الروضة | تمهيدي" double precision,
+    "الصف الاول" double precision,
+    "الصف الثاني" double precision,
+    "الصف الثالث" double precision,
+    "الصف الرابع" double precision,
+    "الصف الخامس" double precision,
+    "الصف السادس" double precision,
+    "الصف السابع" double precision,
+    "الصف الثامن" double precision,
+    "الصف التاسع" double precision,
+    "الصف العاشر" double precision,
+    "الصف الأول ثانوي" double precision,
+    "الصف الثاني ثانوي" double precision
+);
+
+*/
+  </script>
+  <script type="module" src="./info.js"></script>
+
+</body>
+</html>

@@ -4,11 +4,18 @@
 
 -- Dumped from database version 17.4
 -- Dumped by pg_dump version 17.4
+<<<<<<< Updated upstream
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
 SET transaction_timeout = 0;
+=======
+SET search_path TO public;
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+>>>>>>> Stashed changes
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -51,7 +58,10 @@ CREATE TABLE public.schooldata (
 );
 
 
+<<<<<<< Updated upstream
 ALTER TABLE public.schooldata OWNER TO postgres;
+=======
+>>>>>>> Stashed changes
 
 --
 -- Name: user_filters; Type: TABLE; Schema: public; Owner: postgres
@@ -70,7 +80,10 @@ CREATE TABLE public.user_filters (
 );
 
 
+<<<<<<< Updated upstream
 ALTER TABLE public.user_filters OWNER TO postgres;
+=======
+>>>>>>> Stashed changes
 
 --
 -- Name: user_filters_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -85,7 +98,10 @@ CREATE SEQUENCE public.user_filters_id_seq
     CACHE 1;
 
 
+<<<<<<< Updated upstream
 ALTER SEQUENCE public.user_filters_id_seq OWNER TO postgres;
+=======
+>>>>>>> Stashed changes
 
 --
 -- Name: user_filters_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
