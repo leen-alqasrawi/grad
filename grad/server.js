@@ -199,6 +199,8 @@ app.get('/school-info', async (req, res) => {
     console.error('Error fetching school info:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
+  console.log(`📡 Sending driver location for ${schoolId}`, latitude, longitude);
+
 });
 
 //  Track driver's bus location
@@ -206,9 +208,7 @@ app.post('/track/driver', async (req, res) => {
   const { schoolId, lat, lng } = req.body;
   if (!schoolId || !lat || !lng) return res.status(400).send("Missing fields");
 
-  await client.set(`bus:${schoolId}`, JSON.stringify({ lat, lng, timestamp: Date.now() }), {
-    EX: 60
-  });
+  await client.set(`bus:${schoolId}`, JSON.stringify({ lat, lng, timestamp: Date.now() }));
   res.send("Bus location updated");
 });
 
@@ -226,9 +226,10 @@ app.get('/get-student-school', async (req, res) => {
 
   try {
     const result = await pool.query(`
-      SELECT s."اسم المدرسة", s."المنطقة", s.latitude, s.longitude
+      SELECT st.home_lat, st.home_lng, s.school_id,
+             s."اسم المدرسة", s."المنطقة"
       FROM students AS st
-      JOIN schooldata AS s ON st.school_id = s.id
+      JOIN schooldata AS s ON st.school_id = s.school_id
       WHERE st.id = $1
       LIMIT 1
     `, [studentId]);
@@ -237,12 +238,26 @@ app.get('/get-student-school', async (req, res) => {
       return res.status(404).json({ error: 'Student not found or no linked school' });
     }
 
-    res.json({ school: result.rows[0] });
+    const row = result.rows[0];
+
+    res.json({
+      school: {
+        name: row["اسم المدرسة"],
+        region: row["المنطقة"],
+        school_id: row.school_id
+      },
+      home: {
+        lat: row.home_lat,
+        lng: row.home_lng
+      }
+    });
   } catch (err) {
     console.error('Error fetching school for student:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
 app.post('/update-location', async (req, res) => {
   const { uid, lat, lng } = req.body;
   if (!uid || !lat || !lng) {
@@ -256,21 +271,38 @@ app.post('/update-location', async (req, res) => {
     );
 
     if (existing.rows.length === 0) {
-      // Optionally get school_id from user_filters to insert a full student record
+      // Try to find user's selected location from user_filters
+      let school_id = 'SCH001'; // fallback default
+
       const schoolResult = await pool.query(
-        `SELECT grade_from FROM user_filters WHERE firebase_uid = $1 ORDER BY created_at DESC LIMIT 1`,
+        `SELECT location FROM user_filters
+         WHERE firebase_uid = $1
+         ORDER BY created_at DESC
+         LIMIT 1`,
         [uid]
       );
 
-      // fallback school_id or dummy value
-      const school_id = 'SCH001'; // default or inferred based on your schema
+      if (schoolResult.rows.length > 0) {
+        const location = schoolResult.rows[0].location;
+
+        const match = await pool.query(
+          `SELECT school_id FROM schooldata
+           WHERE TRIM("المنطقة") = $1
+           LIMIT 1`,
+          [location]
+        );
+
+        if (match.rows.length > 0) {
+          school_id = match.rows[0].school_id;
+        }
+      }
 
       await pool.query(
         `INSERT INTO students (id, name, firebase_uid, school_id, home_lat, home_lng)
          VALUES ($1, $2, $3, $4, $5, $6)`,
         [
-          'stu_' + Date.now(),   // or use uuid if preferred
-          'Anonymous',           // you can replace with a real name later
+          'stu_' + Date.now(),
+          'Anonymous',
           uid,
           school_id,
           lat,
@@ -292,6 +324,7 @@ app.post('/update-location', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 
