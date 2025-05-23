@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
 const bodyParser = require("body-parser");
+const { createClient } = require("redis");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -10,19 +11,36 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// PostgreSQL setup
 const isProduction = process.env.NODE_ENV === 'production';
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_IaWQ4Cdrt9Pz@ep-delicate-sound-a1f4t8mi-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require',
   ssl: isProduction ? { rejectUnauthorized: false } : false,
 });
+
+// Redis setup
+const client = createClient({
+  username: 'default',
+  password: 'LXra3VRCTOSFh9tvQBMLFfLZC4BhiqG1',
+  socket: {
+    host: 'redis-16198.c99.us-east-1-4.ec2.redns.redis-cloud.com',
+    port: 16198
+  }
+});
+
+client.on('error', err => console.error('❌ Redis Client Error', err));
+
+(async () => {
+  await client.connect();
+  console.log('✅ Redis connected');
+})();
 
 // ✅ Health check
 app.get('/', (req, res) => {
   res.send('✅ App is running and listening on /');
 });
 
-// Get all school names
+// 🎓 Get all school names
 app.get('/city', (req, res) => {
   pool.query('SELECT "اسم المدرسة" FROM "schooldata";', (error, result) => {
     if (error) {
@@ -33,7 +51,7 @@ app.get('/city', (req, res) => {
   });
 });
 
-// filter values
+// 🎯 Get filter values
 app.get('/filters', async (req, res) => {
   try {
     const queries = {
@@ -74,38 +92,22 @@ app.get('/filters', async (req, res) => {
       mixed: mixed.rows.map(r => r["mixed_flag"]),
       special_needs: special_needs.rows.map(r => r["needs_flag"]),
     });
-
   } catch (error) {
     console.error('Error loading filters:', error);
     res.status(500).send('Database error');
   }
 });
 
-//  Filter schools based on search criteria
+// 🎯 Filter schools
 app.post('/filter-school', async (req, res) => {
   try {
-    const {
-      location,
-      special_needs,
-      language,
-      mixed,
-      grade
-    } = req.body;
+    const { location, special_needs, language, mixed, grade } = req.body;
     const gradeMap = {
-  "1": "الصف الاول",
-  "2": "الصف الثاني",
-  "3": "الصف الثالث",
-  "4": "الصف الرابع",
-  "5": "الصف الخامس",
-  "6": "الصف السادس",
-  "7": "الصف السابع",
-  "8": "الصف الثامن",
-  "9": "الصف التاسع",
-  "10": "الصف العاشر",
-  "11": "الصف الأول ثانوي",
-  "12": "الصف الثاني ثانوي"
-};
-
+      "1": "الصف الاول", "2": "الصف الثاني", "3": "الصف الثالث",
+      "4": "الصف الرابع", "5": "الصف الخامس", "6": "الصف السادس",
+      "7": "الصف السابع", "8": "الصف الثامن", "9": "الصف التاسع",
+      "10": "الصف العاشر", "11": "الصف الأول ثانوي", "12": "الصف الثاني ثانوي"
+    };
 
     let query = 'SELECT * FROM "schooldata" WHERE 1=1';
     const values = [];
@@ -115,35 +117,25 @@ app.post('/filter-school', async (req, res) => {
       query += ` AND TRIM("المنطقة") = $${count++}`;
       values.push(location);
     }
-
-    if (special_needs === 'نعم') {
-      query += ` AND TRIM("تقبل الطلبة من ذوي الإحتياجات") ILIKE 'نعم%'`;
-    } else if (special_needs === 'لا') {
-      query += ` AND TRIM("تقبل الطلبة من ذوي الإحتياجات") ILIKE 'لا%'`;
-    }
+    if (special_needs === 'نعم') query += ` AND TRIM("تقبل الطلبة من ذوي الإحتياجات") ILIKE 'نعم%'`;
+    else if (special_needs === 'لا') query += ` AND TRIM("تقبل الطلبة من ذوي الإحتياجات") ILIKE 'لا%'`;
 
     if (mixed === 'نعم') {
       query += ` AND "مختلطة" ILIKE '%مختلطة%' AND "مختلطة" NOT ILIKE '%غير%'`;
     } else if (mixed === 'لا') {
-      query += ` AND (
-        "مختلطة" ILIKE '%غير%' OR
-        "مختلطة" ILIKE '%ذكور%' OR
-        "مختلطة" ILIKE '%إناث%' OR
-        "مختلطة" NOT ILIKE '%مختلطة%'
-      )`;
+      query += ` AND ("مختلطة" ILIKE '%غير%' OR "مختلطة" ILIKE '%ذكور%' OR "مختلطة" ILIKE '%إناث%')`;
     }
 
     if (language) {
       query += ` AND TRIM("لغة التدريس") = $${count++}`;
       values.push(language);
     }
-    if (grade && gradeMap[grade]) {
-  query += ` AND "${gradeMap[grade]}"::text ~ '^[0-9]+$' AND "${gradeMap[grade]}"::int > 0`;
-}
-    const result = await pool.query(query, values);
-    console.log("Final SQL Query:", query);
-    console.log("SQL Parameters:", values);
 
+    if (grade && gradeMap[grade]) {
+      query += ` AND "${gradeMap[grade]}"::text ~ '^[0-9]+$' AND "${gradeMap[grade]}"::int > 0`;
+    }
+
+    const result = await pool.query(query, values);
     res.json(result.rows);
   } catch (err) {
     console.error('Error filtering schools:', err);
@@ -151,15 +143,11 @@ app.post('/filter-school', async (req, res) => {
   }
 });
 
-//  Save filter selection
+// 💾 Save form submission
 app.post('/save-form', async (req, res) => {
-  const {
-    uid, location, special_needs, language, mixed, grade
-  } = req.body;
+  const { uid, location, special_needs, language, mixed, grade} = req.body;
 
-  if (!uid) {
-    return res.status(400).json({ error: "firebase error: UID missing" });
-  }
+  if (!uid) return res.status(400).json({ error: "firebase error: UID missing" });
 
   try {
     await pool.query(
@@ -173,7 +161,7 @@ app.post('/save-form', async (req, res) => {
   }
 });
 
-//  Retrieve previously saved form
+// 🔍 Get previously saved user form
 app.get('/get-user-form/:uid', async (req, res) => {
   const { uid } = req.params;
 
@@ -182,11 +170,7 @@ app.get('/get-user-form/:uid', async (req, res) => {
       'SELECT location, special_needs, language, mixed, grade_from AS grade FROM user_filters WHERE firebase_uid = $1',
       [uid]
     );
-
-    if (result.rows.length === 0) {
-      return res.json({ message: 'No data submitted' });
-    }
-
+    if (result.rows.length === 0) return res.json({ message: 'No data submitted' });
     res.json(result.rows[0]);
   } catch (err) {
     console.error('Error retrieving user form:', err);
@@ -194,7 +178,7 @@ app.get('/get-user-form/:uid', async (req, res) => {
   }
 });
 
-// 📘 Get detailed info about a school
+//  Get detailed info about a school
 app.get('/school-info', async (req, res) => {
   const { name } = req.query;
   if (!name) return res.status(400).json({ error: 'Missing school name' });
@@ -204,9 +188,7 @@ app.get('/school-info', async (req, res) => {
       'SELECT * FROM "schooldata" WHERE "اسم المدرسة" = $1 LIMIT 1',
       [name]
     );
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'School not found' });
-    }
+    if (result.rows.length === 0) return res.status(404).json({ error: 'School not found' });
     res.json(result.rows[0]);
   } catch (err) {
     console.error('Error fetching school info:', err);
@@ -214,4 +196,24 @@ app.get('/school-info', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+//  Track driver's bus location
+app.post('/track/driver', async (req, res) => {
+  const { schoolId, lat, lng } = req.body;
+  if (!schoolId || !lat || !lng) return res.status(400).send("Missing fields");
+
+  await client.set(`bus:${schoolId}`, JSON.stringify({ lat, lng, timestamp: Date.now() }), {
+    EX: 60
+  });
+  res.send("Bus location updated");
+});
+
+//  Get bus location for a school
+app.get('/track/:schoolId', async (req, res) => {
+  const { schoolId } = req.params;
+  const data = await client.get(`bus:${schoolId}`);
+  if (!data) return res.status(404).send('No location available');
+  res.json(JSON.parse(data));
+});
+
+//  Start server
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));

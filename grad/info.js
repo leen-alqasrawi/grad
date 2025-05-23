@@ -104,3 +104,4 @@ function showSchoolImage(schoolName) {
     });
   });
 }
+

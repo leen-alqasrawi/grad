@@ -42,8 +42,8 @@ onAuthStateChanged(auth, async (user) => {
               <div class="data-value">${data.special_needs}</div>
             </div>
             <div class="data-item">
-              <div class="data-label">Grade Range</div>
-              <div class="data-value">${data.grade_from} to ${data.grade_to}</div>
+              <div class="data-label">Grade selected</div>
+              <div class="data-value">${data.grade}</div>
             </div>
             <div class="data-item">
               <div class="data-label">Mixed</div>

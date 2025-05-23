@@ -1,5 +1,4 @@
 
 grad/node_modules/
-grad/.env/
-grad/firebase-config.js/
-
+grad/.env
+grad/firebase-config.js
