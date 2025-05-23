@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-white text-black">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ – School Adviser</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    .hidden-section {
+      display: none;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center p-8 bg-white text-black">
+  <h1 class="text-4xl font-bold mb-1">FaQ</h1>
+  <p class="text-gray-400 mb-10">Your questions answered here.</p>
+  <a href="index.html" class="fixed bottom-6 left-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg z-50">
+    Home
+  </a>
+
+  <div class="flex w-full max-w-6xl">
+    <!-- Sidebar -->
+    <aside class="w-1/5 pr-6 text-gray-400 text-sm">
+      <ul class="space-y-4">
+        <li id="nav-general" class="cursor-pointer text-cyan-400 font-semibold" onclick="showSection('general', this)">General</li>
+        <li id="nav-build" class="cursor-pointer" onclick="showSection('build', this)">Build</li>
+        <li id="nav-promote" class="cursor-pointer" onclick="showSection('promote', this)">Promote</li>
+        <li id="nav-manage" class="cursor-pointer" onclick="showSection('manage', this)">Manage</li>
+        <li id="nav-integrations" class="cursor-pointer" onclick="showSection('integrations', this)">Integrations</li>
+        <li id="nav-legal" class="cursor-pointer" onclick="showSection('legal', this)">Legal</li>
+      </ul>
+    </aside>
+
+    <!-- FAQ Content -->
+    <section class="w-4/5">
+      <!-- General Section -->
+      <div id="general" class="faq-section">
+        <h2 class="text-lg font-semibold mb-6">General Questions</h2>
+        <div class="divide-y divide-gray-800">
+          <details class="py-4 group">
+            <summary class="flex justify-between cursor-pointer">What is School Adviser?<span>+</span></summary>
+            <p class="text-gray-400 mt-2 text-sm">
+              School Adviser is a smart platform that helps parents find schools based on location, fees, and services.
+            </p>
+          </details>
+          <details class="py-4 group">
+            <summary class="flex justify-between cursor-pointer">How does School Adviser work?<span>+</span></summary>
+            <p class="text-gray-400 mt-2 text-sm">
+              Parents input preferences and receive suggestions, reviews, and maps to choose from.
+            </p>
+          </details>
+          <details class="py-4 group">
+            <summary class="flex justify-between cursor-pointer">Who can use the platform?<span>+</span></summary>
+            <p class="text-gray-400 mt-2 text-sm">
+              Parents, schools, and service providers can all benefit from the platform.
+            </p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Build Section -->
+      <div id="build" class="faq-section hidden-section">
+        <h2 class="text-lg font-semibold mb-6">Build Questions</h2>
+        <div class="divide-y divide-gray-800">
+          <details class="py-4 group">
+            <summary class="flex justify-between cursor-pointer">How to add a new school?<span>+</span></summary>
+            <p class="text-gray-400 mt-2 text-sm">
+              Schools can register and submit their profile for admin approval.
+            </p>
+          </details>
+          <details class="py-4 group">
+            <summary class="flex justify-between cursor-pointer">Can I edit school details later?<span>+</span></summary>
+            <p class="text-gray-400 mt-2 text-sm">
+              Yes, school admins can update data from the dashboard anytime.
+            </p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Promote Section -->
+      <div id="promote" class="faq-section hidden-section">
+        <h2 class="text-lg font-semibold mb-6">Promote Questions</h2>
+        <div class="divide-y divide-gray-800">
+          <details class="py-4 group">
+            <summary class="flex justify-between cursor-pointer">How can schools promote themselves?<span>+</span></summary>
+            <p class="text-gray-400 mt-2 text-sm">
+              Paid features allow featured listings, homepage banners, and priority search results.
+            </p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Manage Section -->
+      <div id="manage" class="faq-section hidden-section">
+        <h2 class="text-lg font-semibold mb-6">Manage Questions</h2>
+        <div class="divide-y divide-gray-800">
+          <details class="py-4 group">
+            <summary class="flex justify-between cursor-pointer">How do I manage school applications?<span>+</span></summary>
+            <p class="text-gray-400 mt-2 text-sm">
+              Schools can receive and respond to inquiries directly via the admin panel.
+            </p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Integrations Section -->
+      <div id="integrations" class="faq-section hidden-section">
+        <h2 class="text-lg font-semibold mb-6">Integrations</h2>
+        <div class="divide-y divide-gray-800">
+          <details class="py-4 group">
+            <summary class="flex justify-between cursor-pointer">Can we integrate GPS tracking?<span>+</span></summary>
+            <p class="text-gray-400 mt-2 text-sm">
+              Yes, we support GPS integration for school buses to track routes in real time.
+            </p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Legal Section -->
+      <div id="legal" class="faq-section hidden-section">
+        <h2 class="text-lg font-semibold mb-6">Legal Questions</h2>
+        <div class="divide-y divide-gray-800">
+          <details class="py-4 group">
+            <summary class="flex justify-between cursor-pointer">Is user data protected?<span>+</span></summary>
+            <p class="text-gray-400 mt-2 text-sm">
+              Yes, we follow GDPR compliance and never share user data without consent.
+            </p>
+          </details>
+          <details class="py-4 group">
+            <summary class="flex justify-between cursor-pointer">How do reviews stay fair?<span>+</span></summary>
+            <p class="text-gray-400 mt-2 text-sm">
+              We monitor reviews for spam and inappropriate content to ensure fairness.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function showSection(sectionId, clickedItem) {
+      const sections = document.querySelectorAll('.faq-section');
+      sections.forEach(sec => {
+        sec.classList.toggle('hidden-section', sec.id !== sectionId);
+      });
+
+      const items = document.querySelectorAll('aside ul li');
+      items.forEach(item => item.classList.remove('text-cyan-400', 'font-semibold'));
+
+      clickedItem.classList.add('text-cyan-400', 'font-semibold');
+    }
+  </script>
+</body>
+</html>
