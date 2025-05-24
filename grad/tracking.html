@@ -67,9 +67,10 @@
     <div id="mainScreen" class="container">
         <h1>School Bus Tracker</h1>
         <p>Track your school bus in real-time</p>
-        <button class="btn" onclick="showStudentLogin()">Track Bus</button>
+        <!-- ✅ Remove onclick, use event listeners instead -->
+        <button class="btn" id="trackBusBtn">Track Bus</button>
         <div>
-            <p>Are you a bus driver? <a href="#" onclick="showDriverLogin()">Click here</a></p>
+            <p>Are you a bus driver? <a href="#" id="driverLoginLink">Click here</a></p>
         </div>
     </div>
 
@@ -77,8 +78,9 @@
     <div id="studentScreen" class="container hidden">
         <h1>Student Login</h1>
         <input type="text" id="studentId" placeholder="Enter your Student ID" />
-        <button class="btn" onclick="requestLocation()">Continue</button>
-        <button class="btn" onclick="showMainScreen()">Back</button>
+        <!-- ✅ Remove onclick, use event listeners instead -->
+        <button class="btn" id="continueBtn">Continue</button>
+        <button class="btn" id="backToMainBtn">Back</button>
     </div>
 
     <!-- Driver Login -->
@@ -86,8 +88,9 @@
         <h1>Driver Login</h1>
         <input type="text" id="driverUsername" placeholder="Driver Username" />
         <input type="password" id="driverPassword" placeholder="Driver Password" />
-        <button class="btn" onclick="driverLogin()">Login</button>
-        <button class="btn" onclick="showMainScreen()">Back</button>
+        <!-- ✅ Remove onclick, use event listeners instead -->
+        <button class="btn" id="driverLoginBtn">Login</button>
+        <button class="btn" id="backToMainBtn2">Back</button>
     </div>
 
     <!-- Map Screen -->
@@ -105,19 +108,21 @@
             <strong>🏫 School:</strong> <span id="schoolLocation">Loading...</span><br>
             <strong>🏠 Home:</strong> <span id="homeLocation">Loading...</span>
         </div>
-        <button class="btn" onclick="showMainScreen()">Exit Tracking</button>
+        <!-- ✅ Remove onclick, use event listeners instead -->
+        <button class="btn" id="exitTrackingBtn">Exit Tracking</button>
     </div>
 
     <!-- Driver Dashboard -->
     <div id="driverDashboard" class="container hidden">
         <h1>Driver Dashboard</h1>
         <div class="status" id="driverLocation">Loading driver location...</div>
-        <button class="btn" onclick="logout()">Logout</button>
+        <!-- ✅ Remove onclick, use event listeners instead -->
+        <button class="btn" id="logoutBtn">Logout</button>
     </div>
 
-    <!-- Scripts -->
+    <!-- ✅ Load scripts in correct order -->
     <script src="./tracking.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYdvR3g3uF5c0Lczooxqe4Cx95Cxd5TaU" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYdvR3g3uF5c0Lczooxqe4Cx95Cxd5TaU&callback=initializeApp" async defer></script>
     <script type="module" src="usermenu-loader.js"></script>
 </body>
 </html>

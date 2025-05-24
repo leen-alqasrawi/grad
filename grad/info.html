@@ -4,15 +4,35 @@
   <meta charset="UTF-8">
   <title>معلومات المدرسة</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/jpeg" href="../images/logo.jpg"> 
+   <link rel="icon" type="image/jpeg" href="../images/logo.jpg"> 
+   
   <style>
-    body {
-      background: url('images/courses-bg.jpg');
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background-color: #f5f7fa;
-      padding: 2rem;
-      direction: rtl;
-      text-align: right;
+   body {
+  background: url('../images/school-info2.png') no-repeat center center fixed;
+  background-size: cover;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  padding: 2rem;
+  direction: rtl;
+  text-align: right;
+}
+ /* Home Button Fixed Bottom Left */
+    .home-fixed {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+      z-index: 1000;
+    }
+
+    .home-fixed:hover {
+      background-color: #0056b3;
     }
 
     h1 {
@@ -21,12 +41,12 @@
       margin-bottom: 1rem;
     }
 
-    .school-photo {
+    .school-image {
       text-align: center;
       margin-bottom: 2rem;
     }
 
-    .school-photo img {
+    .school-image img {
       width: 300px;
       max-width: 90%;
       border-radius: 10px;
@@ -64,34 +84,29 @@
       margin: 0 auto;
       overflow-x: auto;
     }
+    
   </style>
 </head>
 <body>
+
   <div class="container">
-    <h1 id="schoolTitle">معلومات المدرسة</h1>
+    <!-- ✅ This will get replaced by JS -->
+    <h1 id="schoolTitle">موقع المدرسة</h1>
 
-    <!-- 📸 School Photo -->
-    <div id="school-photo" class="school-photo"></div>
+    <!-- Map Button -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <img src="./images/info.png" id="openMapButton" style="width: 40px; height: auto; background: transparent; cursor: pointer;">
+    </div>
 
-<div style="text-align: center; margin-bottom: 2rem;">
-  <button id="openMapButton" style="
-    background-color: #007bff;
-    color: white;
-    padding: 1rem 2rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-  ">
-    عرض الموقع على الخريطة
-  </button>
-</div>
-
+   <!-- ✅ صورة صغيرة قابلة للنقر -->
+    <div id="school-photo" class="school-image">
+      <a href="#schoolInfo">
+      </a>
+    </div>
 
     <br><br>
-
-    <!-- First Table -->
     <h1>معلومات المدرسة</h1>
+    <!-- ✅ First Table -->
     <table>
       <tr>
         <th>نظام التدريسي</th>
@@ -101,16 +116,16 @@
         <th>أعلى صف</th>
       </tr>
       <tr>
-        <td id="system"></td>
-        <td id="special_needs"></td>
-        <td id="language"></td>
-        <td id="mixed"></td>
-        <td id="max_grade"></td>
+        <td id="system">—</td>
+        <td id="special_needs">—</td>
+        <td id="language">—</td>
+        <td id="mixed">—</td>
+        <td id="max_grade">—</td>
       </tr>
     </table>
 
-    <!-- Second Table -->
     <h1>اسعار الصفوف</h1>
+    <!-- ✅ Second Table (15 Columns) -->
     <table>
       <tr>
         <th>الروضة | براعم</th>
@@ -130,21 +145,21 @@
         <th>الصف الثاني ثانوي</th>
       </tr>
       <tr>
-        <td id="براعم"></td>
-        <td id="بستان"></td>
-        <td id="تمهيدي"></td>
-        <td id="الاول"></td>
-        <td id="الثاني"></td>
-        <td id="الثالث"></td>
-        <td id="الرابع"></td>
-        <td id="الخامس"></td>
-        <td id="السادس"></td>
-        <td id="السابع"></td>
-        <td id="الثامن"></td>
-        <td id="التاسع"></td>
-        <td id="العاشر"></td>
-        <td id="الاول ثانوي"></td>
-        <td id="الثاني ثانوي"></td>
+        <td id="براعم">—</td>
+        <td id="بستان">—</td>
+        <td id="تمهيدي">—</td>
+        <td id="الاول">—</td>
+        <td id="الثاني">—</td>
+        <td id="الثالث">—</td>
+        <td id="الرابع">—</td>
+        <td id="الخامس">—</td>
+        <td id="السادس">—</td>
+        <td id="السابع">—</td>
+        <td id="الثامن">—</td>
+        <td id="التاسع">—</td>
+        <td id="العاشر">—</td>
+        <td id="الاول ثانوي">—</td>
+        <td id="الثاني ثانوي">—</td>
       </tr>
     </table>
   </div>
@@ -155,9 +170,27 @@
     defer
   ></script>
 
+  <!-- ✅ JavaScript to show school name in title -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const params = new URLSearchParams(window.location.search);
+      const schoolName = params.get("school");
+
+      if (schoolName) {
+        const titleElement = document.getElementById("schoolTitle");
+        if (titleElement) {
+          titleElement.textContent = decodeURIComponent(schoolName);
+        }
+      }
+    });
+  </script>
+
   <!-- JS Logic -->
   <script type="module" src="./info.js"></script>
   <script type="module" src="usermenu-loader.js"></script>
+
+  <!-- Home Button -->
+  <a href="index.html" class="home-fixed">Home</a>
 
 </body>
 </html>

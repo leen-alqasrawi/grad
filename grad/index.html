@@ -5,13 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Advisor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="icon" type="image/jpeg" href="./images/logo.jpg">
-
-
-   
-
-
-
+    <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,6 +20,8 @@
                 <li><a href="tracking.html">TRACKING</a></li>
                 <li><a href="#contact">CONTACT</a></li>
                  <li><a href="#review">REVIEW</a></li>
+               
+
 
             </ul>
         </nav>
@@ -33,16 +29,25 @@
 
 
 <!---------------------------------INTRO SECTION--------------------------------->
+<section class="hero">
+  <div class="overlay">
+    <div class="hero-text">
+      <p class="subheading">Find the Perfect School for Your Child</p>
+      <h1>Smart, Simple, and Tailored to You.</h1>
 
-    <section class="hero">
-        <div class="overlay">
-            <div class="hero-text">
-                <p class="subheading">Find the Perfect School for Your Child</p>
-                <h1>Smart, Simple, and Tailored to You.</h1>
-                <a href="#testimonials" class="btn">DISCOVER MORE</a>
-            </div>
-        </div>
-    </section>
+      <!-- Discover More button -->
+      <div style="margin-bottom: 15px;">
+        <a href="#testimonials" class="btn">DISCOVER MORE</a>
+      </div>
+
+      <!-- Appointment Now button under it -->
+      <div>
+        <a href="appointment.html" class="btn" style="font-size: 14px; padding: 8px 20px;">Appointment Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
     <!-- -->
 <!--------------------Feature SECTION--------------------------------->
 <section id="about" class="offer-section">
@@ -138,7 +143,7 @@
 
     <!-- Feature list (dynamic items inserted via JS) -->
     <ul id="feature-list"></ul>
-
+    
     <!-- Navigation dots to switch between slides -->
     <div class="dots">
       <span class="dot"></span> <!-- Dot for slide 0 -->
@@ -164,7 +169,7 @@
     <div class="programs-content">
       <!-- Left Image -->
       <div class="programs-image">
-        <img src="/images/ourprogram.svg" alt="Program Illustration">
+        <img src="../images/ourprogram.svg" alt="Program Illustration">
       </div>
 
       <!-- Right Text -->
@@ -179,7 +184,7 @@
         </ul>
 
         <!-- Button with alert -->
-        <a href="findschool.html" class="cta-button">Start Now</a>
+        <a href="findschool.html" class="cta-button">Search Now</a>
       </div>
     </div>
   </div>
@@ -225,7 +230,7 @@
         <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="1 star"></label>
       </div>
 
-      <button type="submit" id="reviewButton">Submit</button>
+      <button type="submit">Submit</button>
 
       <!-- Success message -->
       <p id="reviewSuccessMsg" class="success-msg" style="display: none;">Thanks for your review!</p>
@@ -245,11 +250,11 @@
       <textarea id="reviewMessage" placeholder="Write your comment here..." required></textarea>
       <select id="rating">
         <option value="">Optional: Star Rating</option>
-        <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
-        <option value="4">⭐️⭐️⭐️⭐️</option>
-        <option value="3">⭐️⭐️⭐️</option>
-        <option value="2">⭐️⭐️</option>
-        <option value="1">⭐️</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="1">⭐</option>
       </select>
       <button type="submit">Submit</button>
     </form>
@@ -272,7 +277,7 @@
             <li><a href="#about">About Us</a></li>
             <li> <a href="#contact">Contact Us</a></li>
             <li><a href="privacypolicy.html">Privacy Policy</a></li>
-            <li><a href="#">FAQs & Help</a></li>
+            <li><a href="help.html">FAQs & Help</a></li>
           </ul>
         </div>
 
@@ -298,6 +303,6 @@
       
       
 
-<script src="/script.js"></script>
+<script src="../js/script.js"></script>
 </body>
 </html>

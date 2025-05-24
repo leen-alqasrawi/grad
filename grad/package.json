@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/leen-alqasrawi/grad#readme",
   "dependencies": {
+    "@google-cloud/vision": "^5.1.0",
+    "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "env": "^0.0.2",
@@ -28,6 +30,7 @@
     "node": "^24.0.1",
     "pg": "^8.16.0",
     "pool": "^0.4.1",
-    "redis": "^5.1.0"
+    "redis": "^5.1.0",
+    "resend": "^4.5.1"
   }
 }

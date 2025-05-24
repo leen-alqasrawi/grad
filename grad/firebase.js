@@ -84,7 +84,7 @@ if (loginForm) {
       }
 
       localStorage.setItem("loggedInUserId", user.uid);
-      window.location.href = "findschool.html";
+      window.location.href = "profile.html";
 
     } catch (err) {
       switch (err.code) {

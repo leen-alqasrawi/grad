@@ -1,144 +1,178 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>حجز موعد - School Advisor</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
+
+  <title>Book an Appointment</title>
   <style>
+    /* === PAGE STYLE === */
     body {
-      background: url('images/courses-bg.jpg');
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background-color: #f4f6f9;
       margin: 0;
       padding: 0;
-      direction: rtl;
+      font-family: 'Poppins', sans-serif;
+background: url('../images/appointment2.png') no-repeat center center fixed;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      transform: scale(0.65);
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(1px);
     }
+   
 
-    .container {
-      max-width: 700px;
-      margin: 50px auto;
-      background: #eaeaea;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-      text-align: center;
-      color: #007bff;
-      margin-bottom: 1rem;
-    }
-
-    form label {
-      font-weight: bold;
-      margin-top: 1rem;
-      display: block;
-    }
-
-    form input, form select, form textarea {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.3rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-
-    form textarea {
-      resize: vertical;
-    }
-
-    .btn-submit {
-      background-color: #007bff;
+    /* === FORM CONTAINER === */
+    .form-container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      width: 90%;
+      max-width: 500px;
+      height: auto;
+      min-height: 600px;
       color: white;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      margin-top: 1.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 100%;
+      text-align: center;
     }
 
-    .btn-submit:hover {
+    .form-container h2 {
+      margin-bottom: 30px;
+      color: white;
+    }
+
+    input, select, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+    }
+
+    input, select, textarea {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    textarea {
+      resize: none;
+      height: 100px;
+    }
+
+    select option {
+      background: rgb(81, 77, 77);
+      color: white;
+    }
+
+    ::placeholder {
+      color: white;
+      opacity: 1;
+    }
+ /* Home Button Fixed Bottom Left */
+    .home-fixed {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+      z-index: 1000;
+    }
+
+    .home-fixed:hover {
       background-color: #0056b3;
     }
-
-    .note {
-      font-size: 0.9rem;
-      color: #555;
-      text-align: center;
-      margin-top: 1rem;
+  
+    /* === BUTTON STYLE === */
+    button {
+      background: #007BFF; /* Blue background */
+      color: white; /* Button text color */
+      font-weight: bold; /* Bold text */
+      cursor: pointer; /* Pointer cursor */
+      transition: background 0.3s; /* Smooth hover transition */
+    }
+  
+    button:hover {
+      background: #0056b3; /* Darker blue on hover */
     }
 
-    @media (max-width: 600px) {
-      .container {
-        margin: 20px;
-        padding: 1.5rem;
-      }
+    button:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
     }
+  
+    /* === NOTE TEXT BELOW BUTTON === */
+    p.note {
+      font-size: 14px; /* Smaller font */
+      margin-top: 15px; /* Space above */
+      color: #ccc; /* Light gray */
+    }
+
+    /* Required field indicator */
+    .required {
+      color: #ff6b6b;
+      font-weight: bold;
+    }
+
+    /* Form message styles are handled by JavaScript */
   </style>
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>حجز موعد في المدرسة</h1>
+  <!-- === FORM === -->
+  <div class="form-container">
+    <h2>Book an Appointment at the School</h2>
+    <form>
+      <input type="text" placeholder="Parent's Name *" required>
+      <input type="text" placeholder="Student's Name *" required>
+      <input type="tel" placeholder="Phone Number *" required>
+      <input type="email" placeholder="Email Address *" required>
 
-    <form id="appointmentForm">
-      <label for="parentName">اسم ولي الأمر</label>
-      <input type="text" id="parentName" name="parentName" required>
-
-      <label for="studentName">اسم الطالب</label>
-      <input type="text" id="studentName" name="studentName" required>
-
-      <label for="phone">رقم الهاتف</label>
-      <input type="tel" id="phone" name="phone" required>
-
-      <label for="email">البريد الإلكتروني</label>
-      <input type="email" id="email" name="email">
-
-      <label for="grade">الصف الدراسي</label>
-      <select id="grade" name="grade" required>
-        <option value="">اختر الصف</option>
-        <option value="تمهيدي">تمهيدي</option>
-        <option value="الصف الأول">الصف الأول</option>
-        <option value="الصف الثاني">الصف الثاني</option>
-        <option value="الصف الثالث">الصف الثالث</option>
-        <option value="الصف الرابع">الصف الرابع</option>
-        <option value="الصف الخامس">الصف الخامس</option>
-        <option value="الصف السادس">الصف السادس</option>
-        <option value="الصف السابع">الصف السابع</option>
-        <option value="الصف الثامن">الصف الثامن</option>
-        <option value="الصف التاسع">الصف التاسع</option>
-        <option value="الصف العاشر">الصف العاشر</option>
-        <option value="الأول ثانوي">الأول ثانوي</option>
-        <option value="الثاني ثانوي">الثاني ثانوي</option>
+      <select required>
+        <option value="" disabled selected hidden>Select Grade *</option>
+        <option value="Grade KG1">Kindergarten 1 (KG1)</option>
+        <option value="Grade KG2">Kindergarten 2 (KG2)</option>
+        <option value="Grade 1">Grade 1</option>
+        <option value="Grade 2">Grade 2</option>
+        <option value="Grade 3">Grade 3</option>
+        <option value="Grade 4">Grade 4</option>
+        <option value="Grade 5">Grade 5</option>
+        <option value="Grade 6">Grade 6</option>
+        <option value="Grade 7">Grade 7</option>
+        <option value="Grade 8">Grade 8</option>
+        <option value="Grade 9">Grade 9</option>
+        <option value="Grade 10">Grade 10</option>
+        <option value="Grade 11">Grade 11</option>
+        <option value="Grade 12">Grade 12</option>
       </select>
 
-      <label for="date">تاريخ الموعد</label>
-      <input type="date" id="date" name="date" required>
+      <input type="date" placeholder="Appointment Date *" required>
+      <input type="time" placeholder="Preferred Time *" required>
+      <textarea placeholder="Additional Notes (Optional - Any extra details?)"></textarea>
 
-      <label for="time">الوقت المفضل</label>
-      <input type="time" id="time" name="time" required>
-
-      <label for="message">ملاحظات إضافية</label>
-      <textarea id="message" name="message" rows="4" placeholder="هل هناك أي تفاصيل إضافية؟"></textarea>
-
-      <button type="submit" class="btn-submit">إرسال الطلب</button>
+      <button type="submit" id="confirm">Submit Request</button>
+      <p class="note">
+        <span class="required">*</span> Required fields<br>
+        We will contact you to confirm your appointment within 24 hours.
+      </p>
     </form>
-
-    <p class="note">سيتم التواصل معك لتأكيد الموعد خلال 24 ساعة.</p>
   </div>
 
-  <script>
-    document.getElementById('appointmentForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert('تم إرسال طلب الحجز بنجاح! ');
-      this.reset();
-    });
-  </script>
-  <script type="module" src="usermenu-loader.js"></script>
-
+  
+<!-- Home Button -->
+  <a href="index.html" class="home-fixed">Home</a>
+  <script src="appointment.js"></script>
 
 </body>
 </html>

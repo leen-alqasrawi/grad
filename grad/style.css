@@ -101,7 +101,6 @@ html {
   background: #00bcd4;
 }
 
-/*********FEATURE SECION************/
 /* What We Offer Section Styles */
 .offer-section {
   padding: 80px 0;
@@ -192,7 +191,7 @@ html {
   font-size: 14px;
   color: #666;
 }
-/*MAGE INTRO*/
+
 .vertical-counter-section {
   background: url('../images/intro.jpg') no-repeat center center/cover;
   height: 100vh;
@@ -234,7 +233,7 @@ html {
 
 
 
-/*************Testimonials Section------------------------------- */
+/*Testimonials Section------------------------------- */
 
 #testimonials {
   background-size: cover;              /* يجعل الصورة الخلفية تغطي كامل العنصر */
@@ -319,7 +318,9 @@ html {
 
 
 
-/*********Programs Section*********/
+
+
+
 
 .programs-section {
   background: #fff;
@@ -546,7 +547,7 @@ html {
   }
 }
 
-/*******************/
+/*/
 
 /****** Footer Section *******/
 .footer {
@@ -670,7 +671,7 @@ html {
   color: #00c9ff;
 }
 
-/******************************************************/
+
 /***************************************** === Review Section === **************************************************/
 .review-section {
   background-color: #f5f7fa;
