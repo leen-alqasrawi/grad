@@ -68,3 +68,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // Show the first slide when the page loads
   showSlide(0);
 });
+

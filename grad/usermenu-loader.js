@@ -58,7 +58,7 @@ if (!isIndex) {
       // Firebase auth listener
       onAuthStateChanged(auth, async (user) => {
         if (!user) {
-          window.location.href = "login.html";
+          window.location.href = "register.html";
           return;
         }
 

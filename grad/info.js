@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (!schoolName) return;
 
   try {
-    const response = await fetch(`http://localhost:5000/school-info?name=${encodeURIComponent(schoolName)}`);
+    const response = await fetch(`/school-info?name=${encodeURIComponent(schoolName)}`);
     if (!response.ok) throw new Error('Failed to load school data');
 
     const data = await response.json();
