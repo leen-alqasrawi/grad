@@ -1,3 +1,4 @@
+// Corrected tracking.js for student view (bus to home logic)
 let locationSharing = false;
 let driverTrackingInterval = null;
 let locationWatchId = null;
@@ -5,7 +6,6 @@ let busPollInterval = null;
 let directionsRenderer, directionsService, map;
 
 function showMainScreen() {
-  hideAllScreens();
   document.getElementById('mainScreen').classList.remove('hidden');
   stopLocationSharing();
   clearIntervals();
@@ -75,29 +75,14 @@ function showMap() {
         center: homeLocation
       });
 
-      new google.maps.Marker({
-        position: homeLocation,
-        map,
-        title: "Home",
-        icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-      });
-
-      new google.maps.Marker({
-        position: schoolLatLng,
-        map,
-        title: "School",
-        icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-      });
+      new google.maps.Marker({ position: homeLocation, map, title: "Home", icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" });
+      new google.maps.Marker({ position: schoolLatLng, map, title: "School", icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png" });
 
       directionsService = new google.maps.DirectionsService();
       directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
       directionsRenderer.setMap(map);
 
-      const busMarker = new google.maps.Marker({
-        map,
-        title: "Bus",
-        icon: "http://maps.google.com/mapfiles/ms/icons/bus.png"
-      });
+      const busMarker = new google.maps.Marker({ map, title: "Bus", icon: "http://maps.google.com/mapfiles/ms/icons/bus.png" });
 
       if (busPollInterval) clearInterval(busPollInterval);
 
@@ -112,15 +97,30 @@ function showMap() {
 
           directionsService.route({
             origin: { lat: busLat, lng: busLng },
-            destination: schoolLatLng,
+            destination: homeLocation,
             travelMode: google.maps.TravelMode.DRIVING
           }, (result, status) => {
-            if (status === 'OK') directionsRenderer.setDirections(result);
+            if (status === 'OK') {
+              directionsRenderer.setDirections(result);
+              const leg = result.routes[0].legs[0];
+              const eta = leg.duration.text;
+              const nextStep = leg.steps[0]?.instructions?.replace(/<[^>]*>/g, '') || "On route";
+              const distance = leg.distance.value;
+              let statusText = "Bus is on route";
+              if (distance < 500) statusText = "Bus is approaching your stop";
+              else if (distance > 2000) statusText = "Bus has left the school";
+
+              document.getElementById('busStatus').textContent = statusText;
+              document.getElementById('eta').textContent = eta;
+              document.getElementById('nextStop').textContent = nextStep;
+            }
           });
 
         } catch (err) {
           console.warn("Bus location unavailable or stale:", err.message);
           document.getElementById('busStatus').textContent = "Bus offline or out of range";
+          document.getElementById('eta').textContent = "N/A";
+          document.getElementById('nextStop').textContent = "N/A";
         }
       }, 10000);
     } else {
@@ -128,20 +128,6 @@ function showMap() {
       alert("Could not locate the school on the map.");
     }
   });
-
-  updateBusStatus();
-}
-
-function updateBusStatus() {
-  const statuses = ['Bus is approaching your stop', 'Bus is 5 minutes away', 'Bus is on route', 'Bus has left the school'];
-  const etas = ['5 minutes', '10 minutes', '15 minutes', '20 minutes'];
-  const stops = ['Main Street', 'Oak Avenue', 'Elm Street', 'School Parking Lot'];
-
-  setInterval(() => {
-    document.getElementById('busStatus').textContent = statuses[Math.floor(Math.random() * statuses.length)];
-    document.getElementById('eta').textContent = etas[Math.floor(Math.random() * etas.length)];
-    document.getElementById('nextStop').textContent = stops[Math.floor(Math.random() * stops.length)];
-  }, 10000);
 }
 
 function startLocationSharing() {
@@ -174,7 +160,6 @@ function driverLogin() {
   }
 
   const schoolId = driver.schoolId;
-
   if (!navigator.geolocation) {
     alert("Geolocation not supported by your browser.");
     return;
@@ -184,21 +169,14 @@ function driverLogin() {
     navigator.geolocation.getCurrentPosition(
       position => {
         const { latitude, longitude } = position.coords;
-
         fetch('http://localhost:5000/track/driver', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ schoolId, lat: latitude, lng: longitude })
         }).catch(err => console.error("❌ Failed to send driver location:", err));
       },
-      error => {
-        console.error('🚨 Driver geolocation error:', error);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 30000,
-        maximumAge: 10000
-      }
+      error => console.error('🚨 Driver geolocation error:', error),
+      { enableHighAccuracy: true, timeout: 30000, maximumAge: 10000 }
     );
   }, 5000);
 
@@ -207,22 +185,16 @@ function driverLogin() {
 }
 
 function stopLocationSharing() {
-  if (locationWatchId) {
-    navigator.geolocation.clearWatch(locationWatchId);
-    locationWatchId = null;
-    locationSharing = false;
-  }
-  if (driverTrackingInterval) {
-    clearInterval(driverTrackingInterval);
-    driverTrackingInterval = null;
-  }
+  if (locationWatchId) navigator.geolocation.clearWatch(locationWatchId);
+  if (driverTrackingInterval) clearInterval(driverTrackingInterval);
+  locationSharing = false;
+  locationWatchId = null;
+  driverTrackingInterval = null;
 }
 
 function clearIntervals() {
-  if (busPollInterval) {
-    clearInterval(busPollInterval);
-    busPollInterval = null;
-  }
+  if (busPollInterval) clearInterval(busPollInterval);
+  busPollInterval = null;
 }
 
 function logout() {
@@ -231,5 +203,4 @@ function logout() {
   clearIntervals();
   showMainScreen();
 }
-
 window.onload = showMainScreen;
