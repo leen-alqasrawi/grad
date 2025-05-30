@@ -1,231 +1,288 @@
 document.addEventListener("DOMContentLoaded", async function () {
+  console.log('Info page loaded, checking for school data');
+  
+  // Get school name from URL parameters
   const params = new URLSearchParams(window.location.search);
-  const schoolName = params.get("school");
-  if (!schoolName) return;
+  const schoolNameParam = params.get("school");
+  
+  console.log('URL parameter school:', schoolNameParam);
+  
+  if (!schoolNameParam) {
+    console.log('No school parameter in URL, checking localStorage');
+    // Try to get from localStorage as fallback
+    const schoolResults = localStorage.getItem('schoolResults');
+    if (schoolResults) {
+      const schools = JSON.parse(schoolResults);
+      if (schools.length > 0) {
+        console.log('Using first school from localStorage');
+        displaySchoolInfo(schools[0]);
+        return;
+      }
+    }
+    
+    document.getElementById("schoolTitle").textContent = "No School Selected";
+    populateSchoolInfo(null);
+    return;
+  }
+
+  const schoolName = decodeURIComponent(schoolNameParam);
+  console.log('Decoded school name:', schoolName);
+  
+  // Update title immediately
+  document.getElementById("schoolTitle").textContent = schoolName;
 
   try {
-    const response = await fetch(`http://localhost:5000/school-info?name=${encodeURIComponent(schoolName)}`);
-    if (!response.ok) throw new Error('Failed to load school data');
-
-    const data = await response.json();
-
-    // 🏷️ Update school title
-    const titleElement = document.getElementById("schoolTitle");
-    if (titleElement) {
-      titleElement.textContent = data["اسم المدرسة"] || "معلومات المدرسة";
+    // Try to load from API first
+    console.log('Attempting to load from API');
+    const response = await fetch(`http://localhost:5000/api/schools/info?name=${encodeURIComponent(schoolName)}`);
+    
+    if (response.ok) {
+      const data = await response.json();
+      console.log('API data received:', data);
+      displaySchoolInfo(data);
+      return;
+    } else {
+      console.log('API request failed, falling back to localStorage');
     }
-
-    // 🧾 Fill general info table
-    document.getElementById("system").textContent = data["نظام التعليمي"] || '—';
-    document.getElementById("special_needs").textContent = data["تقبل الطلبة من ذوي الإحتياجات"] || '—';
-    document.getElementById("language").textContent = data["لغة التدريس"] || '—';
-    document.getElementById("mixed").textContent = data["مختلطة"] || '—';
-    document.getElementById("max_grade").textContent = data["اعلى صف"] || '—';
-
-    // 🧮 Tuition per grade
-    const gradeFields = {
-      "براعم": "الروضة | براعم",
-      "بستان": "الروضة | بستان",
-      "تمهيدي": "الروضة | تمهيدي",
-      "الاول": "الصف الاول",
-      "الثاني": "الصف الثاني",
-      "الثالث": "الصف الثالث",
-      "الرابع": "الصف الرابع",
-      "الخامس": "الصف الخامس",
-      "السادس": "الصف السادس",
-      "السابع": "الصف السابع",
-      "الثامن": "الصف الثامن",
-      "التاسع": "الصف التاسع",
-      "العاشر": "الصف العاشر",
-      "الاول ثانوي": "الصف الأول ثانوي",
-      "الثاني ثانوي": "الصف الثاني ثانوي"
-    };
-
-    Object.entries(gradeFields).forEach(([id, dbKey]) => {
-      const cell = document.getElementById(id);
-      if (cell) {
-        const value = data[dbKey];
-        cell.textContent = value !== null && value !== undefined ? `${value} د.أ` : '—';
-      }
-    });
-
-    // 🖼️ Show school image via Google Places with Vision API validation
-    await loadGoogleMapsIfNeeded();
-    await showValidatedSchoolImage(data["اسم المدرسة"]);
-
-    // 📍 Map redirect button
-    const mapButton = document.getElementById("openMapButton");
-    if (mapButton && data["اسم المدرسة"]) {
-      const query = encodeURIComponent(`مدرسة ${data["اسم المدرسة"]}`);
-      const googleMapsURL = `https://www.google.com/maps/search/?api=1&query=${query}`;
-      mapButton.addEventListener("click", () => {
-        window.open(googleMapsURL, "_blank");
-      });
-    }
-
-    const viewed = JSON.parse(localStorage.getItem("viewedSchools") || "[]");
-    if (!viewed.includes(data["اسم المدرسة"])) {
-      viewed.push(data["اسم المدرسة"]);
-      localStorage.setItem("viewedSchools", JSON.stringify(viewed));
-    }
-
   } catch (error) {
-    console.error("Error loading school info:", error);
-    alert("فشل تحميل معلومات المدرسة. حاول مرة أخرى.");
+    console.log('API error:', error.message);
+  }
+
+  // Fallback to localStorage
+  try {
+    const schoolResults = localStorage.getItem('schoolResults');
+    if (!schoolResults) {
+      throw new Error('No school data in localStorage');
+    }
+
+    const schools = JSON.parse(schoolResults);
+    console.log('Schools in localStorage:', schools.length);
+    
+    // Find the specific school
+    const school = schools.find(school => 
+      (school["اسم المدرسة"] === schoolName) || 
+      (school["School Name"] === schoolName) ||
+      (school["اسم المدرسة"]?.includes(schoolName)) ||
+      (school["School Name"]?.includes(schoolName))
+    );
+
+    if (school) {
+      console.log('Found school in localStorage:', school);
+      displaySchoolInfo(school);
+    } else {
+      console.log('School not found in localStorage');
+      // Display first school as fallback
+      if (schools.length > 0) {
+        console.log('Using first available school as fallback');
+        displaySchoolInfo(schools[0]);
+      } else {
+        populateSchoolInfo(null);
+      }
+    }
+  } catch (error) {
+    console.error('Error loading from localStorage:', error);
+    populateSchoolInfo(null);
   }
 });
 
-function loadGoogleMapsIfNeeded() {
-  return new Promise(resolve => {
-    if (window.google && window.google.maps && window.google.maps.places) {
-      resolve();
-    } else {
-      window.initMap = resolve;
-    }
-  });
+function displaySchoolInfo(schoolData) {
+  console.log('Displaying school info:', schoolData);
+  
+  if (!schoolData) {
+    populateSchoolInfo(null);
+    return;
+  }
+
+  // Update school title
+  const schoolName = schoolData["اسم المدرسة"] || schoolData["School Name"] || "Unknown School";
+  document.getElementById("schoolTitle").textContent = schoolName;
+
+  // Populate the information tables
+  populateSchoolInfo(schoolData);
+  
+  // Setup map button with school name
+  setupMapButton(schoolName);
+  
+  // Load school image
+  loadSchoolImage(schoolName);
+  
+  // Mark as viewed
+  markSchoolAsViewed(schoolName);
 }
 
-// 🔍 Enhanced function with Google Cloud Vision validation
-async function showValidatedSchoolImage(schoolName) {
-  const query = `مدرسة ${schoolName}`;
-  const service = new google.maps.places.PlacesService(document.createElement('div'));
+function populateSchoolInfo(schoolData) {
+  console.log('Populating school info');
   
-  // Show loading indicator
-  showLoadingImage();
-  
-  service.textSearch({ query }, async (results, status) => {
-    if (status !== google.maps.places.PlacesServiceStatus.OK || !results[0]) {
-      console.warn("School not found on Google Maps.");
-      showDefaultImage();
-      return;
+  if (!schoolData) {
+    // Set all fields to "Not Available"
+    document.getElementById('system').textContent = 'Not Available';
+    document.getElementById('special_needs').textContent = 'Not Available';
+    document.getElementById('language').textContent = 'Not Available';
+    document.getElementById('mixed').textContent = 'Not Available';
+    document.getElementById('max_grade').textContent = 'Not Available';
+    
+    // Set all grade fees to "—"
+    const gradeIds = ['kg1', 'kg2', 'prep', 'grade1', 'grade2', 'grade3', 'grade4', 'grade5', 'grade6', 'grade7', 'grade8', 'grade9', 'grade10', 'grade11', 'grade12'];
+    gradeIds.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) element.textContent = '—';
+    });
+    return;
+  }
+
+  // Basic Information
+  const system = schoolData["نظام التدريسي"] || schoolData["نظام التعليمي"] || schoolData["School System"] || 'Not Available';
+  const specialNeeds = extractDisabilityType(schoolData["تقبل الطلبة من ذوي الإحتياجات"] || schoolData["Special Needs"]);
+  const language = schoolData["لغة التدريس"] || schoolData["Language of Instruction"] || 'Not Available';
+  const mixed = normalizeMixedValue(schoolData["مختلطة"] || schoolData["Mixed"]);
+  const maxGrade = schoolData["اعلى صف"] || schoolData["Highest Grade"] || 'Not Available';
+
+  document.getElementById('system').textContent = system;
+  document.getElementById('special_needs').textContent = specialNeeds;
+  document.getElementById('language').textContent = language;
+  document.getElementById('mixed').textContent = mixed;
+  document.getElementById('max_grade').textContent = maxGrade;
+
+  // Grade Fees - Updated mapping to match database structure
+  const gradeMapping = {
+    'kg1': ['الروضة | براعم', 'KG1'],
+    'kg2': ['الروضة | بستان', 'KG2'], 
+    'prep': ['الروضة | تمهيدي', 'Prep'],
+    'grade1': ['الصف الاول', 'Grade 1'],
+    'grade2': ['الصف الثاني', 'Grade 2'],
+    'grade3': ['الصف الثالث', 'Grade 3'],
+    'grade4': ['الصف الرابع', 'Grade 4'],
+    'grade5': ['الصف الخامس', 'Grade 5'],
+    'grade6': ['الصف السادس', 'Grade 6'],
+    'grade7': ['الصف السابع', 'Grade 7'],
+    'grade8': ['الصف الثامن', 'Grade 8'],
+    'grade9': ['الصف التاسع', 'Grade 9'],
+    'grade10': ['الصف العاشر', 'Grade 10'],
+    'grade11': ['الصف الأول ثانوي', 'Grade 11'],
+    'grade12': ['الصف الثاني ثانوي', 'Grade 12']
+  };
+
+  Object.entries(gradeMapping).forEach(([elementId, possibleKeys]) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      let value = null;
+      
+      // Try each possible key
+      for (const key of possibleKeys) {
+        if (schoolData[key] !== undefined && schoolData[key] !== null) {
+          value = schoolData[key];
+          break;
+        }
+      }
+      
+      if (value !== null && value !== undefined && value !== '' && !isNaN(value) && Number(value) > 0) {
+        element.textContent = `${value} JD`;
+      } else {
+        element.textContent = '—';
+      }
     }
+  });
 
-    const place = results[0];
+  console.log('School info populated successfully');
+}
 
-    service.getDetails({ placeId: place.place_id, fields: ['photos'] }, async (placeDetails, detailStatus) => {
-      if (detailStatus === google.maps.places.PlacesServiceStatus.OK && placeDetails.photos?.length) {
-        
-        // Get multiple photos to increase chances of finding a valid building image
-        const photosToCheck = placeDetails.photos.slice(0, 3); // Check up to 3 photos
-        let validImageFound = false;
+function extractDisabilityType(text) {
+  if (!text || text.trim().startsWith('لا') || text.toLowerCase().includes('no')) {
+    return 'No';
+  }
+  const keywords = ['التوحد', 'صعوبات تعلم', 'إعاقة حركية', 'اعاقة حركية', 'autism', 'learning difficulties', 'physical disability'];
+  const matched = keywords.filter(k => text.toLowerCase().includes(k.toLowerCase()));
+  return matched.length > 0 ? `Yes (${matched.join(', ')})` : 'Yes';
+}
 
-        for (let i = 0; i < photosToCheck.length && !validImageFound; i++) {
-          const photoUrl = photosToCheck[i].getUrl({ maxWidth: 400, maxHeight: 300 });
-          
-          try {
-            const isValidBuilding = await validateImageWithVision(photoUrl);
-            
-            if (isValidBuilding) {
-              showValidatedImage(photoUrl, schoolName);
-              validImageFound = true;
-            }
-          } catch (error) {
-            console.error(`Error validating image ${i + 1}:`, error);
+function normalizeMixedValue(text) {
+  if (!text) return 'Unknown';
+  const lowerText = text.toLowerCase();
+  if (lowerText.includes('غير') || lowerText.includes('ذكور') || lowerText.includes('إناث') || 
+      lowerText.includes('boys') || lowerText.includes('girls') || lowerText.includes('single')) {
+    return 'Not Mixed';
+  }
+  if (lowerText.includes('مختلطة') || lowerText.includes('mixed')) return 'Mixed';
+  return 'Unknown';
+}
+
+function setupMapButton(schoolName) {
+  const mapButton = document.getElementById("openMapButton");
+  if (mapButton && schoolName) {
+    mapButton.addEventListener("click", () => {
+      const query = encodeURIComponent(`مدرسة ${schoolName}`);
+      const googleMapsURL = `https://www.google.com/maps/search/?api=1&query=${query}`;
+      window.open(googleMapsURL, "_blank");
+    });
+  }
+}
+
+function loadSchoolImage(schoolName) {
+  // Set default image first
+  const schoolImage = document.getElementById('schoolImage');
+  if (schoolImage) {
+    schoolImage.src = './images/default-school.jpg';
+    schoolImage.alt = schoolName || 'School Photo';
+  }
+  
+  // Try to load Google Maps photo if available
+  if (window.google && window.google.maps && window.google.maps.places && schoolName) {
+    console.log('Attempting to load school image from Google Maps');
+    loadGoogleMapsPhoto(schoolName);
+  }
+}
+
+function loadGoogleMapsPhoto(schoolName) {
+  const service = new google.maps.places.PlacesService(document.createElement('div'));
+  const query = `مدرسة ${schoolName}`;
+  
+  service.textSearch({ query }, (results, status) => {
+    if (status === google.maps.places.PlacesServiceStatus.OK && results[0]) {
+      const place = results[0];
+      
+      service.getDetails({ placeId: place.place_id, fields: ['photos'] }, (placeDetails, detailStatus) => {
+        if (detailStatus === google.maps.places.PlacesServiceStatus.OK && placeDetails.photos?.length) {
+          const photoUrl = placeDetails.photos[0].getUrl({ maxWidth: 400, maxHeight: 300 });
+          const schoolImage = document.getElementById('schoolImage');
+          if (schoolImage) {
+            schoolImage.src = photoUrl;
+            console.log('School image loaded from Google Maps');
           }
         }
-
-        // If no valid building image found, show default
-        if (!validImageFound) {
-          console.log("No valid building images found, using default image.");
-          showDefaultImage();
-        }
-      } else {
-        showDefaultImage();
-      }
-    });
+      });
+    }
   });
 }
 
-// 🤖 Validate image using Google Cloud Vision API
-async function validateImageWithVision(imageUrl) {
+function markSchoolAsViewed(schoolName) {
   try {
-    const response = await fetch('http://localhost:5000/validate-image', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ imageUrl })
-    });
-
-    if (!response.ok) {
-      throw new Error(`Vision API request failed: ${response.status}`);
+    const viewed = JSON.parse(localStorage.getItem("viewedSchools") || "[]");
+    if (!viewed.includes(schoolName)) {
+      viewed.push(schoolName);
+      localStorage.setItem("viewedSchools", JSON.stringify(viewed));
+      console.log('School marked as viewed');
     }
-
-    const result = await response.json();
-    return result.isValidBuilding;
   } catch (error) {
-    console.error('Error calling Vision API:', error);
-    return false; // Default to false if validation fails
+    console.error('Error marking school as viewed:', error);
   }
 }
 
-// 🖼️ Display validated image
-function showValidatedImage(imageUrl, schoolName) {
-  const img = document.createElement('img');
-  img.src = imageUrl;
-  img.alt = schoolName;
-  img.style = "width: 100%; max-width: 400px; margin-top: 10px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);";
+// Debug function to check what data is available
+window.debugSchoolData = function() {
+  console.log('=== DEBUG: School Data ===');
   
-  // Add a small indicator that this image was validated
-  const container = document.createElement('div');
-  container.style = "position: relative; display: inline-block;";
+  const params = new URLSearchParams(window.location.search);
+  console.log('URL Parameters:', Object.fromEntries(params));
   
-  const badge = document.createElement('div');
-  badge.innerHTML = '✓';
-  badge.style = "position: absolute; top: 5px; right: 5px; background: #28a745; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;";
-  badge.title = "تم التحقق من صحة الصورة";
-  
-  container.appendChild(img);
-  container.appendChild(badge);
-  
-  const photoDiv = document.getElementById('school-photo');
-  photoDiv.innerHTML = '';
-  photoDiv.appendChild(container);
-}
-
-// 🏢 Show default fallback image
-function showDefaultImage() {
-  const img = document.createElement('img');
-  img.src = './images/school-info2.png';
-  img.alt = 'صورة افتراضية للمدرسة';
-  img.style = "width: 100%; max-width: 400px; margin-top: 10px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); opacity: 0.8;";
-  
-  const container = document.createElement('div');
-  container.style = "position: relative; display: inline-block;";
-  
-  const badge = document.createElement('div');
-  badge.innerHTML = '🏫';
-  badge.style = "position: absolute; top: 5px; right: 5px; background: #6c757d; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px;";
-  badge.title = "صورة افتراضية";
-  
-  container.appendChild(img);
-  container.appendChild(badge);
-  
-  const photoDiv = document.getElementById('school-photo');
-  photoDiv.innerHTML = '';
-  photoDiv.appendChild(container);
-}
-
-// ⏳ Show loading state
-function showLoadingImage() {
-  const loadingDiv = document.createElement('div');
-  loadingDiv.style = "width: 100%; max-width: 400px; height: 200px; margin-top: 10px; border-radius: 10px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: loading 2s infinite; display: flex; align-items: center; justify-content: center; color: #666;";
-  loadingDiv.innerHTML = 'جاري التحقق من الصورة...';
-  
-  // Add CSS animation for loading effect
-  if (!document.getElementById('loading-style')) {
-    const style = document.createElement('style');
-    style.id = 'loading-style';
-    style.textContent = `
-      @keyframes loading {
-        0% { background-position: 200% 0; }
-        100% { background-position: -200% 0; }
-      }
-    `;
-    document.head.appendChild(style);
+  const schoolResults = localStorage.getItem('schoolResults');
+  if (schoolResults) {
+    const schools = JSON.parse(schoolResults);
+    console.log('Schools in localStorage:', schools.length);
+    console.log('First school:', schools[0]);
+    console.log('Available fields:', Object.keys(schools[0] || {}));
+  } else {
+    console.log('No schools in localStorage');
   }
-  
-  const photoDiv = document.getElementById('school-photo');
-  photoDiv.innerHTML = '';
-  photoDiv.appendChild(loadingDiv);
-}
+};
+
+console.log('Info.js loaded successfully. Use debugSchoolData() to check available data.');

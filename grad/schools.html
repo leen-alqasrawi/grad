@@ -1,325 +1,455 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>قائمة المدارس</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
+  <title>Schools</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
-
-    :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --secondary: #f0f9ff;
-      --accent: #3b82f6;
-      --text: #1e293b;
-      --text-light: #64748b;
-      --background: #f8fafc;
-      --card: #ffffff;
-      --border: #e2e8f0;
-      --shadow: rgba(0, 0, 0, 0.1);
-    }
-
     * {
-      margin: 0;
-      padding: 0;
       box-sizing: border-box;
     }
 
     body {
-      background: url('./images/heroimageee.jpeg') center center/cover no-repeat;
-      background-attachment: fixed;
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 2rem;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('../images/main-slider-02.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #111827;
     }
 
-    .page-wrapper {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    .layout {
+      display: flex;
+      height: 100vh;
     }
 
-    .header {
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background-color: #ffffff;
+      border-right: 1px solid #e5e7eb;
+      padding: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 24px;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 10px;
+      color: #374151;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .nav-link:hover {
+      background-color: #f3f4f6;
+    }
+
+    .nav-link.active {
+      background-color: #e0e7ff;
+      color: #3730a3;
+      font-weight: bold;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      padding: 24px;
+      overflow: auto;
+    }
+
+    .main-header,
+    .sub-header {
       text-align: center;
-      margin-bottom: 2.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
-    h1 {
-      background-color: var(--primary);
-      color: white;
-      font-size: 2.5rem;
+    .main-header {
+      font-size: 32px;
       font-weight: 700;
-      padding: 0.6rem 1.5rem;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      display: inline-block;
+      margin-bottom: 8px;
+      color: #ffffff;
     }
 
-    .subtitle {
-      background-color: var(--primary);
-      color: white;
-      font-size: 1.1rem;
-      padding: 0.4rem 1rem;
-      border-radius: 8px;
-      display: inline-block;
+    .sub-header {
+      font-size: 20px;
+      color: #ffffff;
+      margin-bottom: 24px;
     }
 
-    .search-container {
-      margin-bottom: 2rem;
+    .filter-section {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
       flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .filter-tag {
+      background-color: #e0e7ff;
+      color: #3730a3;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 16px;
+      font-weight: 500;
     }
 
     .search-box {
-      position: relative;
-      flex: 1;
-      max-width: 500px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
     }
 
     .search-input {
-      width: 100%;
-      padding: 0.9rem 1.2rem 0.9rem 3rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      font-size: 1rem;
-      font-family: 'Tajawal', sans-serif;
-      background-color: var(--card);
-      color: var(--text);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-light);
-    }
-
-    .button {
-      padding: 0.9rem 1.5rem;
-      background-color: var(--primary);
-      color: white;
+      padding: 14px 18px;
       border: none;
-      border-radius: 12px;
+      border-radius: 8px;
+      background-color: #ffffff;
+      color: #000000;
+      font-size: 16px;
+      width: 250px;
+    }
+
+    .search-button {
+      padding: 14px 24px;
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
       cursor: pointer;
-      font-size: 1rem;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .search-button:hover {
+      background-color: #f0f0f0;
     }
 
     .table-container {
-      overflow-x: auto;
-      border-radius: 12px;
+      background-color: white;
+      border-radius: 10px;
+      overflow: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background: var(--card);
-      border: 1px solid #e2e8f0; 
+      min-width: 900px;
     }
 
-    th, td {
-      padding: 1.2rem 1rem;
-      text-align: right;
-      border: 1px solid #e2e8f0;
-    }
-
-    th {
-      background-color: var(--primary);
+    thead {
+      background-color: #1b3865;
       color: white;
     }
 
-    .school-name {
-      font-weight: 600;
-      color: var(--primary);
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
     }
 
-    .badge {
+    tbody tr:hover {
+      background-color: #f3f4f6;
+    }
+
+    tbody tr {
+      cursor: pointer;
+    }
+
+    .status {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 13px;
       display: inline-block;
-      padding: 0.3rem 0.8rem;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 500;
     }
 
-    .badge-mixed {
-      background-color: #dbeafe;
-      color: #1e40af;
+    .status.accredited {
+      background-color: #d1fae5;
+      color: #065f46;
     }
 
-    .badge-not-mixed {
+    .status.pending {
       background-color: #fef3c7;
       color: #92400e;
     }
 
-    .badge-disability {
-      background-color: #dcfce7;
-      color: #166534;
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      display: inline-block;
     }
-
     .badge-no-disability {
-      background-color: #fee2e2;
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    .badge-disability {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    .badge-mixed {
+      background-color: #bfdbfe;
+      color: #1e40af;
+    }
+    .badge-not-mixed {
+      background-color: #fca5a5;
       color: #991b1b;
     }
-
     .no-results {
       text-align: center;
-      padding: 3rem 1rem;
-      color: var(--text-light);
-      font-size: 1.1rem;
+      padding: 20px;
+      font-style: italic;
+      color: #6b7280;
     }
 
-    .footer {
-      margin-top: 2rem;
+    .loading {
       text-align: center;
-      color: var(--text-light);
-      font-size: 0.9rem;
+      padding: 40px;
+      color: #6b7280;
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
-  <div class="page-wrapper fade-in">
-    <div class="header">
-      <h1>قائمة المدارس</h1>
-      <p class="subtitle">استعرض قائمة المدارس واضغط على أي مدرسة للانتقال إلى موقعها على الخريطة</p>
+  <div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>Dashboard</h2>
+      <a class="nav-link" href="index.html">Home</a>
+      <a class="nav-link active" href="#">Schools</a>
+      <a class="nav-link" href="appointment.html">Appointment</a>
+      <a class="nav-link" href="help.html">Help</a>
+      <a class="nav-link" href="privacypolicy.html">Privacy Policy</a>
     </div>
 
-    <div class="search-container">
-      <div class="search-box">
-        <input type="text" class="search-input" id="searchInput" placeholder="ابحث عن مدرسة، مدينة، أو محافظة...">
-        <i class="fas fa-search search-icon"></i>
+    <!-- Main Content -->
+    <div class="main">
+      <div class="main-header">Schools</div>
+      <div class="sub-header">Browse the list of schools and apply filters</div>
+
+      <div class="filter-section">
+        <div class="filter-bar">
+          <div class="filter-tag">Governorate: All</div>
+          <div class="filter-tag">City: All</div>
+          <div class="filter-tag">Grade: All</div>
+          <div class="filter-tag">Language: All</div>
+          <div class="filter-tag">Type: All</div>
+          <div class="filter-tag">Status: All</div>
+        </div>
+
+        <div class="search-box">
+          <input id="searchInput" type="text" class="search-input" placeholder="Search schools..." />
+          <button id="loadDataBtn" class="search-button">Reload</button>
+        </div>
       </div>
-      <button class="button" id="loadDataBtn">
-        <i class="fas fa-sync-alt"></i>
-        <span>تحديث البيانات</span>
-      </button>
-    </div>
 
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>اسم المدرسة</th>
-            <th>المحافظة</th>
-            <th>المدينة</th>
-            <th>المنطقة</th>
-            <th>الصفوف</th>
-            <th>اللغة</th>
-            <th>نوع الإعاقة</th>
-            <th>الاختلاط</th>
-          </tr>
-        </thead>
-        <tbody id="resultsBody"></tbody>
-      </table>
-    </div>
-
-    <div class="footer">
-      <p>© 2025 نظام قائمة المدارس | جميع الحقوق محفوظة</p>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>School Name</th>
+              <th>Governorate</th>
+              <th>City</th>
+              <th>Area</th>
+              <th>Grade</th>
+              <th>Language</th>
+              <th>Disability Support</th>
+              <th>Mixed</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody">
+            <tr><td colspan="8" class="loading">Loading schools data...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <script>
-    function goToInfo(schoolName) {
-      const encoded = encodeURIComponent(schoolName);
-      window.location.href = `info.html?school=${encoded}`;
+<script>
+function goToInfo(schoolName) {
+  console.log('Navigating to info page for school:', schoolName);
+  if (schoolName) {
+    const encoded = encodeURIComponent(schoolName);
+    const url = `info.html?school=${encoded}`;
+    console.log('Opening URL:', url);
+    window.open(url, '_blank');
+  } else {
+    console.error('No school name provided');
+    alert('Unable to load school information - missing school name');
+  }
+}
+
+function extractDisabilityType(text) {
+  if (!text || text.trim().startsWith('لا') || text.toLowerCase().includes('no')) {
+    return { label: 'No', class: 'badge-no-disability' };
+  }
+
+  const keywords = ['التوحد', 'صعوبات تعلم', 'إعاقة حركية', 'اعاقة حركية', 'autism', 'learning difficulties', 'physical disability'];
+  const matched = keywords.filter(k => text.toLowerCase().includes(k.toLowerCase()));
+  const type = matched.length > 0 ? matched.join(', ') : 'Yes';
+  return { label: `Yes / ${type}`, class: 'badge-disability' };
+}
+
+function normalizeMixedValue(text) {
+  if (!text) return 'Unknown';
+  const lowerText = text.toLowerCase();
+  if (lowerText.includes('غير') || lowerText.includes('ذكور') || lowerText.includes('إناث') || 
+      lowerText.includes('boys') || lowerText.includes('girls') || lowerText.includes('single')) {
+    return 'Not Mixed';
+  }
+  if (lowerText.includes('مختلطة') || lowerText.includes('mixed')) return 'Mixed';
+  return 'Unknown';
+}
+
+async function fetchSchoolData() {
+  try {
+    // First try to get from localStorage (from search results)
+    const raw = localStorage.getItem('schoolResults');
+    if (raw) {
+      const data = JSON.parse(raw);
+      console.log('Loaded', data.length, 'schools from localStorage');
+      return data;
     }
-
-    function extractDisabilityType(text) {
-      if (!text || text.trim().startsWith('لا')) {
-        return { label: 'لا', class: 'badge-no-disability' };
-      }
-
-      const keywords = ['التوحد', 'صعوبات تعلم', 'إعاقة حركية', 'اعاقة حركية'];
-      const matched = keywords.filter(k => text.includes(k));
-      const type = matched.length > 0 ? matched.join('، ') : 'غير محدد';
-      return { label: `نعم / ${type}`, class: 'badge-disability' };
+    
+    // If no localStorage data, try to fetch all schools from API
+    console.log('No localStorage data, fetching from API');
+    const response = await fetch('http://localhost:5000/api/schools/city');
+    if (response.ok) {
+      const apiData = await response.json();
+      console.log('Loaded', apiData.length, 'schools from API');
+      return apiData;
     }
+    
+    console.warn('No data source available');
+    return [];
+  } catch (error) {
+    console.error('Error loading school data:', error);
+    return [];
+  }
+}
 
-    function normalizeMixedValue(text) {
-      if (!text) return 'غير معروف';
-      if (text.includes('غير') || text.includes('ذكور') || text.includes('إناث')) return 'غير مختلطة';
-      if (text.includes('مختلطة')) return 'مختلطة';
-      return 'غير معروف';
-    }
+async function renderSchools(filterText = '') {
+  console.log('Rendering schools with filter:', filterText || 'none');
+  
+  let data = await fetchSchoolData();
 
-    async function fetchSchoolData() {
-      try {
-        const raw = localStorage.getItem('schoolResults');
-        return raw ? JSON.parse(raw) : [];
-      } catch (error) {
-        console.error('خطأ في تحميل بيانات المدارس:', error);
-        return [];
-      }
-    }
+  if (filterText) {
+    filterText = filterText.toLowerCase();
+    data = data.filter(school =>
+      (school["اسم المدرسة"]?.toLowerCase() || '').includes(filterText) ||
+      (school["School Name"]?.toLowerCase() || '').includes(filterText) ||
+      (school["المدينة"]?.toLowerCase() || '').includes(filterText) ||
+      (school["City"]?.toLowerCase() || '').includes(filterText) ||
+      (school["المحافظة"]?.toLowerCase() || '').includes(filterText) ||
+      (school["Governorate"]?.toLowerCase() || '').includes(filterText)
+    );
+  }
 
-    async function renderSchools(filterText = '') {
-      let data = await fetchSchoolData();
+  const tbody = document.getElementById('resultsBody');
+  tbody.innerHTML = '';
 
-      if (filterText) {
-        filterText = filterText.toLowerCase();
-        data = data.filter(school =>
-          (school["اسم المدرسة"]?.toLowerCase() || '').includes(filterText) ||
-          (school["المدينة"]?.toLowerCase() || '').includes(filterText) ||
-          (school["المحافظة"]?.toLowerCase() || '').includes(filterText)
-        );
-      }
+  if (data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="no-results">No matching results found.</td></tr>`;
+    return;
+  }
 
-      const tbody = document.getElementById('resultsBody');
-      tbody.innerHTML = '';
+  console.log('Rendering', data.length, 'schools');
 
-      if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="no-results"><p>لا توجد نتائج مطابقة.</p></td></tr>`;
-        return;
-      }
+  data.forEach((school, index) => {
+    // Handle both Arabic and English data structures
+    const schoolName = school["اسم المدرسة"] || school["School Name"] || `School ${index + 1}`;
+    const governorate = school["المحافظة"] || school["Governorate"] || '';
+    const city = school["المدينة"] || school["City"] || '';
+    const area = school["المنطقة"] || school["Area"] || '';
+    const grade = school["اعلى صف"] || school["Grade"] || '';
+    const language = school["لغة التدريس"] || school["Language"] || '';
+    const disabilityText = school["تقبل الطلبة من ذوي الإحتياجات"] || school["Disability Support"] || '';
+    const mixedText = school["مختلطة"] || school["Mixed"] || '';
 
-      data.forEach(school => {
-        const disabilityInfo = extractDisabilityType(school["تقبل الطلبة من ذوي الإحتياجات"]);
-        const mixedStatus = normalizeMixedValue(school["مختلطة"]);
+    const disabilityInfo = extractDisabilityType(disabilityText);
+    const mixedStatus = normalizeMixedValue(mixedText);
 
-        const row = document.createElement('tr');
-        row.onclick = () => goToInfo(school["اسم المدرسة"]);
+    const row = document.createElement('tr');
+    
+    // Make sure the click handler uses the correct school name
+    row.onclick = () => {
+      console.log('Row clicked for school:', schoolName);
+      goToInfo(schoolName);
+    };
 
-        row.innerHTML = `
-          <td class="school-name">${school["اسم المدرسة"] || ''}</td>
-          <td>${school["المحافظة"] || ''}</td>
-          <td>${school["المدينة"] || ''}</td>
-          <td>${school["المنطقة"] || ''}</td>
-          <td>${school["اعلى صف"] || ''}</td>
-          <td>${school["لغة التدريس"] || ''}</td>
-          <td><span class="badge ${disabilityInfo.class}">${disabilityInfo.label}</span></td>
-          <td><span class="badge ${mixedStatus === 'مختلطة' ? 'badge-mixed' : 'badge-not-mixed'}">${mixedStatus}</span></td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
+    row.innerHTML = `
+      <td><strong>${schoolName}</strong></td>
+      <td>${governorate}</td>
+      <td>${city}</td>
+      <td>${area}</td>
+      <td>${grade}</td>
+      <td>${language}</td>
+      <td><span class="badge ${disabilityInfo.class}">${disabilityInfo.label}</span></td>
+      <td><span class="badge ${mixedStatus === 'Mixed' ? 'badge-mixed' : 'badge-not-mixed'}">${mixedStatus}</span></td>
+    `;
 
-    document.addEventListener('DOMContentLoaded', () => {
-      renderSchools();
+    tbody.appendChild(row);
+  });
 
-      document.getElementById('searchInput').addEventListener('input', e => {
-        renderSchools(e.target.value);
-      });
+  console.log('Schools rendered successfully');
+}
 
-      document.getElementById('loadDataBtn').addEventListener('click', () => {
-        renderSchools();
-        document.getElementById('searchInput').value = '';
-      });
+// Debug function to check localStorage data
+window.debugSchoolsData = function() {
+  console.log('=== DEBUG: Schools Data ===');
+  const raw = localStorage.getItem('schoolResults');
+  if (raw) {
+    const data = JSON.parse(raw);
+    console.log('Total schools:', data.length);
+    console.log('First school:', data[0]);
+    console.log('Available fields:', Object.keys(data[0] || {}));
+    console.log('School names:', data.slice(0, 5).map(s => s["اسم المدرسة"] || s["School Name"]));
+  } else {
+    console.log('No school data in localStorage');
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Schools page initialized');
+  
+  // Load schools immediately
+  renderSchools();
+
+  // Setup search functionality
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', e => {
+      renderSchools(e.target.value);
     });
-  </script>
-  <script type="module" src="usermenu-loader.js"></script>
+  }
 
+  // Setup reload button
+  const loadDataBtn = document.getElementById('loadDataBtn');
+  if (loadDataBtn) {
+    loadDataBtn.addEventListener('click', () => {
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = '';
+      renderSchools();
+    });
+  }
+  
+  console.log('Event listeners setup complete. Use debugSchoolsData() to check data.');
+});
+  </script>
+    <script type="module" src="usermenu-loader.js"></script>
 </body>
 </html>

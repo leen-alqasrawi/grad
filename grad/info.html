@@ -1,21 +1,204 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>معلومات المدرسة</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="icon" type="image/jpeg" href="../images/logo.jpg"> 
-   
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpg">
+  <title>School Information</title>
   <style>
-   body {
-  background: url('../images/school-info2.png') no-repeat center center fixed;
-  background-size: cover;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  padding: 2rem;
-  direction: rtl;
-  text-align: right;
-}
- /* Home Button Fixed Bottom Left */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('../images/main-slider-02.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #111827;
+    }
+
+    .layout {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background-color: #ffffff;
+      border-right: 1px solid #e5e7eb;
+      padding: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 24px;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 10px;
+      color: #374151;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .nav-link:hover {
+      background-color: #f3f4f6;
+    }
+
+    .nav-link.active {
+      background-color: #e0e7ff;
+      color: #3730a3;
+      font-weight: bold;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      padding: 24px;
+      overflow: auto;
+    }
+
+    .main-header,
+    .sub-header {
+      text-align: center;
+    }
+
+    .main-header {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    .sub-header {
+      font-size: 20px;
+      color: #ffffff;
+      margin-bottom: 24px;
+    }
+
+    /* School Info Section */
+    .school-info {
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .school-image {
+      margin-bottom: 2rem;
+    }
+
+    .school-image img {
+      width: 300px;
+      max-width: 90%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+
+    .map-button {
+      margin: 20px 0;
+    }
+
+    .map-button img {
+      width: 40px;
+      height: auto;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .map-button img:hover {
+      transform: scale(1.1);
+    }
+
+    /* Tables */
+    .table-container {
+      background-color: white;
+      border-radius: 10px;
+      overflow: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .table-title {
+      background-color: #1b3865;
+      color: white;
+      padding: 15px;
+      margin: 0;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    thead {
+      background-color: #1b3865;
+      color: white;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: center;
+    }
+
+    tbody tr:hover {
+      background-color: #f3f4f6;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 20px;
+      font-style: italic;
+      color: #6b7280;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+      font-size: 18px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+        height: auto;
+      }
+      
+      .sidebar {
+        width: 100%;
+        padding: 15px;
+      }
+      
+      .main {
+        padding: 15px;
+      }
+      
+      table {
+        min-width: 600px;
+      }
+    }
+
+    /* Home Button */
     .home-fixed {
       position: fixed;
       bottom: 20px;
@@ -34,163 +217,271 @@
     .home-fixed:hover {
       background-color: #0056b3;
     }
-
-    h1 {
-      text-align: center;
-      color: #007bff;
-      margin-bottom: 1rem;
-    }
-
-    .school-image {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .school-image img {
-      width: 300px;
-      max-width: 90%;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-      margin-bottom: 3rem;
-    }
-
-    th, td {
-      padding: 1rem;
-      border: 1px solid #ddd;
-      text-align: center;
-      font-size: 0.95rem;
-    }
-
-    th {
-      background-color: #007bff;
-      color: white;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    .container {
-      max-width: 100%;
-      margin: 0 auto;
-      overflow-x: auto;
-    }
-    
   </style>
 </head>
 <body>
-
-  <div class="container">
-    <!-- ✅ This will get replaced by JS -->
-    <h1 id="schoolTitle">موقع المدرسة</h1>
-
-    <!-- Map Button -->
-    <div style="text-align: center; margin-bottom: 2rem;">
-      <img src="./images/info.png" id="openMapButton" style="width: 40px; height: auto; background: transparent; cursor: pointer;">
+  <div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>Dashboard</h2>
+      <a class="nav-link" href="index.html">Home</a>
+      <a class="nav-link" href="schools.html">Schools</a>
+      <a class="nav-link" href="appointment.html">Appointment</a>
+      <a class="nav-link" href="help.html">Help</a>
+      <a class="nav-link" href="privacypolicy.html">Privacy Policy</a>
+      <a class="nav-link active" href="#">School Info</a>
     </div>
 
-   <!-- ✅ صورة صغيرة قابلة للنقر -->
-    <div id="school-photo" class="school-image">
-      <a href="#schoolInfo">
-      </a>
+    <!-- Main Content -->
+    <div class="main">
+      <div class="main-header" id="schoolTitle">School Information</div>
+      <div class="sub-header">Detailed information about the selected school</div>
+
+      <!-- School Info Section -->
+      <div class="school-info">
+        <!-- Map Button -->
+        <div class="map-button">
+          <img src="./images/info.png" id="openMapButton" alt="Open Map" title="View on Map">
+        </div>
+
+        <!-- School Image -->
+        <div id="school-photo" class="school-image">
+          <img src="../images/default-school.jpg" alt="School Photo" id="schoolImage">
+        </div>
+      </div>
+
+      <!-- Basic Information Table -->
+      <div class="table-container">
+        <h3 class="table-title">School Information</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>School System</th>
+              <th>Special Needs</th>
+              <th>Language of Instruction</th>
+              <th>Mixed Status</th>
+              <th>Highest Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="system">Loading...</td>
+              <td id="special_needs">Loading...</td>
+              <td id="language">Loading...</td>
+              <td id="mixed">Loading...</td>
+              <td id="max_grade">Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Grade Fees Table -->
+      <div class="table-container">
+        <h3 class="table-title">Grade Fees</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>KG1</th>
+              <th>KG2</th>
+              <th>Prep</th>
+              <th>Grade 1</th>
+              <th>Grade 2</th>
+              <th>Grade 3</th>
+              <th>Grade 4</th>
+              <th>Grade 5</th>
+              <th>Grade 6</th>
+              <th>Grade 7</th>
+              <th>Grade 8</th>
+              <th>Grade 9</th>
+              <th>Grade 10</th>
+              <th>Grade 11</th>
+              <th>Grade 12</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="kg1">—</td>
+              <td id="kg2">—</td>
+              <td id="prep">—</td>
+              <td id="grade1">—</td>
+              <td id="grade2">—</td>
+              <td id="grade3">—</td>
+              <td id="grade4">—</td>
+              <td id="grade5">—</td>
+              <td id="grade6">—</td>
+              <td id="grade7">—</td>
+              <td id="grade8">—</td>
+              <td id="grade9">—</td>
+              <td id="grade10">—</td>
+              <td id="grade11">—</td>
+              <td id="grade12">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    <br><br>
-    <h1>معلومات المدرسة</h1>
-    <!-- ✅ First Table -->
-    <table>
-      <tr>
-        <th>نظام التدريسي</th>
-        <th>احتياجات خاصة</th>
-        <th>لغة التدريس</th>
-        <th>مختلطة إلى</th>
-        <th>أعلى صف</th>
-      </tr>
-      <tr>
-        <td id="system">—</td>
-        <td id="special_needs">—</td>
-        <td id="language">—</td>
-        <td id="mixed">—</td>
-        <td id="max_grade">—</td>
-      </tr>
-    </table>
-
-    <h1>اسعار الصفوف</h1>
-    <!-- ✅ Second Table (15 Columns) -->
-    <table>
-      <tr>
-        <th>الروضة | براعم</th>
-        <th>الروضة | بستان</th>
-        <th>الروضة | تمهيدي</th>
-        <th>الصف الأول</th>
-        <th>الصف الثاني</th>
-        <th>الصف الثالث</th>
-        <th>الصف الرابع</th>
-        <th>الصف الخامس</th>
-        <th>الصف السادس</th>
-        <th>الصف السابع</th>
-        <th>الصف الثامن</th>
-        <th>الصف التاسع</th>
-        <th>الصف العاشر</th>
-        <th>الصف الأول ثانوي</th>
-        <th>الصف الثاني ثانوي</th>
-      </tr>
-      <tr>
-        <td id="براعم">—</td>
-        <td id="بستان">—</td>
-        <td id="تمهيدي">—</td>
-        <td id="الاول">—</td>
-        <td id="الثاني">—</td>
-        <td id="الثالث">—</td>
-        <td id="الرابع">—</td>
-        <td id="الخامس">—</td>
-        <td id="السادس">—</td>
-        <td id="السابع">—</td>
-        <td id="الثامن">—</td>
-        <td id="التاسع">—</td>
-        <td id="العاشر">—</td>
-        <td id="الاول ثانوي">—</td>
-        <td id="الثاني ثانوي">—</td>
-      </tr>
-    </table>
   </div>
-
-  <!-- 🧭 Google Maps JS API -->
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYdvR3g3uF5c0Lczooxqe4Cx95Cxd5TaU&libraries=places,marker"
-    defer
-  ></script>
-
-  <!-- ✅ JavaScript to show school name in title -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const params = new URLSearchParams(window.location.search);
-      const schoolName = params.get("school");
-
-      if (schoolName) {
-        const titleElement = document.getElementById("schoolTitle");
-        if (titleElement) {
-          titleElement.textContent = decodeURIComponent(schoolName);
-        }
-      }
-    });
-  </script>
-
-  <!-- JS Logic -->
-  <script type="module" src="./info.js"></script>
-  <script type="module" src="usermenu-loader.js"></script>
 
   <!-- Home Button -->
   <a href="index.html" class="home-fixed">Home</a>
 
+  <!-- Google Maps API -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYdvR3g3uF5c0Lczooxqe4Cx95Cxd5TaU&libraries=places,marker&loading=async"></script>
+
+  <script>
+    let currentSchoolData = null;
+
+    // Get school name from URL parameters
+    function getSchoolNameFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("school");
+    }
+
+    // Fetch school data from localStorage
+    async function fetchSchoolData() {
+      try {
+        const raw = localStorage.getItem('schoolResults');
+        return raw ? JSON.parse(raw) : [];
+      } catch (error) {
+        console.error('Error loading school data:', error);
+        return [];
+      }
+    }
+
+    // Find specific school data
+    async function findSchoolInfo(schoolName) {
+      const allSchools = await fetchSchoolData();
+      return allSchools.find(school => 
+        (school["اسم المدرسة"] === schoolName) || 
+        (school["School Name"] === schoolName)
+      );
+    }
+
+    // Extract disability support information
+    function extractDisabilityType(text) {
+      if (!text || text.trim().startsWith('لا') || text.toLowerCase().includes('no')) {
+        return 'No';
+      }
+      const keywords = ['التوحد', 'صعوبات تعلم', 'إعاقة حركية', 'اعاقة حركية', 'autism', 'learning difficulties', 'physical disability'];
+      const matched = keywords.filter(k => text.toLowerCase().includes(k.toLowerCase()));
+      return matched.length > 0 ? `Yes (${matched.join(', ')})` : 'Yes';
+    }
+
+    // Normalize mixed status
+    function normalizeMixedValue(text) {
+      if (!text) return 'Unknown';
+      const lowerText = text.toLowerCase();
+      if (lowerText.includes('غير') || lowerText.includes('ذكور') || lowerText.includes('إناث') || 
+          lowerText.includes('boys') || lowerText.includes('girls') || lowerText.includes('single')) {
+        return 'Not Mixed';
+      }
+      if (lowerText.includes('مختلطة') || lowerText.includes('mixed')) return 'Mixed';
+      return 'Unknown';
+    }
+
+    // Populate school information
+    function populateSchoolInfo(schoolData) {
+      if (!schoolData) {
+        document.getElementById('system').textContent = 'Not Available';
+        document.getElementById('special_needs').textContent = 'Not Available';
+        document.getElementById('language').textContent = 'Not Available';
+        document.getElementById('mixed').textContent = 'Not Available';
+        document.getElementById('max_grade').textContent = 'Not Available';
+        return;
+      }
+
+      // Handle both Arabic and English data structures with multiple field name variations
+      const system = schoolData["نظام التدريسي"] || schoolData["نظام التعليمي"] || schoolData["School System"] || 'Not Available';
+      const specialNeeds = extractDisabilityType(schoolData["تقبل الطلبة من ذوي الإحتياجات"] || schoolData["Special Needs"]);
+      const language = schoolData["لغة التدريس"] || schoolData["Language of Instruction"] || 'Not Available';
+      const mixed = normalizeMixedValue(schoolData["مختلطة"] || schoolData["Mixed"]);
+      const maxGrade = schoolData["اعلى صف"] || schoolData["Highest Grade"] || 'Not Available';
+
+      document.getElementById('system').textContent = system;
+      document.getElementById('special_needs').textContent = specialNeeds;
+      document.getElementById('language').textContent = language;
+      document.getElementById('mixed').textContent = mixed;
+      document.getElementById('max_grade').textContent = maxGrade;
+
+      // Updated grade mapping to match info.js structure
+      const gradeFields = {
+        "براعم": "الروضة | براعم",
+        "بستان": "الروضة | بستان", 
+        "تمهيدي": "الروضة | تمهيدي",
+        "الاول": "الصف الاول",
+        "الثاني": "الصف الثاني",
+        "الثالث": "الصف الثالث",
+        "الرابع": "الصف الرابع",
+        "الخامس": "الصف الخامس",
+        "السادس": "الصف السادس",
+        "السابع": "الصف السابع",
+        "الثامن": "الصف الثامن",
+        "التاسع": "الصف التاسع",
+        "العاشر": "الصف العاشر",
+        "الاول ثانوي": "الصف الأول ثانوي",
+        "الثاني ثانوي": "الصف الثاني ثانوي"
+      };
+
+      Object.entries(gradeFields).forEach(([id, dbKey]) => {
+        const cell = document.getElementById(id);
+        if (cell) {
+          const value = schoolData[dbKey] || schoolData[id] || null;
+          cell.textContent = value !== null && value !== undefined ? `${value} JD` : '—';
+        }
+      });
+    }
+
+    // Open Google Maps
+    function openGoogleMaps(schoolName) {
+      if (schoolName) {
+        const encoded = encodeURIComponent(schoolName);
+        window.open(`https://www.google.com/maps/search/?api=1&query=${encoded}`, '_blank');
+      }
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function() {
+      const schoolName = getSchoolNameFromURL();
+      
+      if (schoolName) {
+        const decodedName = decodeURIComponent(schoolName);
+        document.getElementById('schoolTitle').textContent = decodedName;
+        
+        // Try API first, then fallback to localStorage
+        const isAPIAvailable = await checkAPIAvailability();
+        
+        if (isAPIAvailable) {
+          console.log('API available, attempting to load from API...');
+          try {
+            currentSchoolData = await loadSchoolDataFromAPI(decodedName);
+            populateSchoolInfo(currentSchoolData);
+            console.log('Successfully loaded data from API');
+          } catch (error) {
+            console.log('API failed, falling back to localStorage...');
+            currentSchoolData = await findSchoolInfo(decodedName);
+            populateSchoolInfo(currentSchoolData);
+          }
+        } else {
+          console.log('API not available, using localStorage...');
+          currentSchoolData = await findSchoolInfo(decodedName);
+          populateSchoolInfo(currentSchoolData);
+        }
+        
+        // Setup map button
+        document.getElementById('openMapButton').addEventListener('click', () => {
+          openGoogleMaps(decodedName);
+        });
+        
+        // Setup school image click
+        document.getElementById('schoolImage').addEventListener('click', () => {
+          openGoogleMaps(decodedName);
+        });
+      } else {
+        document.getElementById('schoolTitle').textContent = 'No School Selected';
+        populateSchoolInfo(null);
+      }
+    });
+  </script>
+  <script src="./info.js"></script>
 </body>
 </html>

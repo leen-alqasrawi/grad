@@ -135,9 +135,9 @@
 
   <a href="index.html" class="home-fixed">Home</a>
 
-  <script>
+ <script>
     window.addEventListener('DOMContentLoaded', () => {
-      fetch('http://localhost:5000/filters')
+      fetch('http://localhost:5000/api/schools/filters')
         .then(res => res.json())
         .then(data => {
           populateSelect('location', data.location, 'اختار المنطقة');
@@ -168,13 +168,13 @@
         grade: document.getElementById('grade').value,
       };
 
-      fetch('http://localhost:5000/save-form', {
+      fetch('http://localhost:5000/api/users/save-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(filter)
       })
       .then(() =>
-        fetch('http://localhost:5000/filter-school', {
+        fetch('http://localhost:5000/api/schools/filter', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(filter)
