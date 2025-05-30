@@ -90,7 +90,7 @@ async function startStudentTracking() {
         console.log('Fetching student data for ID:', studentId);
         
         // Fetch student and school data
-        const response = await fetch(`http://localhost:5000/get-student-school?studentId=${studentId}`);
+        const response = await fetch(`http://localhost:5000/api/schools/student-school?studentId=${studentId}`);
         
         if (!response.ok) {
             throw new Error('Failed to fetch student data');
@@ -108,7 +108,7 @@ async function startStudentTracking() {
         
         // Try to fetch full school details including coordinates
         try {
-            const schoolResponse = await fetch(`http://localhost:5000/school-info?name=${encodeURIComponent(data.school.name)}`);
+            const schoolResponse = await fetch(`http://localhost:5000/api/schools/info?name=${encodeURIComponent(data.school.name)}`);
             if (schoolResponse.ok) {
                 const schoolData = await schoolResponse.json();
                 
@@ -737,4 +737,3 @@ window.initializeApp = initializeApp;
 
 // Log when script loads
 console.log('Bus tracking system loaded successfully');
-//student_KuI92bwRYIg8obHBlPVk5LTAj342_1748201740877
