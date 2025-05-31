@@ -1,6 +1,8 @@
 // Wait until the entire page is fully loaded before running script
 document.addEventListener("DOMContentLoaded", () => {
   
+  
+  
   // Initialize testimonial slides
   initializeTestimonials();
   
@@ -65,6 +67,7 @@ function initializeTestimonials() {
     // Update the dots: highlight the one for the current slide
     dots.forEach((dot, i) => {
       dot.classList.toggle('active', i === index);
+      
     });
   }
 
@@ -74,8 +77,16 @@ function initializeTestimonials() {
   });
 
   // Show the first slide when the page loads
+ // Show the first slide when the page loads
   showSlide(0);
-}
+  let currentIndex = 0;
+setInterval(() => {
+  currentIndex = (currentIndex + 1) % slides.length;
+  showSlide(currentIndex);
+}, 3000); // كل 5 ثواني
+
+};
+
 
 // ================== REVIEW FUNCTIONALITY ==================
 

@@ -178,7 +178,7 @@ function populateSchoolInfo(schoolData) {
       if (value !== null && value !== undefined && value !== '' && !isNaN(value) && Number(value) > 0) {
         element.textContent = `${value} JD`;
       } else {
-        element.textContent = '—';
+        element.textContent = '—'; 
       }
     }
   });
