@@ -8,7 +8,7 @@ const schoolRoutes = require('./routes/schools');
 const userRoutes = require('./routes/users');
 const visionRoutes = require('./routes/vision');
 const emailRoutes = require('./routes/email');
-const schoolSelectionRoutes = require('./routes/school-selection');
+const contactRoutes = require('./routes/contact');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,7 +26,7 @@ app.use('/api/schools', schoolRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/vision', visionRoutes);
 app.use('/api/email', emailRoutes);
-app.use('/api/school-selection', schoolSelectionRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -41,8 +41,8 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log('Server running on port ' + PORT);
+  console.log('Contact form API available at /api/contact/submit');
   console.log('Firebase tracking system enabled');
-  console.log('School selection system enabled');
 });
 
 const gracefulShutdown = async () => {
