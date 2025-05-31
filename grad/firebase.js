@@ -26,11 +26,14 @@ function showMessage(msg, targetId, isError = false) {
 }
 
 // Simple session management
+// Add this to your firebase.js file in the onAuthStateChanged function:
+
 onAuthStateChanged(auth, (user) => {
   if (user && user.emailVerified) {
     // User is logged in and verified
     localStorage.setItem("loggedInUserId", user.uid);
-    localStorage.setItem("loginTime", Date.now().toString()); // Add login timestamp
+    localStorage.setItem("loginTime", Date.now().toString());
+    localStorage.setItem("userEmail", user.email); // Add this line for autofill
     console.log("User logged in:", user.email);
     
     // Redirect to profile if on login/register page
@@ -40,7 +43,8 @@ onAuthStateChanged(auth, (user) => {
   } else if (user && !user.emailVerified) {
     // User exists but email not verified
     localStorage.removeItem("loggedInUserId");
-    localStorage.removeItem("loginTime"); // Clear login time
+    localStorage.removeItem("loginTime");
+    localStorage.removeItem("userEmail"); // Add this line
     console.log("User needs to verify email");
     
     if (!window.location.pathname.includes('login.html') && !window.location.pathname.includes('register.html')) {
@@ -50,7 +54,8 @@ onAuthStateChanged(auth, (user) => {
   } else {
     // No user logged in
     localStorage.removeItem("loggedInUserId");
-    localStorage.removeItem("loginTime"); // Clear login time
+    localStorage.removeItem("loginTime");
+    localStorage.removeItem("userEmail"); // Add this line
     console.log("No user logged in");
     
     // Redirect to login if not on public pages

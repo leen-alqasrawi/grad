@@ -190,9 +190,46 @@
           localStorage.setItem('schoolResults', JSON.stringify(data));
           window.location.href = 'schools.html';
         })
+        // Add this to your existing findschool.html script section, in the fetchData() function:
 
+function fetchData() {
+  const filter = {
+    uid: localStorage.getItem("loggedInUserId"),
+    location: document.getElementById('location').value,
+    special_needs: document.getElementById('special_needs').value,
+    language: document.getElementById('language').value,
+    mixed: document.getElementById('mixed').value,
+    grade: document.getElementById('grade').value,
+  };
+
+  // Save the filter data for autofill in other forms
+  localStorage.setItem('lastSearchFilters', JSON.stringify(filter));
+  localStorage.setItem('recentSchoolFilter', JSON.stringify(filter));
+
+  fetch('http://localhost:5000/api/users/save-form', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(filter)
+  })
+  .then(() =>
+    fetch('http://localhost:5000/api/schools/filter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(filter)
+    })
+  )
+  .then(res => res.json())
+  .then(data => {
+      if (!Array.isArray(data)) {
+        console.error('Server did not return an array:', data);
+        alert('Error loading schools. Check the server log.');
+        return;
+      }
+      localStorage.setItem('schoolResults', JSON.stringify(data));
+      window.location.href = 'schools.html';
+    })
       .catch(err => console.error('fetchData() error:', err));
-    }
+    }}
   </script>
   <script type="module" src="usermenu-loader.js"></script>
 

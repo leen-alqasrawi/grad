@@ -143,4 +143,79 @@ router.get('/student-school', async (req, res) => {
   }
 });
 
+
+// GET /api/schools/student-info/:studentId
+router.get('/student-info/:studentId', async (req, res) => {
+  const { studentId } = req.params;
+  
+  if (!studentId) {
+    return res.status(400).json({ error: 'Missing student ID' });
+  }
+
+  try {
+    const studentQuery = `
+      SELECT 
+        s.id,
+        s.student_id,
+        s.name as student_name,
+        s.parent_name,
+        s.parent_email,
+        s.grade,
+        s.home_address,
+        s.school_name,
+        s.school_id,
+        s.home_lat,
+        s.home_lng,
+        sd."اسم المدرسة" as arabic_school_name,
+        sd."المنطقة" as school_area
+      FROM students s
+      LEFT JOIN "schooldata" sd ON s.school_id = sd.school_id
+      WHERE (s.student_id = $1 OR s.id = $1) AND (s.is_active IS NULL OR s.is_active = true)
+      LIMIT 1
+    `;
+    
+    const result = await dbPool.query(studentQuery, [studentId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ 
+        error: 'Student not found or inactive',
+        message: 'Please check your Student ID or contact the school administration'
+      });
+    }
+
+    const student = result.rows[0];
+    
+    const responseData = {
+      student: {
+        id: student.student_id || student.id,
+        name: student.student_name,
+        grade: student.grade,
+        parentName: student.parent_name,
+        parentEmail: student.parent_email
+      },
+      school: {
+        name: student.school_name,
+        arabicName: student.arabic_school_name,
+        area: student.school_area,
+        school_id: student.school_id
+      },
+      home: {
+        address: student.home_address,
+        coordinates: student.home_lat && student.home_lng ? {
+          lat: parseFloat(student.home_lat),
+          lng: parseFloat(student.home_lng)
+        } : null
+      }
+    };
+
+    res.json(responseData);
+
+  } catch (err) {
+    console.error('Error fetching student info for tracking:', err);
+    res.status(500).json({ 
+      error: 'Internal server error',
+      message: 'Unable to fetch student information. Please try again later.'
+    });
+  }
+});
 module.exports = router;

@@ -26,7 +26,6 @@
       height: 100vh;
     }
 
-    /* Sidebar */
     .sidebar {
       width: 240px;
       background-color: #ffffff;
@@ -58,7 +57,6 @@
       font-weight: bold;
     }
 
-    /* Main Content */
     .main {
       flex: 1;
       padding: 24px;
@@ -83,7 +81,6 @@
       margin-bottom: 24px;
     }
 
-    /* School Info Section */
     .school-info {
       background-color: white;
       border-radius: 10px;
@@ -120,7 +117,237 @@
       transform: scale(1.1);
     }
 
-    /* Tables */
+    /* Select School Button */
+    .select-school-btn {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 20px 0;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .select-school-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+    }
+
+    .select-school-btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .select-school-btn:hover:before {
+      left: 100%;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      transform: scale(0.9);
+      animation: modalSlideIn 0.3s ease forwards;
+      position: relative;
+    }
+
+    @keyframes modalSlideIn {
+      to {
+        transform: scale(1);
+      }
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: #666;
+      cursor: pointer;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .close-btn:hover {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .modal-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1b3865;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .modal-subtitle {
+      color: #666;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-group input:read-only {
+      background: #e9ecef;
+      color: #6c757d;
+    }
+
+    .required {
+      color: #ef4444;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #1b3865, #2c5aa0);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(27, 56, 101, 0.3);
+    }
+
+    .btn:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn.secondary {
+      background: #6c757d;
+      margin-top: 10px;
+    }
+
+    .btn.secondary:hover {
+      background: #5a6268;
+    }
+
+    .message {
+      padding: 12px;
+      border-radius: 8px;
+      margin: 16px 0;
+      font-weight: 500;
+      display: none;
+      text-align: center;
+    }
+
+    .message.success {
+      background-color: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .message.error {
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     .table-container {
       background-color: white;
       border-radius: 10px;
@@ -177,28 +404,6 @@
       font-size: 18px;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .layout {
-        flex-direction: column;
-        height: auto;
-      }
-      
-      .sidebar {
-        width: 100%;
-        padding: 15px;
-      }
-      
-      .main {
-        padding: 15px;
-      }
-      
-      table {
-        min-width: 600px;
-      }
-    }
-
-    /* Home Button */
     .home-fixed {
       position: fixed;
       bottom: 20px;
@@ -217,11 +422,45 @@
     .home-fixed:hover {
       background-color: #0056b3;
     }
+
+    .info-badge {
+      background: #e3f2fd;
+      color: #1976d2;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 15px;
+      border-left: 4px solid #1976d2;
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+        height: auto;
+      }
+      
+      .sidebar {
+        width: 100%;
+        padding: 15px;
+      }
+      
+      .main {
+        padding: 15px;
+      }
+      
+      .modal-content {
+        padding: 30px 20px;
+        width: 95%;
+      }
+      
+      table {
+        min-width: 600px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="layout">
-    <!-- Sidebar -->
     <div class="sidebar">
       <h2>Dashboard</h2>
       <a class="nav-link" href="index.html">Home</a>
@@ -232,22 +471,24 @@
       <a class="nav-link active" href="#">School Info</a>
     </div>
 
-    <!-- Main Content -->
     <div class="main">
       <div class="main-header" id="schoolTitle">School Information</div>
       <div class="sub-header">Detailed information about the selected school</div>
 
       <!-- School Info Section -->
       <div class="school-info">
-        <!-- Map Button -->
         <div class="map-button">
           <img src="./images/info.png" id="openMapButton" alt="Open Map" title="View on Map">
         </div>
 
-        <!-- School Image -->
         <div id="school-photo" class="school-image">
           <img src="../images/default-school.jpg" alt="School Photo" id="schoolImage">
         </div>
+
+        <!-- Select School Button -->
+        <button class="select-school-btn" id="selectSchoolBtn">
+          🎓 Select This School for Your Child
+        </button>
       </div>
 
       <!-- Basic Information Table -->
@@ -322,166 +563,81 @@
     </div>
   </div>
 
-  <!-- Home Button -->
+  <!-- Modal for School Selection -->
+  <div class="modal-overlay" id="schoolModal">
+    <div class="modal-content">
+      <button class="close-btn" id="closeModal">&times;</button>
+      
+      <div class="modal-title">Select This School</div>
+      <div class="modal-subtitle">Fill in your details to get a Student ID for bus tracking</div>
+      
+      <div class="info-badge">
+        <strong>Info:</strong> Some fields are pre-filled based on your previous selections
+      </div>
+      
+      <div id="modalMessage" class="message"></div>
+      
+      <form id="schoolSelectionForm">
+        <div class="form-group">
+          <label for="parentName">Parent Name <span class="required">*</span></label>
+          <input type="text" id="parentName" name="parentName" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="parentEmail">Email Address <span class="required">*</span></label>
+          <input type="email" id="parentEmail" name="parentEmail" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="studentName">Student Name <span class="required">*</span></label>
+          <input type="text" id="studentName" name="studentName" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="studentGrade">Student Grade <span class="required">*</span></label>
+          <select id="studentGrade" name="studentGrade" required>
+            <option value="">Select Grade</option>
+            <option value="KG1">Kindergarten 1 (KG1)</option>
+            <option value="KG2">Kindergarten 2 (KG2)</option>
+            <option value="1">Grade 1</option>
+            <option value="2">Grade 2</option>
+            <option value="3">Grade 3</option>
+            <option value="4">Grade 4</option>
+            <option value="5">Grade 5</option>
+            <option value="6">Grade 6</option>
+            <option value="7">Grade 7</option>
+            <option value="8">Grade 8</option>
+            <option value="9">Grade 9</option>
+            <option value="10">Grade 10</option>
+            <option value="11">Grade 11</option>
+            <option value="12">Grade 12</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="homeAddress">Home Address</label>
+          <input type="text" id="homeAddress" name="homeAddress" placeholder="Optional - for bus route planning">
+        </div>
+        
+        <div class="form-group">
+          <label for="selectedSchool">Selected School</label>
+          <input type="text" id="selectedSchool" name="selectedSchool" readonly>
+        </div>
+        
+        <button type="submit" id="submitBtn" class="btn">
+          Get Student ID & Send Email
+        </button>
+        
+        <button type="button" class="btn secondary" id="cancelBtn">
+          Cancel
+        </button>
+      </form>
+    </div>
+  </div>
+
   <a href="index.html" class="home-fixed">Home</a>
 
-  <!-- Google Maps API -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYdvR3g3uF5c0Lczooxqe4Cx95Cxd5TaU&libraries=places,marker&loading=async"></script>
-
-  <script>
-    let currentSchoolData = null;
-
-    // Get school name from URL parameters
-    function getSchoolNameFromURL() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("school");
-    }
-
-    // Fetch school data from localStorage
-    async function fetchSchoolData() {
-      try {
-        const raw = localStorage.getItem('schoolResults');
-        return raw ? JSON.parse(raw) : [];
-      } catch (error) {
-        console.error('Error loading school data:', error);
-        return [];
-      }
-    }
-
-    // Find specific school data
-    async function findSchoolInfo(schoolName) {
-      const allSchools = await fetchSchoolData();
-      return allSchools.find(school => 
-        (school["اسم المدرسة"] === schoolName) || 
-        (school["School Name"] === schoolName)
-      );
-    }
-
-    // Extract disability support information
-    function extractDisabilityType(text) {
-      if (!text || text.trim().startsWith('لا') || text.toLowerCase().includes('no')) {
-        return 'No';
-      }
-      const keywords = ['التوحد', 'صعوبات تعلم', 'إعاقة حركية', 'اعاقة حركية', 'autism', 'learning difficulties', 'physical disability'];
-      const matched = keywords.filter(k => text.toLowerCase().includes(k.toLowerCase()));
-      return matched.length > 0 ? `Yes (${matched.join(', ')})` : 'Yes';
-    }
-
-    // Normalize mixed status
-    function normalizeMixedValue(text) {
-      if (!text) return 'Unknown';
-      const lowerText = text.toLowerCase();
-      if (lowerText.includes('غير') || lowerText.includes('ذكور') || lowerText.includes('إناث') || 
-          lowerText.includes('boys') || lowerText.includes('girls') || lowerText.includes('single')) {
-        return 'Not Mixed';
-      }
-      if (lowerText.includes('مختلطة') || lowerText.includes('mixed')) return 'Mixed';
-      return 'Unknown';
-    }
-
-    // Populate school information
-    function populateSchoolInfo(schoolData) {
-      if (!schoolData) {
-        document.getElementById('system').textContent = 'Not Available';
-        document.getElementById('special_needs').textContent = 'Not Available';
-        document.getElementById('language').textContent = 'Not Available';
-        document.getElementById('mixed').textContent = 'Not Available';
-        document.getElementById('max_grade').textContent = 'Not Available';
-        return;
-      }
-
-      // Handle both Arabic and English data structures with multiple field name variations
-      const system = schoolData["نظام التدريسي"] || schoolData["نظام التعليمي"] || schoolData["School System"] || 'Not Available';
-      const specialNeeds = extractDisabilityType(schoolData["تقبل الطلبة من ذوي الإحتياجات"] || schoolData["Special Needs"]);
-      const language = schoolData["لغة التدريس"] || schoolData["Language of Instruction"] || 'Not Available';
-      const mixed = normalizeMixedValue(schoolData["مختلطة"] || schoolData["Mixed"]);
-      const maxGrade = schoolData["اعلى صف"] || schoolData["Highest Grade"] || 'Not Available';
-
-      document.getElementById('system').textContent = system;
-      document.getElementById('special_needs').textContent = specialNeeds;
-      document.getElementById('language').textContent = language;
-      document.getElementById('mixed').textContent = mixed;
-      document.getElementById('max_grade').textContent = maxGrade;
-
-      // Updated grade mapping to match info.js structure
-      const gradeFields = {
-        "براعم": "الروضة | براعم",
-        "بستان": "الروضة | بستان", 
-        "تمهيدي": "الروضة | تمهيدي",
-        "الاول": "الصف الاول",
-        "الثاني": "الصف الثاني",
-        "الثالث": "الصف الثالث",
-        "الرابع": "الصف الرابع",
-        "الخامس": "الصف الخامس",
-        "السادس": "الصف السادس",
-        "السابع": "الصف السابع",
-        "الثامن": "الصف الثامن",
-        "التاسع": "الصف التاسع",
-        "العاشر": "الصف العاشر",
-        "الاول ثانوي": "الصف الأول ثانوي",
-        "الثاني ثانوي": "الصف الثاني ثانوي"
-      };
-
-      Object.entries(gradeFields).forEach(([id, dbKey]) => {
-        const cell = document.getElementById(id);
-        if (cell) {
-          const value = schoolData[dbKey] || schoolData[id] || null;
-          cell.textContent = value !== null && value !== undefined ? `${value} JD` : '—';
-        }
-      });
-    }
-
-    // Open Google Maps
-    function openGoogleMaps(schoolName) {
-      if (schoolName) {
-        const encoded = encodeURIComponent(schoolName);
-        window.open(`https://www.google.com/maps/search/?api=1&query=${encoded}`, '_blank');
-      }
-    }
-
-    // Initialize page
-    document.addEventListener('DOMContentLoaded', async function() {
-      const schoolName = getSchoolNameFromURL();
-      
-      if (schoolName) {
-        const decodedName = decodeURIComponent(schoolName);
-        document.getElementById('schoolTitle').textContent = decodedName;
-        
-        // Try API first, then fallback to localStorage
-        const isAPIAvailable = await checkAPIAvailability();
-        
-        if (isAPIAvailable) {
-          console.log('API available, attempting to load from API...');
-          try {
-            currentSchoolData = await loadSchoolDataFromAPI(decodedName);
-            populateSchoolInfo(currentSchoolData);
-            console.log('Successfully loaded data from API');
-          } catch (error) {
-            console.log('API failed, falling back to localStorage...');
-            currentSchoolData = await findSchoolInfo(decodedName);
-            populateSchoolInfo(currentSchoolData);
-          }
-        } else {
-          console.log('API not available, using localStorage...');
-          currentSchoolData = await findSchoolInfo(decodedName);
-          populateSchoolInfo(currentSchoolData);
-        }
-        
-        // Setup map button
-        document.getElementById('openMapButton').addEventListener('click', () => {
-          openGoogleMaps(decodedName);
-        });
-        
-        // Setup school image click
-        document.getElementById('schoolImage').addEventListener('click', () => {
-          openGoogleMaps(decodedName);
-        });
-      } else {
-        document.getElementById('schoolTitle').textContent = 'No School Selected';
-        populateSchoolInfo(null);
-      }
-    });
-  </script>
   <script src="./info.js"></script>
 </body>
 </html>

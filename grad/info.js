@@ -16,12 +16,18 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (schools.length > 0) {
         console.log('Using first school from localStorage');
         displaySchoolInfo(schools[0]);
+        
+        // Setup modal after school info is loaded
+        setupModalFunctionality();
         return;
       }
     }
     
     document.getElementById("schoolTitle").textContent = "No School Selected";
     populateSchoolInfo(null);
+    
+    // Setup modal even if no school
+    setupModalFunctionality();
     return;
   }
 
@@ -40,15 +46,20 @@ document.addEventListener("DOMContentLoaded", async function () {
       const data = await response.json();
       console.log('API data received:', data);
       displaySchoolInfo(data);
-      return;
     } else {
       console.log('API request failed, falling back to localStorage');
+      loadFromLocalStorage(schoolName);
     }
   } catch (error) {
     console.log('API error:', error.message);
+    loadFromLocalStorage(schoolName);
   }
 
-  // Fallback to localStorage
+  // Setup modal functionality after everything is loaded
+  setupModalFunctionality();
+});
+
+function loadFromLocalStorage(schoolName) {
   try {
     const schoolResults = localStorage.getItem('schoolResults');
     if (!schoolResults) {
@@ -83,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.error('Error loading from localStorage:', error);
     populateSchoolInfo(null);
   }
-});
+}
 
 function displaySchoolInfo(schoolData) {
   console.log('Displaying school info:', schoolData);
@@ -223,6 +234,13 @@ function loadSchoolImage(schoolName) {
   if (schoolImage) {
     schoolImage.src = './images/default-school.jpg';
     schoolImage.alt = schoolName || 'School Photo';
+    
+    // Also setup click to open maps
+    schoolImage.addEventListener('click', () => {
+      const query = encodeURIComponent(`مدرسة ${schoolName}`);
+      const googleMapsURL = `https://www.google.com/maps/search/?api=1&query=${query}`;
+      window.open(googleMapsURL, "_blank");
+    });
   }
   
   // Try to load Google Maps photo if available
@@ -267,6 +285,207 @@ function markSchoolAsViewed(schoolName) {
   }
 }
 
+// Modal functionality
+function setupModalFunctionality() {
+  console.log('Setting up modal functionality...');
+  
+  const selectBtn = document.getElementById('selectSchoolBtn');
+  const modal = document.getElementById('schoolModal');
+  const closeBtn = document.getElementById('closeModal');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const form = document.getElementById('schoolSelectionForm');
+  
+  console.log('Modal elements found:', {
+    selectBtn: !!selectBtn,
+    modal: !!modal,
+    closeBtn: !!closeBtn,
+    cancelBtn: !!cancelBtn,
+    form: !!form
+  });
+  
+  // Open modal
+  if (selectBtn) {
+    selectBtn.addEventListener('click', function() {
+      console.log('Select school button clicked!');
+      openModal();
+    });
+  }
+  
+  // Close modal functions
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeModal);
+  }
+  
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', closeModal);
+  }
+  
+  // Close modal when clicking outside
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+  }
+  
+  // Form submission
+  if (form) {
+    form.addEventListener('submit', handleFormSubmission);
+  }
+  
+  console.log('Modal functionality setup complete!');
+}
+
+function openModal() {
+  console.log('Opening modal...');
+  const modal = document.getElementById('schoolModal');
+  if (modal) {
+    modal.classList.add('show');
+    autofillForm();
+  }
+}
+
+function closeModal() {
+  console.log('Closing modal...');
+  const modal = document.getElementById('schoolModal');
+  if (modal) {
+    modal.classList.remove('show');
+    const form = document.getElementById('schoolSelectionForm');
+    if (form) {
+      form.reset();
+    }
+  }
+}
+
+function autofillForm() {
+  console.log('Starting autofill...');
+  
+  // Pre-fill school name
+  const schoolName = document.getElementById('schoolTitle').textContent;
+  const selectedSchoolInput = document.getElementById('selectedSchool');
+  if (selectedSchoolInput) {
+    selectedSchoolInput.value = schoolName;
+    console.log('School name filled:', schoolName);
+  }
+  
+  // Try to auto-fill email from localStorage
+  const storedEmail = localStorage.getItem('userEmail');
+  if (storedEmail) {
+    const emailInput = document.getElementById('parentEmail');
+    if (emailInput) {
+      emailInput.value = storedEmail;
+      console.log('Email filled from localStorage:', storedEmail);
+    }
+  }
+  
+  // Try to auto-fill grade from localStorage
+  const lastFilters = localStorage.getItem('lastSearchFilters');
+  if (lastFilters) {
+    try {
+      const filters = JSON.parse(lastFilters);
+      if (filters.grade) {
+        const gradeSelect = document.getElementById('studentGrade');
+        if (gradeSelect) {
+          gradeSelect.value = filters.grade;
+          console.log('Grade filled from filters:', filters.grade);
+        }
+      }
+    } catch (e) {
+      console.log('Could not parse filters');
+    }
+  }
+}
+
+function showMessage(message, type) {
+  const messageDiv = document.getElementById('modalMessage');
+  if (messageDiv) {
+    messageDiv.textContent = message;
+    messageDiv.className = `message ${type}`;
+    messageDiv.style.display = 'block';
+    
+    setTimeout(() => {
+      messageDiv.style.display = 'none';
+    }, 5000);
+  }
+}
+
+async function handleFormSubmission(e) {
+  e.preventDefault();
+  console.log('Form submitted!');
+  
+  const submitBtn = document.getElementById('submitBtn');
+  const originalText = submitBtn.textContent;
+  
+  // Get form data
+  const formData = {
+    parentName: document.getElementById('parentName').value.trim(),
+    parentEmail: document.getElementById('parentEmail').value.trim(),
+    studentName: document.getElementById('studentName').value.trim(),
+    studentGrade: document.getElementById('studentGrade').value,
+    homeAddress: document.getElementById('homeAddress').value.trim(),
+    schoolName: document.getElementById('selectedSchool').value
+  };
+  
+  console.log('Form data:', formData);
+  
+  // Validation
+  if (!formData.parentName || !formData.parentEmail || !formData.studentName || !formData.studentGrade) {
+    showMessage('Please fill in all required fields', 'error');
+    return;
+  }
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formData.parentEmail)) {
+    showMessage('Please enter a valid email address', 'error');
+    return;
+  }
+  
+  // Show loading
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="loading-spinner"></span>Processing...';
+  
+  try {
+    console.log('Submitting to API...');
+    const response = await fetch('http://localhost:5000/api/school-selection/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    });
+    
+    const result = await response.json();
+    console.log('API response:', result);
+    
+    if (response.ok && result.success) {
+      showMessage(`🎉 Success! Student ID: ${result.studentId} has been sent to your email.`, 'success');
+      
+      // Save for future autofill
+      localStorage.setItem('userEmail', formData.parentEmail);
+      localStorage.setItem('lastSearchFilters', JSON.stringify({
+        grade: formData.studentGrade,
+        school: formData.schoolName
+      }));
+      
+      // Close modal after 3 seconds
+      setTimeout(() => {
+        closeModal();
+      }, 3000);
+      
+    } else {
+      showMessage(result.error || 'Failed to submit school selection', 'error');
+    }
+    
+  } catch (error) {
+    console.error('Error submitting:', error);
+    showMessage('Network error. Please try again.', 'error');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalText;
+  }
+}
+
 // Debug function to check what data is available
 window.debugSchoolData = function() {
   console.log('=== DEBUG: School Data ===');
@@ -282,6 +501,17 @@ window.debugSchoolData = function() {
     console.log('Available fields:', Object.keys(schools[0] || {}));
   } else {
     console.log('No schools in localStorage');
+  }
+};
+
+// Test modal function
+window.testModal = function() {
+  console.log('Testing modal...');
+  const btn = document.getElementById('selectSchoolBtn');
+  if (btn) {
+    btn.click();
+  } else {
+    console.log('Button not found!');
   }
 };
 
