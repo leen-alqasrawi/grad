@@ -141,7 +141,7 @@ function populateSchoolInfo(schoolData) {
     return;
   }
 
-  // Basic Information
+  // basic information for the rest of the code
   const system = schoolData["نظام التدريسي"] || schoolData["نظام التعليمي"] || schoolData["School System"] || 'Not Available';
   const specialNeeds = extractDisabilityType(schoolData["تقبل الطلبة من ذوي الإحتياجات"] || schoolData["Special Needs"]);
   const language = schoolData["لغة التدريس"] || schoolData["Language of Instruction"] || 'Not Available';
@@ -154,7 +154,7 @@ function populateSchoolInfo(schoolData) {
   document.getElementById('mixed').textContent = mixed;
   document.getElementById('max_grade').textContent = maxGrade;
 
-  // Grade Fees - Updated mapping to match database structure
+  // grade fees(i updated it to match how the database looks like)
   const gradeMapping = {
     'kg1': ['الروضة | براعم', 'KG1'],
     'kg2': ['الروضة | بستان', 'KG2'], 
@@ -178,7 +178,7 @@ function populateSchoolInfo(schoolData) {
     if (element) {
       let value = null;
       
-      // Try each possible key
+      // try each key/grade
       for (const key of possibleKeys) {
         if (schoolData[key] !== undefined && schoolData[key] !== null) {
           value = schoolData[key];
@@ -229,13 +229,12 @@ function setupMapButton(schoolName) {
 }
 
 function loadSchoolImage(schoolName) {
-  // Set default image first
+  // set the default image first
   const schoolImage = document.getElementById('schoolImage');
   if (schoolImage) {
     schoolImage.src = './images/default-school.jpg';
     schoolImage.alt = schoolName || 'School Photo';
     
-    // Also setup click to open maps
     schoolImage.addEventListener('click', () => {
       const query = encodeURIComponent(`مدرسة ${schoolName}`);
       const googleMapsURL = `https://www.google.com/maps/search/?api=1&query=${query}`;
@@ -243,7 +242,7 @@ function loadSchoolImage(schoolName) {
     });
   }
   
-  // Try to load Google Maps photo if available
+  // try to load Google maps photo if its available
   if (window.google && window.google.maps && window.google.maps.places && schoolName) {
     console.log('Attempting to load school image from Google Maps');
     loadGoogleMapsPhoto(schoolName);
@@ -271,7 +270,7 @@ function loadGoogleMapsPhoto(schoolName) {
     }
   });
 }
-
+//mark as viewed for profile.html
 function markSchoolAsViewed(schoolName) {
   try {
     const viewed = JSON.parse(localStorage.getItem("viewedSchools") || "[]");
@@ -285,9 +284,9 @@ function markSchoolAsViewed(schoolName) {
   }
 }
 
-// Modal functionality
+// modal functionality(dialog box for when we want to link a student to teh school specified)
 function setupModalFunctionality() {
-  console.log('Setting up modal functionality...');
+  console.log('Setting up dialogbox...');
   
   const selectBtn = document.getElementById('selectSchoolBtn');
   const modal = document.getElementById('schoolModal');
@@ -417,7 +416,7 @@ async function handleFormSubmission(e) {
   const submitBtn = document.getElementById('submitBtn');
   const originalText = submitBtn.textContent;
   
-  // Get form data
+  // get form data
   const formData = {
     parentName: document.getElementById('parentName').value.trim(),
     parentEmail: document.getElementById('parentEmail').value.trim(),
@@ -485,34 +484,3 @@ async function handleFormSubmission(e) {
     submitBtn.innerHTML = originalText;
   }
 }
-
-// Debug function to check what data is available
-window.debugSchoolData = function() {
-  console.log('=== DEBUG: School Data ===');
-  
-  const params = new URLSearchParams(window.location.search);
-  console.log('URL Parameters:', Object.fromEntries(params));
-  
-  const schoolResults = localStorage.getItem('schoolResults');
-  if (schoolResults) {
-    const schools = JSON.parse(schoolResults);
-    console.log('Schools in localStorage:', schools.length);
-    console.log('First school:', schools[0]);
-    console.log('Available fields:', Object.keys(schools[0] || {}));
-  } else {
-    console.log('No schools in localStorage');
-  }
-};
-
-// Test modal function
-window.testModal = function() {
-  console.log('Testing modal...');
-  const btn = document.getElementById('selectSchoolBtn');
-  if (btn) {
-    btn.click();
-  } else {
-    console.log('Button not found!');
-  }
-};
-
-console.log('Info.js loaded successfully. Use debugSchoolData() to check available data.');
