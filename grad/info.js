@@ -416,6 +416,19 @@ async function handleFormSubmission(e) {
   const submitBtn = document.getElementById('submitBtn');
   const originalText = submitBtn.textContent;
   
+  // Get Firebase UID from localStorage
+  const firebaseUid = localStorage.getItem('loggedInUserId');
+  
+  console.log('Firebase UID from localStorage:', firebaseUid);
+  
+  if (!firebaseUid) {
+    showMessage('Please log in first to select a school', 'error');
+    setTimeout(() => {
+      window.location.href = 'register.html';
+    }, 2000);
+    return;
+  }
+  
   // get form data
   const formData = {
     parentName: document.getElementById('parentName').value.trim(),
@@ -423,10 +436,11 @@ async function handleFormSubmission(e) {
     studentName: document.getElementById('studentName').value.trim(),
     studentGrade: document.getElementById('studentGrade').value,
     homeAddress: document.getElementById('homeAddress').value.trim(),
-    schoolName: document.getElementById('selectedSchool').value
+    schoolName: document.getElementById('selectedSchool').value,
+    firebaseUid: firebaseUid // Add Firebase UID to the request
   };
   
-  console.log('Form data:', formData);
+  console.log('Form data being sent:', formData);
   
   // Validation
   if (!formData.parentName || !formData.parentEmail || !formData.studentName || !formData.studentGrade) {
@@ -437,6 +451,11 @@ async function handleFormSubmission(e) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(formData.parentEmail)) {
     showMessage('Please enter a valid email address', 'error');
+    return;
+  }
+  
+  if (!formData.schoolName) {
+    showMessage('School name is missing. Please try again.', 'error');
     return;
   }
   
@@ -454,6 +473,8 @@ async function handleFormSubmission(e) {
       body: JSON.stringify(formData)
     });
     
+    console.log('Response status:', response.status);
+    
     const result = await response.json();
     console.log('API response:', result);
     
@@ -467,18 +488,31 @@ async function handleFormSubmission(e) {
         school: formData.schoolName
       }));
       
+      // Save student info for tracking
+      localStorage.setItem('currentStudentId', result.studentId);
+      
       // Close modal after 3 seconds
       setTimeout(() => {
         closeModal();
       }, 3000);
       
     } else {
-      showMessage(result.error || 'Failed to submit school selection', 'error');
+      // Handle specific error cases
+      if (response.status === 409) {
+        showMessage('You already have a student profile. ' + (result.details || ''), 'error');
+      } else if (response.status === 400 && result.error.includes('authentication')) {
+        showMessage('Please log in first', 'error');
+        setTimeout(() => {
+          window.location.href = 'register.html';
+        }, 2000);
+      } else {
+        showMessage(result.error || 'Failed to submit school selection', 'error');
+      }
     }
     
   } catch (error) {
     console.error('Error submitting:', error);
-    showMessage('Network error. Please try again.', 'error');
+    showMessage('Network error. Please check your connection and try again.', 'error');
   } finally {
     submitBtn.disabled = false;
     submitBtn.innerHTML = originalText;

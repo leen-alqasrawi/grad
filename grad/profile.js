@@ -171,34 +171,86 @@ window.updateLocation = async function() {
     return;
   }
 
+  // Check if user is logged in
+  const uid = getCurrentUserId();
+  if (!uid) {
+    alert("Please log in first");
+    return;
+  }
+
   navigator.geolocation.getCurrentPosition(async (position) => {
     const lat = position.coords.latitude;
     const lng = position.coords.longitude;
-    const uid = getCurrentUserId();
-
-    if (!uid) {
-      alert("Not authenticated");
-      return;
-    }
 
     try {
-      const response = await makeAuthenticatedRequest('http://localhost:5000/api/users/update-location', {
+      const requestBody = { 
+        uid: uid,
+        lat: lat, 
+        lng: lng 
+      };
+      
+      console.log('Sending update location request:', requestBody);
+      
+      const response = await fetch('http://localhost:5000/api/users/update-location', {
         method: 'POST',
-        body: JSON.stringify({ lat, lng })
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
       });
 
+      console.log('Response status:', response.status);
+      
       if (response.ok) {
+        const result = await response.json();
+        console.log('Update location result:', result);
         alert("Location updated successfully!");
       } else {
-        alert("Failed to update location.");
+        const errorData = await response.json();
+        console.error('Update location error:', errorData);
+        
+        if (response.status === 404 && errorData.error === "Student profile not found") {
+          // Show helpful message for missing student profile
+          const userChoice = confirm(
+            "You need to select a school first before updating your location.\n\n" +
+            "Would you like to go to the school search page now?"
+          );
+          
+          if (userChoice) {
+            window.location.href = "findschool.html";
+          }
+        } else {
+          alert("Failed to update location: " + (errorData.error || 'Unknown error'));
+        }
       }
     } catch (err) {
       console.error("Location update error:", err);
-      alert("Error updating location.");
+      alert("Error updating location: " + err.message);
     }
   }, (err) => {
-    console.error(err);
-    alert("Could not get location.");
+    console.error('Geolocation error:', err);
+    let errorMessage = "Could not get location: ";
+    
+    switch(err.code) {
+      case err.PERMISSION_DENIED:
+        errorMessage += "Location access denied. Please enable location permissions.";
+        break;
+      case err.POSITION_UNAVAILABLE:
+        errorMessage += "Location information unavailable.";
+        break;
+      case err.TIMEOUT:
+        errorMessage += "Location request timed out.";
+        break;
+      default:
+        errorMessage += err.message;
+        break;
+    }
+    
+    alert(errorMessage);
+  }, {
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 300000 // 5 minutes
   });
 };
 

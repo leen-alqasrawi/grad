@@ -6,20 +6,22 @@ const cacheMiddleware = require('../middleware/cache');
 // GET /api/schools/city
 router.get('/city', cacheMiddleware, async (req, res) => {
   try {
+    console.log('Fetching all schools from city endpoint');
     const result = await dbPool.query('SELECT "اسم المدرسة" FROM "schooldata";');
     await redisConnection.set(req.originalUrl, JSON.stringify(result.rows), { EX: 3600 });
     res.json(result.rows);
   } catch (error) {
-    console.error('Error occurred:', error);
-    res.status(500).send('Database error');
+    console.error('Error occurred in /city endpoint:', error);
+    res.status(500).json({ error: 'Database error', message: error.message });
   }
 });
 
 // GET /api/schools/filters
 router.get('/filters', cacheMiddleware, async (req, res) => {
   try {
-    const locationQuery = `SELECT DISTINCT TRIM("المنطقة") AS "المنطقة" FROM "schooldata";`;
-    const languageQuery = `SELECT DISTINCT TRIM("لغة التدريس") AS "لغة التدريس" FROM "schooldata";`;
+    console.log('Fetching filter options');
+    const locationQuery = `SELECT DISTINCT TRIM("المنطقة") AS "المنطقة" FROM "schooldata" WHERE "المنطقة" IS NOT NULL;`;
+    const languageQuery = `SELECT DISTINCT TRIM("لغة التدريس") AS "لغة التدريس" FROM "schooldata" WHERE "لغة التدريس" IS NOT NULL;`;
 
     const locationResult = await dbPool.query(locationQuery);
     const languageResult = await dbPool.query(languageQuery);
@@ -33,13 +35,14 @@ router.get('/filters', cacheMiddleware, async (req, res) => {
     res.json(responseData);
   } catch (error) {
     console.error('Error loading filters:', error);
-    res.status(500).send('Database error');
+    res.status(500).json({ error: 'Database error', message: error.message });
   }
 });
 
 // POST /api/schools/filter
 router.post('/filter', async (req, res) => {
   try {
+    console.log('Filtering schools with criteria:', req.body);
     const { location, special_needs, language, mixed, grade } = req.body;
     
     const gradeMapping = {
@@ -53,9 +56,9 @@ router.post('/filter', async (req, res) => {
     const parameters = [];
     let paramCount = 1;
 
-    if (location) {
+    if (location && location.trim() !== '') {
       query += ` AND TRIM("المنطقة") = $${paramCount++}`;
-      parameters.push(location);
+      parameters.push(location.trim());
     }
     
     if (special_needs === 'نعم') {
@@ -70,9 +73,9 @@ router.post('/filter', async (req, res) => {
       query += ` AND ("مختلطة" ILIKE '%غير%' OR "مختلطة" ILIKE '%ذكور%' OR "مختلطة" ILIKE '%إناث%')`;
     }
 
-    if (language) {
+    if (language && language.trim() !== '') {
       query += ` AND TRIM("لغة التدريس") = $${paramCount++}`;
-      parameters.push(language);
+      parameters.push(language.trim());
     }
 
     if (grade && gradeMapping[grade]) {
@@ -80,38 +83,62 @@ router.post('/filter', async (req, res) => {
       query += ` AND "${gradeColumn}"::text ~ '^[0-9]+$' AND "${gradeColumn}"::int > 0`;
     }
 
+    console.log('Executing query:', query);
+    console.log('With parameters:', parameters);
+
     const result = await dbPool.query(query, parameters);
-    res.json(result.rows);
+    
+    console.log(`Found ${result.rows.length} schools matching criteria`);
+    res.json({
+      success: true,
+      count: result.rows.length,
+      schools: result.rows
+    });
   } catch (err) {
     console.error('Error filtering schools:', err);
-    res.status(500).json({ error: 'Filtering failed' });
+    res.status(500).json({ 
+      error: 'Filtering failed', 
+      message: err.message,
+      details: err.stack 
+    });
   }
 });
 
 // GET /api/schools/info
 router.get('/info', cacheMiddleware, async (req, res) => {
   const { name } = req.query;
-  if (!name) return res.status(400).json({ error: 'Missing school name' });
+  console.log('Getting school info for:', name);
+  
+  if (!name) {
+    return res.status(400).json({ error: 'Missing school name parameter' });
+  }
 
   try {
     const result = await dbPool.query(
       'SELECT * FROM "schooldata" WHERE "اسم المدرسة" = $1 LIMIT 1',
       [name]
     );
-    if (result.rows.length === 0) return res.status(404).json({ error: 'School not found' });
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'School not found' });
+    }
     
     await redisConnection.set(req.originalUrl, JSON.stringify(result.rows[0]), { EX: 1800 });
     res.json(result.rows[0]);
   } catch (err) {
     console.error('Error fetching school info:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', message: err.message });
   }
 });
 
 // GET /api/schools/student-school
 router.get('/student-school', async (req, res) => {
   const { studentId } = req.query;
-  if (!studentId) return res.status(400).json({ error: 'Missing student ID' });
+  console.log('Getting student school info for ID:', studentId);
+  
+  if (!studentId) {
+    return res.status(400).json({ error: 'Missing student ID parameter' });
+  }
 
   try {
     const studentQuery = `
@@ -139,17 +166,17 @@ router.get('/student-school', async (req, res) => {
     res.json(responseData);
   } catch (err) {
     console.error('Error fetching school for student:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', message: err.message });
   }
 });
-
 
 // GET /api/schools/student-info/:studentId
 router.get('/student-info/:studentId', async (req, res) => {
   const { studentId } = req.params;
+  console.log('Getting detailed student info for ID:', studentId);
   
   if (!studentId) {
-    return res.status(400).json({ error: 'Missing student ID' });
+    return res.status(400).json({ error: 'Missing student ID parameter' });
   }
 
   try {
@@ -218,4 +245,5 @@ router.get('/student-info/:studentId', async (req, res) => {
     });
   }
 });
+
 module.exports = router;

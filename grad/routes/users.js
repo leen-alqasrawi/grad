@@ -75,18 +75,40 @@ router.post('/update-location', async (req, res) => {
     console.log('Updating location for user:', uid);
     console.log('New coordinates:', lat, lng);
 
-    const result = await dbPool.query(
-      'UPDATE students SET home_lat = $1, home_lng = $2 WHERE firebase_uid = $3',
+    // Check if student record exists with this firebase_uid
+    const checkResult = await dbPool.query(
+      'SELECT id, student_id, name, parent_name FROM students WHERE firebase_uid = $1 AND (is_active IS NULL OR is_active = true)',
+      [uid]
+    );
+
+    if (checkResult.rows.length === 0) {
+      console.log('No student record found for Firebase UID:', uid);
+      
+      return res.status(404).json({
+        success: false,
+        error: 'Student profile not found',
+        details: 'You need to select a school first to create your student profile.',
+        suggestion: 'Please go to "Find School" → select a school → get your Student ID, then try updating location again.',
+        action: 'redirect_to_school_search'
+      });
+    }
+
+    const student = checkResult.rows[0];
+    console.log('Found student record:', student);
+
+    // Update the location
+    const updateResult = await dbPool.query(
+      'UPDATE students SET home_lat = $1, home_lng = $2, updated_at = CURRENT_TIMESTAMP WHERE firebase_uid = $3',
       [parseFloat(lat), parseFloat(lng), uid]
     );
 
-    console.log('Update result:', result.rowCount, 'rows affected');
+    console.log('Update result:', updateResult.rowCount, 'rows affected');
 
-    if (result.rowCount === 0) {
-      return res.status(404).json({
+    if (updateResult.rowCount === 0) {
+      return res.status(500).json({
         success: false,
-        error: 'User not found in students table',
-        details: 'Please make sure you have a student profile first'
+        error: 'Failed to update location in database',
+        details: 'Update query executed but no rows were affected'
       });
     }
 
@@ -97,8 +119,14 @@ router.post('/update-location', async (req, res) => {
         lat: parseFloat(lat), 
         lng: parseFloat(lng) 
       },
+      studentInfo: {
+        id: student.id,
+        studentId: student.student_id,
+        name: student.name,
+        parentName: student.parent_name
+      },
       timestamp: new Date().toISOString(),
-      rowsUpdated: result.rowCount
+      rowsUpdated: updateResult.rowCount
     });
 
   } catch (error) {
@@ -106,10 +134,19 @@ router.post('/update-location', async (req, res) => {
     console.error('Message:', error.message);
     console.error('Code:', error.code);
     console.error('Detail:', error.detail);
+    console.error('Stack:', error.stack);
+    
+    // Handle specific PostgreSQL errors
+    let errorMessage = 'Database error while updating location';
+    if (error.code === '23505') {
+      errorMessage = 'Duplicate entry error';
+    } else if (error.code === '23503') {
+      errorMessage = 'Foreign key constraint error';
+    }
     
     res.status(500).json({
       success: false,
-      error: 'Database error while updating location',
+      error: errorMessage,
       details: {
         message: error.message,
         code: error.code

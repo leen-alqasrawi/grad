@@ -134,7 +134,7 @@ async function handleReviewSubmit(event) {
   submitButton.textContent = 'Submitting...';
 
   try {
-    console.log('📝 Submitting review:', formData);
+    console.log('Submitting review:', formData);
     
     const response = await fetch('http://localhost:5000/api/reviews/submit', {
       method: 'POST',
@@ -145,10 +145,10 @@ async function handleReviewSubmit(event) {
     });
 
     const result = await response.json();
-    console.log('📝 Server response:', result);
+    console.log('Server response:', result);
 
     if (response.ok && result.success) {
-      alert('Thank you for your review! 🎉');
+      alert('Thank you for your review!');
       
       // Reset form
       event.target.reset();
@@ -164,7 +164,7 @@ async function handleReviewSubmit(event) {
     }
 
   } catch (error) {
-    console.error('❌ Error submitting review:', error);
+    console.error('Error submitting review:', error);
     alert('Network error. Please check your connection and try again.');
   } finally {
     submitButton.disabled = false;
@@ -183,40 +183,40 @@ function resetStarRating() {
 }
 
 async function loadRecentReviews() {
-  console.log('🔄 Starting to load recent reviews...');
+  console.log('Starting to load recent reviews...');
   
   try {
     const url = 'http://localhost:5000/api/reviews?limit=10';
-    console.log('📡 Fetching from:', url);
+    console.log('Fetching from:', url);
     
     const response = await fetch(url);
-    console.log('📡 Response status:', response.status, response.statusText);
+    console.log('Response status:', response.status, response.statusText);
     
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
     
     const data = await response.json();
-    console.log('📖 Raw server response:', data);
-    console.log('📖 Reviews array:', data.reviews);
-    console.log('📖 Number of reviews:', data.reviews ? data.reviews.length : 0);
+    console.log('Raw server response:', data);
+    console.log('Reviews array:', data.reviews);
+    console.log('Number of reviews:', data.reviews ? data.reviews.length : 0);
 
     if (data.reviews && Array.isArray(data.reviews)) {
       if (data.reviews.length > 0) {
-        console.log('✅ Found reviews, calling displayRecentReviews...');
+        console.log('Found reviews, calling displayRecentReviews...');
         displayRecentReviews(data.reviews);
       } else {
-        console.log('ℹ️ No reviews found, showing empty message...');
+        console.log('No reviews found, showing empty message...');
         showNoReviewsMessage();
       }
     } else {
-      console.error('❌ Invalid response format - reviews is not an array:', typeof data.reviews);
+      console.error('Invalid response format - reviews is not an array:', typeof data.reviews);
       showNoReviewsMessage();
     }
     
   } catch (error) {
-    console.error('❌ Error loading recent reviews:', error);
-    console.error('❌ Error details:', {
+    console.error('Error loading recent reviews:', error);
+    console.error('Error details:', {
       message: error.message,
       stack: error.stack
     });
@@ -225,12 +225,12 @@ async function loadRecentReviews() {
 }
 
 function displayRecentReviews(reviews) {
-  console.log('🎨 Starting to display reviews:', reviews);
+  console.log('Starting to display reviews:', reviews);
   
   const container = document.getElementById('recentReviews');
   
   if (!container) {
-    console.error('❌ Container element #recentReviews not found!');
+    console.error('Container element #recentReviews not found!');
     console.log('Available elements with "review" in ID:');
     document.querySelectorAll('[id*="review"]').forEach(el => {
       console.log('  -', el.id, el.tagName);
@@ -238,17 +238,17 @@ function displayRecentReviews(reviews) {
     return;
   }
   
-  console.log('✅ Container found:', container);
+  console.log('Container found:', container);
 
   if (!Array.isArray(reviews) || reviews.length === 0) {
-    console.warn('⚠️ No reviews to display');
+    console.warn('No reviews to display');
     showNoReviewsMessage();
     return;
   }
 
   try {
     const reviewsHTML = reviews.map((review, index) => {
-      console.log(`📝 Processing review ${index + 1}:`, review);
+      console.log(`Processing review ${index + 1}:`, review);
       
       const date = new Date(review.created_at).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -281,12 +281,12 @@ function displayRecentReviews(reviews) {
       </div>
     `;
 
-    console.log('🎨 Setting innerHTML for container...');
+    console.log('Setting innerHTML for container...');
     container.innerHTML = finalHTML;
-    console.log('✅ Reviews displayed successfully!');
+    console.log('Reviews displayed successfully!');
     
   } catch (error) {
-    console.error('❌ Error in displayRecentReviews:', error);
+    console.error('Error in displayRecentReviews:', error);
     showErrorMessage();
   }
 }
@@ -297,10 +297,10 @@ function showNoReviewsMessage() {
     container.innerHTML = `
       <div style="margin-top: 30px; text-align: center; color: #666; padding: 20px;">
         <h3 style="color: #19497b; margin-bottom: 15px;">Recent Reviews</h3>
-        <p>No reviews yet. Be the first to leave a review! 🌟</p>
+        <p>No reviews yet. Be the first to leave a review!</p>
       </div>
     `;
-    console.log('ℹ️ No reviews message displayed');
+    console.log('No reviews message displayed');
   }
 }
 
@@ -313,7 +313,7 @@ function showErrorMessage() {
         <p>Unable to load reviews at the moment. Please try again later.</p>
       </div>
     `;
-    console.log('❌ Error message displayed');
+    console.log('Error message displayed');
   }
 }
 
@@ -510,7 +510,7 @@ function escapeHtml(text) {
 
 // Debug functions
 window.testLoadReviews = function() {
-  console.log('🧪 Manual test: Loading reviews...');
+  console.log('Manual test: Loading reviews...');
   loadRecentReviews();
 };
 

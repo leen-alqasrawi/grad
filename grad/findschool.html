@@ -97,37 +97,35 @@
         <option value="" disabled selected hidden>Select Region</option>
       </select>
       <select id="special_needs" required>
-  <option value="" selected>تقبل المدرسة من ذوي الاحتياجات</option>
-  <option value="نعم">Yes</option>
-  <option value="لا">No</option>
-</select>
-
+        <option value="" selected>تقبل المدرسة من ذوي الاحتياجات</option>
+        <option value="نعم">Yes</option>
+        <option value="لا">No</option>
+      </select>
 
       <select id="language" required>
         <option value="" disabled selected hidden>Language</option>
       </select>
       <select id="mixed" required>
-  <option value="" selected>المدارس المختلطة</option>
-  <option value="نعم">Yes</option>
-  <option value="لا">No</option>
-</select>
-
+        <option value="" selected>المدارس المختلطة</option>
+        <option value="نعم">Yes</option>
+        <option value="لا">No</option>
+      </select>
 
       <select id="grade" required>
-  <option value="" disabled selected hidden>اختار الصف</option>
-  <option value="1">1</option>
-  <option value="2">2</option>
-  <option value="3">3</option>
-  <option value="4">4</option>
-  <option value="5">5</option>
-  <option value="6">6</option>
-  <option value="7">7</option>
-  <option value="8">8</option>
-  <option value="9">9</option>
-  <option value="10">10</option>
-  <option value="11">11</option>
-  <option value="12">12</option>
-</select>
+        <option value="" disabled selected hidden>اختار الصف</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+      </select>
 
       <button type="button" onclick="fetchData()">Search</button>
     </form>
@@ -135,7 +133,7 @@
 
   <a href="index.html" class="home-fixed">Home</a>
 
- <script>
+  <script>
     window.addEventListener('DOMContentLoaded', () => {
       fetch('http://localhost:5000/api/schools/filters')
         .then(res => res.json())
@@ -158,6 +156,7 @@
       });
     }
 
+    // SINGLE, CLEAN fetchData function
     function fetchData() {
       const filter = {
         uid: localStorage.getItem("loggedInUserId"),
@@ -167,6 +166,10 @@
         mixed: document.getElementById('mixed').value,
         grade: document.getElementById('grade').value,
       };
+
+      // Save the filter data for autofill in other forms
+      localStorage.setItem('lastSearchFilters', JSON.stringify(filter));
+      localStorage.setItem('recentSchoolFilter', JSON.stringify(filter));
 
       fetch('http://localhost:5000/api/users/save-form', {
         method: 'POST',
@@ -182,54 +185,30 @@
       )
       .then(res => res.json())
       .then(data => {
-          if (!Array.isArray(data)) {
-            console.error('Server did not return an array:', data);
-            alert('Error loading schools. Check the server log.');
+          console.log('Server response:', data);
+          
+          // Handle both old and new response formats
+          let schoolsArray;
+          if (data.success && Array.isArray(data.schools)) {
+            // New format: { success: true, count: X, schools: [...] }
+            schoolsArray = data.schools;
+          } else if (Array.isArray(data)) {
+            // Old format: directly an array
+            schoolsArray = data;
+          } else {
+            console.error('Unexpected response format:', data);
+            alert('Error loading schools. Please check the server log.');
             return;
           }
-          localStorage.setItem('schoolResults', JSON.stringify(data));
+          
+          localStorage.setItem('schoolResults', JSON.stringify(schoolsArray));
           window.location.href = 'schools.html';
         })
-        // Add this to your existing findschool.html script section, in the fetchData() function:
-
-function fetchData() {
-  const filter = {
-    uid: localStorage.getItem("loggedInUserId"),
-    location: document.getElementById('location').value,
-    special_needs: document.getElementById('special_needs').value,
-    language: document.getElementById('language').value,
-    mixed: document.getElementById('mixed').value,
-    grade: document.getElementById('grade').value,
-  };
-
-  // Save the filter data for autofill in other forms
-  localStorage.setItem('lastSearchFilters', JSON.stringify(filter));
-  localStorage.setItem('recentSchoolFilter', JSON.stringify(filter));
-
-  fetch('http://localhost:5000/api/users/save-form', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(filter)
-  })
-  .then(() =>
-    fetch('http://localhost:5000/api/schools/filter', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(filter)
-    })
-  )
-  .then(res => res.json())
-  .then(data => {
-      if (!Array.isArray(data)) {
-        console.error('Server did not return an array:', data);
-        alert('Error loading schools. Check the server log.');
-        return;
-      }
-      localStorage.setItem('schoolResults', JSON.stringify(data));
-      window.location.href = 'schools.html';
-    })
-      .catch(err => console.error('fetchData() error:', err));
-    }}
+        .catch(err => {
+          console.error('fetchData() error:', err);
+          alert('Error connecting to server. Please try again.');
+        });
+    }
   </script>
   <script type="module" src="usermenu-loader.js"></script>
 

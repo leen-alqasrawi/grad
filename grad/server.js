@@ -9,7 +9,7 @@ const userRoutes = require('./routes/users');
 const visionRoutes = require('./routes/vision');
 const emailRoutes = require('./routes/email');
 const contactRoutes = require('./routes/contact');
-
+const selectRoutes = require('./routes/school-selection');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -20,13 +20,17 @@ app.use(cors({
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Use routes
+// Use routes - FIX: Correct the school-selection route
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/schools', schoolRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/vision', visionRoutes);
+// Email routes - both patterns for backward compatibility
 app.use('/api/email', emailRoutes);
+app.use('/send-appointment-emails', emailRoutes);
+app.use('/send-student-confirmation', emailRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/school-selection', selectRoutes); // FIXED: Changed from '/api/schools' to '/api/school-selection'
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -42,6 +46,7 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log('Server running on port ' + PORT);
   console.log('Contact form API available at /api/contact/submit');
+  console.log('School selection API available at /api/school-selection/submit');
   console.log('Firebase tracking system enabled');
 });
 
